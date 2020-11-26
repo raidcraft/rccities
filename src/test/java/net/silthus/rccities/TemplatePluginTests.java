@@ -1,4 +1,4 @@
-package net.silthus.template;
+package net.silthus.rccities;
 
 import be.seeseemelk.mockbukkit.MockBukkit;
 import be.seeseemelk.mockbukkit.ServerMock;

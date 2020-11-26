@@ -1,4 +1,4 @@
-package net.silthus.template;
+package net.silthus.rccities;
 
 import kr.entree.spigradle.annotations.PluginMain;
 import org.bukkit.event.EventHandler;
