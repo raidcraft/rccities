@@ -18,7 +18,7 @@ public class TemplatePluginTests {
   @Before
   public void setUp() {
     server = MockBukkit.mock();
-    MockBukkit.loadWith(TemplatePlugin.class, new File("build/tmp/spigotPluginYaml/plugin.yml"));
+    MockBukkit.loadWith(RCCitiesPlugin.class, new File("build/tmp/spigotPluginYaml/plugin.yml"));
   }
 
   @Test
