@@ -1,5 +1,9 @@
 package net.silthus.rccities.api.city;
 
+import net.silthus.rccities.api.request.JoinRequest;
+import net.silthus.rccities.api.resident.Resident;
+import net.silthus.rccities.upgrades.api.holder.UpgradeHolder;
+import net.silthus.rccities.util.RaidCraftException;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 

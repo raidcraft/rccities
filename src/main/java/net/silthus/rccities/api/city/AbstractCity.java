@@ -1,5 +1,6 @@
 package net.silthus.rccities.api.city;
 
+import net.silthus.rccities.upgrades.api.holder.UpgradeHolder;
 import org.bukkit.Location;
 
 import java.sql.Timestamp;

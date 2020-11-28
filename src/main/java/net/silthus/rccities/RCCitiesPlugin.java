@@ -7,7 +7,15 @@ import lombok.Getter;
 import net.milkbowl.vault.economy.Economy;
 import net.silthus.ebean.Config;
 import net.silthus.ebean.EbeanWrapper;
+import net.silthus.rccities.api.city.City;
+import net.silthus.rccities.api.plot.Plot;
+import net.silthus.rccities.commands.PlotCommands;
+import net.silthus.rccities.commands.ResidentCommands;
 import net.silthus.rccities.commands.TownCommands;
+import net.silthus.rccities.listener.EntityListener;
+import net.silthus.rccities.listener.ExpListener;
+import net.silthus.rccities.listener.ResidentListener;
+import net.silthus.rccities.listener.UpgradeListener;
 import net.silthus.rccities.manager.*;
 import net.silthus.rccities.tables.*;
 import org.bukkit.Bukkit;
@@ -62,6 +70,11 @@ public class RCCitiesPlugin extends JavaPlugin {
     private WorldGuardManager worldGuardManager;
     private UpgradeRequestManager upgradeRequestManager;
 
+    private EntityListener entityListener;
+    private ExpListener expListener;
+    private ResidentListener residentListener;
+    private UpgradeListener upgradeListener;
+
     private RCCitiesPluginConfig pluginConfig;
 
     private boolean testing = false;
@@ -94,12 +107,62 @@ public class RCCitiesPlugin extends JavaPlugin {
             setupListeners();
             setupCommands();
         }
+
+        worldGuard = (WorldGuardPlugin) Bukkit.getPluginManager().getPlugin("WorldGuard");
+        worldEdit = (WorldEditPlugin) Bukkit.getPluginManager().getPlugin("WorldEdit");
+
+        reload();
+
+        cityManager = new CityManager(this);
+        plotManager = new PlotManager(this);
+        residentManager = new ResidentManager(this);
+        assignmentManager = new AssignmentManager(this);
+        flagManager = new FlagManager(this);
+        schematicManager = new SchematicManager(this);
+        dynmapManager = new DynmapManager();
+        worldGuardManager = new WorldGuardManager(this, worldGuard);
+        upgradeRequestManager = new UpgradeRequestManager(this);
+
+        // city flags
+        flagManager.registerCityFlag(PvpCityFlag.class);
+        flagManager.registerCityFlag(GreetingsCityFlag.class);
+        flagManager.registerCityFlag(InviteCityFlag.class);
+        flagManager.registerCityFlag(JoinCostsCityFlag.class);
+        flagManager.registerCityFlag(LeafDecayCityFlag.class);
+        flagManager.registerCityFlag(MobSpawnCityFlag.class);
+
+        // plot flags
+        flagManager.registerPlotFlag(MarkPlotFlag.class);
+        flagManager.registerPlotFlag(PvpPlotFlag.class);
+        flagManager.registerPlotFlag(TntPlotFlag.class);
+        flagManager.registerPlotFlag(MobSpawnPlotFlag.class);
+        flagManager.registerPlotFlag(FarmPlotFlag.class);
+
+        flagManager.loadExistingFlags();
+
+        residentManager.reload();
+
+        // create regions if they don't exist
+        for (City city : cityManager.getCities()) {
+            for (Plot plot : plotManager.getPlots(city)) {
+                if (plot.getRegion() == null) {
+                    plot.updateRegion(true);
+                }
+            }
+        }
     }
 
     public void reload() {
 
         loadConfig();
-        getCityManager().reload();
+
+        // TODO load upgrade config
+        // load upgrade holder
+        for (File file : getDataFolder().listFiles()) {
+            if (file.getName().equalsIgnoreCase(config.upgradeHolder + ".yml")) {
+                upgradeConfiguration = configure(new SimpleConfiguration<>(this, file));
+            }
+        }
     }
 
     private boolean setupVault() {
@@ -159,14 +222,17 @@ public class RCCitiesPlugin extends JavaPlugin {
 
     private void setupListeners() {
 
-        signPacketListener = new SignPacketListener(this, ProtocolLibrary.getProtocolManager());
-        Bukkit.getPluginManager().registerEvents(signPacketListener, this);
+        entityListener = new EntityListener(this);
+        Bukkit.getPluginManager().registerEvents(entityListener, this);
 
-        signListener = new SignListener(this);
-        Bukkit.getPluginManager().registerEvents(signListener, this);
+        expListener = new EntityListener(this);
+        Bukkit.getPluginManager().registerEvents(expListener, this);
 
-        clickListener = new ClickListener(this);
-        Bukkit.getPluginManager().registerEvents(clickListener, this);
+        residentListener = new EntityListener(this);
+        Bukkit.getPluginManager().registerEvents(residentListener, this);
+
+        upgradeListener = new EntityListener(this);
+        Bukkit.getPluginManager().registerEvents(upgradeListener, this);
     }
 
 
@@ -174,13 +240,35 @@ public class RCCitiesPlugin extends JavaPlugin {
 
         this.commandManager = new PaperCommandManager(this);
 
+        // TODO?
         registerRegionPlayerContext(commandManager);
         registerRegionContext(commandManager);
         registerRegionsCompletion(commandManager);
         registerWorldGuardRegionCompletion(commandManager);
 
-        commandManager.registerCommand(new AdminCommands(this));
-        commandManager.registerCommand(new RegionCommands(this));
+        commandManager.registerCommand(new PlotCommands(this));
+        commandManager.registerCommand(new ResidentCommands(this));
+        commandManager.registerCommand(new TownCommands(this));
+    }
+
+    /**
+     * Send a message to a target without a prefix.
+     * @param target       The target to send the message to
+     * @param key          The key of the language string
+     * @param replacements The replacements to insert in the message
+     */
+    public void messageNoPrefix(Object target, String key, Object... replacements) {
+        Message.fromKey(key).replacements(replacements).send(target);
+    }
+
+    /**
+     * Send a message to a target, prefixed by the default chat prefix.
+     * @param target       The target to send the message to
+     * @param key          The key of the language string
+     * @param replacements The replacements to insert in the message
+     */
+    public void message(Object target, String key, Object... replacements) {
+        Message.fromKey(key).prefix().replacements(replacements).send(target);
     }
 
 
@@ -190,155 +278,10 @@ public class RCCitiesPlugin extends JavaPlugin {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    @Override
-    public void enable() {
-
-        registerCommands(TownCommands.class);
-        registerCommands(ResidentCommands.class);
-        registerCommands(PlotCommands.class);
-
-        worldGuard = (WorldGuardPlugin) Bukkit.getPluginManager().getPlugin("WorldGuard");
-        worldEdit = (WorldEditPlugin) Bukkit.getPluginManager().getPlugin("WorldEdit");
-
-        // conversation actions
-        ActionManager.registerAction(new FindCityAction());
-        ActionManager.registerAction(new IsCityMemberAction());
-        ActionManager.registerAction(new HasRolePermissionAction());
-        ActionManager.registerAction(new DepositAction());
-        ActionManager.registerAction(new WithdrawAction());
-        ActionManager.registerAction(new SendJoinRequestAction());
-        ActionManager.registerAction(new AcceptJoinRequestAction());
-        ActionManager.registerAction(new RejectJoinRequestAction());
-        ActionManager.registerAction(new HasCitizenshipAction());
-        ActionManager.registerAction(new ListJoinRequestsAction());
-        ActionManager.registerAction(new ListUpgradeTypesAction());
-        ActionManager.registerAction(new ListCityFlagsAction());
-        ActionManager.registerAction(new SetCityFlagAction());
-        ActionManager.registerAction(new ListUpgradeLevelAction());
-        ActionManager.registerAction(new ShowUpgradeLevelInfo());
-        ActionManager.registerAction(new RequestUpgradeLevelUnlockAction());
-        ActionManager.registerAction(new ShowCityInfoAction());
-        ActionManager.registerAction(new FindCityResidentAction());
-        ActionManager.registerAction(new ListCityRolesAction());
-        ActionManager.registerAction(new SetResidentRoleAction());
-        ActionManager.registerAction(new LeaveCityAction());
-        ActionManager.registerAction(new ShowCityFlowAction());
-
-        // upgrade rewards
-        RewardManager.registerRewardType(CityPlotsReward.class);
-        RewardManager.registerRewardType(CityFlagReward.class);
-        RewardManager.registerRewardType(CityRadiusReward.class);
-        RewardManager.registerRewardType(SubtractMoneyReward.class);
-
-        // upgrade requirements
-        registerActionAPI();
-
-        reload();
-
-        cityManager = new CityManager(this);
-        plotManager = new PlotManager(this);
-        residentManager = new ResidentManager(this);
-        assignmentManager = new AssignmentManager(this);
-        flagManager = new FlagManager(this);
-        schematicManager = new SchematicManager(this);
-        dynmapManager = new DynmapManager();
-        worldGuardManager = new WorldGuardManager(this, worldGuard);
-        upgradeRequestManager = new UpgradeRequestManager(this);
-
-        // city flags
-        flagManager.registerCityFlag(PvpCityFlag.class);
-        flagManager.registerCityFlag(GreetingsCityFlag.class);
-        flagManager.registerCityFlag(InviteCityFlag.class);
-        flagManager.registerCityFlag(JoinCostsCityFlag.class);
-        flagManager.registerCityFlag(LeafDecayCityFlag.class);
-        flagManager.registerCityFlag(MobSpawnCityFlag.class);
-
-        // plot flags
-        flagManager.registerPlotFlag(MarkPlotFlag.class);
-        flagManager.registerPlotFlag(PvpPlotFlag.class);
-        flagManager.registerPlotFlag(TntPlotFlag.class);
-        flagManager.registerPlotFlag(MobSpawnPlotFlag.class);
-        flagManager.registerPlotFlag(FarmPlotFlag.class);
-
-        flagManager.loadExistingFlags();
-
-        residentManager.reload();
-
-        // create regions if they don't exist
-        for (City city : cityManager.getCities()) {
-            for (Plot plot : plotManager.getPlots(city)) {
-                if (plot.getRegion() == null) {
-                    plot.updateRegion(true);
-                }
-            }
-        }
-
-        registerEvents(new ExpListener());
-        registerEvents(new UpgradeListener());
-        registerEvents(new EntityListener());
-        registerEvents(worldGuardManager);
-        registerEvents(new ResidentListener());
-    }
-
-    @Override
-    public void reload() {
-
-        config = configure(new LocalConfiguration(this));
-
-        // load upgrade holder
-        for (File file : getDataFolder().listFiles()) {
-            if (file.getName().equalsIgnoreCase(config.upgradeHolder + ".yml")) {
-                upgradeConfiguration = configure(new SimpleConfiguration<>(this, file));
-            }
-        }
-    }
-
-    @Override
-    public void disable() {
-
-//        worldGuardManager.save();
-    }
-
-    private void registerActionAPI() {
-
-        ActionAPI.register(this)
-                .requirement(new CityExpRequirement(), City.class)
-                .requirement(new CityMoneyRequirement(), City.class)
-                .requirement(new CityStaffRequirement(), City.class)
-                .requirement(new CityUpgradeLevelRequirement(), City.class);
-    }
-
-    @Override
-    public List<Class<?>> getDatabaseClasses() {
-
-        List<Class<?>> databases = new ArrayList<>();
-        databases.add(TCity.class);
-        databases.add(TPlot.class);
-        databases.add(TResident.class);
-        databases.add(TAssignment.class);
-        databases.add(TCityFlag.class);
-        databases.add(TPlotFlag.class);
-        databases.add(TJoinRequest.class);
-        databases.add(TUpgradeRequest.class);
-        return databases;
-    }
 
     public class LocalConfiguration extends ConfigurationBase<RCCitiesPlugin> {
 
+        // TODO Update to new config structure
         @Setting("ignored-regions")
         public String[] ignoredRegions = new String[]{"rcmap"};
         @Setting("default-town-radius")
@@ -358,65 +301,5 @@ public class RCCitiesPlugin extends JavaPlugin {
 
             super(plugin, "config.yml");
         }
-    }
-
-    public WorldGuardPlugin getWorldGuard() {
-
-        return worldGuard;
-    }
-
-    public WorldEditPlugin getWorldEdit() {
-
-        return worldEdit;
-    }
-
-    public CityManager getCityManager() {
-
-        return cityManager;
-    }
-
-    public PlotManager getPlotManager() {
-
-        return plotManager;
-    }
-
-    public ResidentManager getResidentManager() {
-
-        return residentManager;
-    }
-
-    public AssignmentManager getAssignmentManager() {
-
-        return assignmentManager;
-    }
-
-    public FlagManager getFlagManager() {
-
-        return flagManager;
-    }
-
-    public SchematicManager getSchematicManager() {
-
-        return schematicManager;
-    }
-
-    public DynmapManager getDynmapManager() {
-
-        return dynmapManager;
-    }
-
-    public WorldGuardManager getWorldGuardManager() {
-
-        return worldGuardManager;
-    }
-
-    public ConfigurationSection getUpgradeConfiguration() {
-
-        return upgradeConfiguration;
-    }
-
-    public UpgradeRequestManager getUpgradeRequestManager() {
-
-        return upgradeRequestManager;
     }
 }
