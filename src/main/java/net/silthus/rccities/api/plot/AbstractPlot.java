@@ -3,10 +3,12 @@ package net.silthus.rccities.api.plot;
 import com.sk89q.worldedit.BlockVector;
 import com.sk89q.worldguard.domains.DefaultDomain;
 import com.sk89q.worldguard.protection.flags.DefaultFlag;
+import com.sk89q.worldguard.protection.flags.Flags;
 import com.sk89q.worldguard.protection.flags.StateFlag;
 import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedCuboidRegion;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
+import lombok.Getter;
 import net.silthus.rccities.RCCitiesPlugin;
 import net.silthus.rccities.api.city.City;
 import net.silthus.rccities.api.resident.Resident;
@@ -15,12 +17,15 @@ import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 
+import java.util.UUID;
+
 /**
  * @author Philip Urban
  */
+@Getter
 public abstract class AbstractPlot implements Plot {
 
-    protected int id;
+    protected UUID id;
     protected Location location;
     protected ProtectedRegion region;
     protected City city;
@@ -39,33 +44,9 @@ public abstract class AbstractPlot implements Plot {
     }
 
     @Override
-    public final int getId() {
-
-        return id;
-    }
-
-    @Override
     public final String getRegionName() {
 
         return city.getName().toLowerCase() + "_" + getId();
-    }
-
-    @Override
-    public final Location getLocation() {
-
-        return location;
-    }
-
-    @Override
-    public final ProtectedRegion getRegion() {
-
-        return region;
-    }
-
-    @Override
-    public final City getCity() {
-
-        return city;
     }
 
     @Override
@@ -101,17 +82,17 @@ public abstract class AbstractPlot implements Plot {
             //TODO maybe we have to set other regions as parent
 
             // flags
-            region.setFlag(DefaultFlag.MOB_DAMAGE, StateFlag.State.ALLOW);
-            region.setFlag(DefaultFlag.MOB_SPAWNING, StateFlag.State.DENY);
-            region.setFlag(DefaultFlag.CREEPER_EXPLOSION, StateFlag.State.DENY);
-            region.setFlag(DefaultFlag.GHAST_FIREBALL, StateFlag.State.DENY);
-            region.setFlag(DefaultFlag.ENDER_BUILD, StateFlag.State.DENY);
-            region.setFlag(DefaultFlag.FIRE_SPREAD, StateFlag.State.DENY);
-            region.setFlag(DefaultFlag.LIGHTNING, StateFlag.State.DENY);
-            region.setFlag(DefaultFlag.CHEST_ACCESS, StateFlag.State.ALLOW);
-            region.setFlag(DefaultFlag.PLACE_VEHICLE, StateFlag.State.ALLOW);
-            region.setFlag(DefaultFlag.DESTROY_VEHICLE, StateFlag.State.ALLOW);
-            region.setFlag(DefaultFlag.GRASS_SPREAD, StateFlag.State.ALLOW);
+            region.setFlag(Flags.MOB_DAMAGE, StateFlag.State.ALLOW);
+            region.setFlag(Flags.MOB_SPAWNING, StateFlag.State.DENY);
+            region.setFlag(Flags.CREEPER_EXPLOSION, StateFlag.State.DENY);
+            region.setFlag(Flags.GHAST_FIREBALL, StateFlag.State.DENY);
+            region.setFlag(Flags.ENDER_BUILD, StateFlag.State.DENY);
+            region.setFlag(Flags.FIRE_SPREAD, StateFlag.State.DENY);
+            region.setFlag(Flags.LIGHTNING, StateFlag.State.DENY);
+            region.setFlag(Flags.CHEST_ACCESS, StateFlag.State.ALLOW);
+            region.setFlag(Flags.PLACE_VEHICLE, StateFlag.State.ALLOW);
+            region.setFlag(Flags.DESTROY_VEHICLE, StateFlag.State.ALLOW);
+            region.setFlag(Flags.GRASS_SPREAD, StateFlag.State.ALLOW);
 
             // flags
             refreshFlags();
@@ -125,7 +106,7 @@ public abstract class AbstractPlot implements Plot {
             for (Resident resident : getCity().getResidents()) {
                 if (!resident.getRole().hasPermission(RolePermission.BUILD_EVERYWHERE)) continue;
                 if(resident.getName() == null) {
-                    plugin.getLogger()
+                    RCCitiesPlugin.getPlugin().getLogger()
                             .info("name of resident is null: " + resident.getId());
                     continue;
                 }

@@ -231,13 +231,13 @@ public class RCCitiesPlugin extends JavaPlugin {
         entityListener = new EntityListener(this);
         Bukkit.getPluginManager().registerEvents(entityListener, this);
 
-        expListener = new EntityListener(this);
+        expListener = new ExpListener(this);
         Bukkit.getPluginManager().registerEvents(expListener, this);
 
-        residentListener = new EntityListener(this);
+        residentListener = new ResidentListener(this);
         Bukkit.getPluginManager().registerEvents(residentListener, this);
 
-        upgradeListener = new EntityListener(this);
+        upgradeListener = new UpgradeListener(this);
         Bukkit.getPluginManager().registerEvents(upgradeListener, this);
     }
 
@@ -275,37 +275,5 @@ public class RCCitiesPlugin extends JavaPlugin {
      */
     public void message(Object target, String key, Object... replacements) {
         Message.fromKey(key).prefix().replacements(replacements).send(target);
-    }
-
-
-
-
-
-
-
-
-
-    public class LocalConfiguration extends ConfigurationBase<RCCitiesPlugin> {
-
-        // TODO Update to new config structure
-        @Setting("ignored-regions")
-        public String[] ignoredRegions = new String[]{"rcmap"};
-        @Setting("default-town-radius")
-        public int defaultMaxRadius = 64;
-        @Setting("initial-plot-credit")
-        public int initialPlotCredit = 3;
-        @Setting("flag-plot-mark-cost")
-        public double flagPlotMarkCost = 0.01;
-        @Setting("city-upgrade-holder")
-        public String upgradeHolder = "city-upgrade-holder";
-        @Setting("join-costs")
-        public String joinCosts = "10S";
-        @Setting("upgrade-request-reject-cooldown")
-        public int upgradeRequestCooldown = 5 * 24 * 60;// 5 days in minutes
-
-        public LocalConfiguration(RCCitiesPlugin plugin) {
-
-            super(plugin, "config.yml");
-        }
     }
 }

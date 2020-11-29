@@ -1,68 +1,44 @@
 package net.silthus.rccities.tables;
 
-import de.raidcraft.RaidCraft;
-import de.raidcraft.rccities.RCCitiesPlugin;
-import de.raidcraft.rccities.api.plot.Plot;
-import de.raidcraft.rccities.api.resident.Resident;
+import io.ebean.Finder;
+import lombok.Getter;
+import lombok.Setter;
+import net.silthus.ebean.BaseEntity;
+import net.silthus.rccities.api.plot.Plot;
+import net.silthus.rccities.api.resident.Resident;
+import net.silthus.rccities.upgrades.tables.TLevelInfo;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import java.util.UUID;
 
 /**
  * @author Philip Urban
  */
 @Entity
+@Getter
+@Setter
 @Table(name = "rccities_assignments")
-public class TAssignment {
+public class TAssignment extends BaseEntity {
 
-    @Id
-    private int id;
+    public static final Finder<UUID, TAssignment> find = new Finder<>(TAssignment.class);
+
     @ManyToOne
     private TPlot plot;
     @ManyToOne
     private TResident resident;
 
-    public int getId() {
-
-        return id;
-    }
-
-    public void setId(int id) {
-
-        this.id = id;
-    }
-
-    public TPlot getPlot() {
-
-        return plot;
-    }
-
-    public void setPlot(TPlot plot) {
-
-        this.plot = plot;
-    }
-
     public void setPlot(Plot plot) {
 
-        TPlot tPlot = RaidCraft.getDatabase(RCCitiesPlugin.class).find(TPlot.class, plot.getId());
+        TPlot tPlot = TPlot.find.byId(plot.getId());
         this.plot = tPlot;
-    }
-
-    public TResident getResident() {
-
-        return resident;
-    }
-
-    public void setResident(TResident resident) {
-
-        this.resident = resident;
     }
 
     public void setResident(Resident resident) {
 
-        TResident tResident = RaidCraft.getDatabase(RCCitiesPlugin.class).find(TResident.class, resident.getId());
+        TResident tResident = TResident.find.byId(resident.getId());
         this.resident = tResident;
     }
 }

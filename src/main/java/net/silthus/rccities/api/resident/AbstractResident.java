@@ -16,7 +16,7 @@ import java.util.UUID;
 @Getter
 public abstract class AbstractResident implements Resident {
 
-    protected int id;
+    protected UUID id;
     protected UUID playerId;
     protected Role profession;
     protected City city;

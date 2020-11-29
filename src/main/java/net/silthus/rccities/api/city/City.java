@@ -16,7 +16,7 @@ import java.util.UUID;
  */
 public interface City {
 
-    int getId();
+    UUID getId();
 
     String getName();
 

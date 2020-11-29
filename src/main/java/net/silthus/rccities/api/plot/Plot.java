@@ -8,13 +8,14 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * @author Philip Urban
  */
 public interface Plot {
 
-    int getId();
+    UUID getId();
 
     String getRegionName();
 

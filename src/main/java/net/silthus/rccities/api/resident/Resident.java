@@ -10,7 +10,7 @@ import java.util.UUID;
  */
 public interface Resident {
 
-    int getId();
+    UUID getId();
 
     UUID getPlayerId();
 

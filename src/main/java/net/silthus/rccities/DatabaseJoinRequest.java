@@ -1,11 +1,9 @@
 package net.silthus.rccities;
 
-import de.raidcraft.RaidCraft;
-import de.raidcraft.api.RaidCraftException;
-import de.raidcraft.rccities.api.city.City;
-import de.raidcraft.rccities.api.request.AbstractJoinRequest;
-import de.raidcraft.rccities.tables.TJoinRequest;
-import de.raidcraft.util.UUIDUtil;
+import net.silthus.rccities.api.city.City;
+import net.silthus.rccities.api.request.AbstractJoinRequest;
+import net.silthus.rccities.tables.TJoinRequest;
+import net.silthus.rccities.util.RaidCraftException;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 
@@ -25,8 +23,8 @@ public class DatabaseJoinRequest extends AbstractJoinRequest {
     public void accept() {
 
         try {
-            RaidCraft.getComponent(RCCitiesPlugin.class).getResidentManager().addResident(getCity(), getPlayer());
-            Bukkit.broadcastMessage(ChatColor.GOLD + UUIDUtil.getNameFromUUID(getPlayer())
+            RCCitiesPlugin.getPlugin().getResidentManager().addResident(getCity(), getPlayer());
+            Bukkit.broadcastMessage(ChatColor.GOLD + Bukkit.getOfflinePlayer(getPlayer()).getName()
                     + " ist nun Einwohner von '" + getCity().getFriendlyName() + "'!");
         } catch (RaidCraftException e) {
         }
@@ -36,44 +34,42 @@ public class DatabaseJoinRequest extends AbstractJoinRequest {
     @Override
     public void reject(String reason) {
 
-        TJoinRequest joinRequest = RaidCraft.getDatabase(RCCitiesPlugin.class)
-                .find(TJoinRequest.class)
+        TJoinRequest joinRequest = TJoinRequest.find.query()
                 .where()
                 .eq("city_id", getCity().getId())
-                .eq("player_id", getPlayer()).findUnique();
+                .eq("player_id", getPlayer()).findOne();
         if (joinRequest == null) return;
 
         joinRequest.setRejected(true);
         joinRequest.setRejectReason(reason);
-        RaidCraft.getDatabase(RCCitiesPlugin.class).update(joinRequest);
+        joinRequest.update();
     }
 
     @Override
     public void save() {
 
-        TJoinRequest tJoinRequest = RaidCraft.getDatabase(RCCitiesPlugin.class)
-                .find(TJoinRequest.class)
+        TJoinRequest tJoinRequest = TJoinRequest.find.query()
                 .where().eq("city_id", getCity().getId())
-                .eq("player_id", getPlayer()).findUnique();
+                .eq("player_id", getPlayer()).findOne();
         if (tJoinRequest == null) {
             tJoinRequest = new TJoinRequest();
             tJoinRequest.setCity(getCity());
             tJoinRequest.setPlayerId(getPlayer());
-            RaidCraft.getDatabase(RCCitiesPlugin.class).save(tJoinRequest);
+            tJoinRequest.save();
         } else {
             tJoinRequest.setRejected(isRejected());
             tJoinRequest.setRejectReason(getRejectReason());
-            RaidCraft.getDatabase(RCCitiesPlugin.class).update(tJoinRequest);
+            tJoinRequest.update();
         }
     }
 
     private void delete() {
 
-        TJoinRequest joinRequest = RaidCraft.getDatabase(RCCitiesPlugin.class).find(TJoinRequest.class)
+        TJoinRequest joinRequest = TJoinRequest.find.query()
                 .where().eq("city_id", getCity().getId())
-                .eq("player_id", getPlayer()).findUnique();
+                .eq("player_id", getPlayer()).findOne();
         if (joinRequest != null) {
-            RaidCraft.getDatabase(RCCitiesPlugin.class).delete(joinRequest);
+            joinRequest.delete();
         }
     }
 

@@ -1,16 +1,13 @@
 package net.silthus.rccities;
 
-import de.raidcraft.RaidCraft;
-import de.raidcraft.api.RaidCraftException;
-import de.raidcraft.api.economy.AccountType;
-import de.raidcraft.rccities.api.city.AbstractCity;
-import de.raidcraft.rccities.api.city.City;
-import de.raidcraft.rccities.api.plot.Plot;
-import de.raidcraft.rccities.api.request.JoinRequest;
-import de.raidcraft.rccities.api.resident.Resident;
-import de.raidcraft.rccities.tables.TCity;
-import de.raidcraft.rccities.tables.TJoinRequest;
-import de.raidcraft.rcupgrades.RCUpgradesPlugin;
+import net.silthus.rccities.api.city.AbstractCity;
+import net.silthus.rccities.api.city.City;
+import net.silthus.rccities.api.plot.Plot;
+import net.silthus.rccities.api.request.JoinRequest;
+import net.silthus.rccities.api.resident.Resident;
+import net.silthus.rccities.tables.TCity;
+import net.silthus.rccities.tables.TJoinRequest;
+import net.silthus.rccities.util.RaidCraftException;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -32,7 +29,7 @@ public class DatabaseCity extends AbstractCity {
 
     public DatabaseCity(TCity tCity) {
 
-        id = tCity.getId();
+        id = tCity.id();
         name = tCity.getName();
         creator = tCity.getCreatorId();
         creationDate = tCity.getCreationDate();
@@ -40,39 +37,41 @@ public class DatabaseCity extends AbstractCity {
         plotCredit = tCity.getPlotCredit();
         maxRadius = tCity.getMaxRadius();
         exp = tCity.getExp();
-        spawn = new Location(Bukkit.getWorld(tCity.getWorld()), (double) tCity.getX() / 1000D, (double) tCity.getY() / 1000D, (double) tCity.getZ() / 1000D, (float) tCity.getYaw() / 1000F, (float) tCity.getPitch() / 1000F);
-        upgradeHolder = RaidCraft.getComponent(RCUpgradesPlugin.class).getUpgradeManager()
+        spawn = new Location(Bukkit.getWorld(tCity.getWorld()), (double) tCity.getX() / 1000D,
+                (double) tCity.getY() / 1000D, (double) tCity.getZ() / 1000D,
+                (float) tCity.getYaw() / 1000F, (float) tCity.getPitch() / 1000F);
+        upgradeHolder = RCCitiesPlugin.getPlugin().getUpgradeManager()
                 .loadDatabaseUpgradeHolder(this, RaidCraft.getComponent(RCCitiesPlugin.class).getUpgradeConfiguration(), id, City.class);
     }
 
     @Override
     public int getSize() {
 
-        return RaidCraft.getComponent(RCCitiesPlugin.class).getPlotManager().getPlots(this).size();
+        return RCCitiesPlugin.getPlugin().getPlotManager().getPlots(this).size();
     }
 
     @Override
     public void setFlag(Player player, String flagName, String flagValue) throws RaidCraftException {
 
-        RaidCraft.getComponent(RCCitiesPlugin.class).getFlagManager().setCityFlag(this, player, flagName, flagValue);
+        RCCitiesPlugin.getPlugin().getFlagManager().setCityFlag(this, player, flagName, flagValue);
     }
 
     @Override
     public void removeFlag(String flagName) {
 
-        RaidCraft.getComponent(RCCitiesPlugin.class).getFlagManager().removeCityFlag(this, flagName);
+        RCCitiesPlugin.getPlugin().getFlagManager().removeCityFlag(this, flagName);
     }
 
     @Override
     public void refreshFlags() {
 
-        RaidCraft.getComponent(RCCitiesPlugin.class).getFlagManager().refreshCityFlags(this);
+        RCCitiesPlugin.getPlugin().getFlagManager().refreshCityFlags(this);
     }
 
     @Override
     public List<Resident> getResidents() {
 
-        return RaidCraft.getComponent(RCCitiesPlugin.class).getResidentManager().getResidents(this);
+        return RCCitiesPlugin.getPlugin().getResidentManager().getResidents(this);
     }
 
     @Override
@@ -80,8 +79,7 @@ public class DatabaseCity extends AbstractCity {
 
         List<JoinRequest> joinRequests = new ArrayList<>();
 
-        List<TJoinRequest> tJoinRequests = RaidCraft.getDatabase(RCCitiesPlugin.class)
-                .find(TJoinRequest.class).where().eq("city_id", getId()).findList();
+        List<TJoinRequest> tJoinRequests = TJoinRequest.find.query().where().eq("city_id", getId()).findList();
         for (TJoinRequest tJoinRequest : tJoinRequests) {
             JoinRequest joinRequest = new DatabaseJoinRequest(tJoinRequest.getPlayerId(),
                     this, tJoinRequest.isRejected(), tJoinRequest.getRejectReason());
@@ -93,9 +91,9 @@ public class DatabaseCity extends AbstractCity {
     @Override
     public JoinRequest getJoinRequest(UUID playerId) {
 
-        TJoinRequest tJoinRequest = RaidCraft.getDatabase(RCCitiesPlugin.class).find(TJoinRequest.class)
+        TJoinRequest tJoinRequest = TJoinRequest.find.query()
                 .where().eq("city_id", getId())
-                .eq("player_id", playerId).findUnique();
+                .eq("player_id", playerId).findOne();
         if (tJoinRequest == null) return null;
         return new DatabaseJoinRequest(tJoinRequest.getPlayerId(), this, tJoinRequest.isRejected(),
                 tJoinRequest.getRejectReason());
@@ -111,7 +109,7 @@ public class DatabaseCity extends AbstractCity {
     public void save() {
 
         // save new city
-        if (getId() == 0) {
+        if (getId() == null) {
             TCity tCity = new TCity();
             tCity.setCreationDate(new Timestamp(System.currentTimeMillis()));
             tCity.setCreatorId(getCreator());
@@ -127,13 +125,14 @@ public class DatabaseCity extends AbstractCity {
             upgradeHolder = RaidCraft.getComponent(RCUpgradesPlugin.class).getUpgradeManager()
                     .createDatabaseUpgradeHolder(this, RaidCraft.getComponent(RCCitiesPlugin.class).getUpgradeConfiguration(), City.class);
             tCity.setUpgradeId(upgradeHolder.getId());
-            RaidCraft.getDatabase(RCCitiesPlugin.class).save(tCity);
-            id = tCity.getId();
-            RaidCraft.getEconomy().createAccount(AccountType.CITY, getBankAccountName());
+            tCity.save();
+            id = tCity.id();
+            // TODO: Check if this works. We get a dummy offline player with UUID "".
+            RCCitiesPlugin.getPlugin().getEconomy().createBank(getBankAccountName(), Bukkit.getOfflinePlayer(UUID.fromString("")));
         }
         // update existing city
         else {
-            TCity tCity = RaidCraft.getDatabase(RCCitiesPlugin.class).find(TCity.class, getId());
+            TCity tCity = TCity.find.byId(getId());
             tCity.setWorld(getSpawn().getWorld().getName());
             tCity.setX((int) getSpawn().getX() * 1000);
             tCity.setY((int) getSpawn().getY() * 1000);
@@ -144,14 +143,14 @@ public class DatabaseCity extends AbstractCity {
             tCity.setPlotCredit(getPlotCredit());
             tCity.setMaxRadius(getMaxRadius());
             tCity.setExp(getExp());
-            RaidCraft.getDatabase(RCCitiesPlugin.class).update(tCity);
+            tCity.update();
         }
     }
 
     @Override
     public void delete() {
 
-        RCCitiesPlugin plugin = RaidCraft.getComponent(RCCitiesPlugin.class);
+        RCCitiesPlugin plugin = RCCitiesPlugin.getPlugin();
         for (Plot plot : plugin.getPlotManager().getPlots(this)) {
             plot.delete();
         }
@@ -159,11 +158,11 @@ public class DatabaseCity extends AbstractCity {
             resident.delete();
         }
 
-        RaidCraft.getEconomy().deleteAccount(AccountType.CITY, getBankAccountName());
+        plugin.getEconomy().deleteBank(getBankAccountName());
         RaidCraft.getComponent(RCUpgradesPlugin.class).getUpgradeManager().deleteUpgradeHolder(getUpgrades().getId());
 
         plugin.getCityManager().removeFromCache(this);
-        TCity tCity = RaidCraft.getDatabase(RCCitiesPlugin.class).find(TCity.class, getId());
-        RaidCraft.getDatabase(RCCitiesPlugin.class).delete(tCity);
+        TCity tCity = TCity.find.byId(getId());
+        tCity.delete();
     }
 }

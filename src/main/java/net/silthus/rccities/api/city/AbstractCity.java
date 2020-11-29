@@ -1,5 +1,6 @@
 package net.silthus.rccities.api.city;
 
+import lombok.Getter;
 import net.silthus.rccities.RCCitiesPlugin;
 import net.silthus.rccities.upgrades.api.holder.UpgradeHolder;
 import org.bukkit.Bukkit;
@@ -11,9 +12,10 @@ import java.util.UUID;
 /**
  * @author Philip Urban
  */
+@Getter
 public abstract class AbstractCity implements City {
 
-    protected int id;
+    protected UUID id;
     protected String name;
     protected UUID creator;
     protected Timestamp creationDate;
@@ -40,18 +42,6 @@ public abstract class AbstractCity implements City {
     }
 
     @Override
-    public int getId() {
-
-        return id;
-    }
-
-    @Override
-    public final String getName() {
-
-        return name;
-    }
-
-    @Override
     public String getFriendlyName() {
 
         return name.replace('_', ' ');
@@ -64,34 +54,10 @@ public abstract class AbstractCity implements City {
     }
 
     @Override
-    public final UUID getCreator() {
-
-        return creator;
-    }
-
-    @Override
-    public final Timestamp getCreationDate() {
-
-        return creationDate;
-    }
-
-    @Override
-    public final Location getSpawn() {
-
-        return spawn;
-    }
-
-    @Override
     public final void setSpawn(Location spawn) {
 
         this.spawn = spawn;
         save();
-    }
-
-    @Override
-    public final String getDescription() {
-
-        return description;
     }
 
     @Override
@@ -109,12 +75,6 @@ public abstract class AbstractCity implements City {
     }
 
     @Override
-    public int getPlotCredit() {
-
-        return plotCredit;
-    }
-
-    @Override
     public void removeExp(int exp) {
 
         this.exp -= exp;
@@ -129,22 +89,10 @@ public abstract class AbstractCity implements City {
     }
 
     @Override
-    public int getExp() {
-
-        return exp;
-    }
-
-    @Override
     public void setMaxRadius(int maxRadius) {
 
         this.maxRadius = maxRadius;
         save();
-    }
-
-    @Override
-    public int getMaxRadius() {
-
-        return maxRadius;
     }
 
     @Override

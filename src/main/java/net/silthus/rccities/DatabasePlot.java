@@ -1,12 +1,11 @@
 package net.silthus.rccities;
 
-import de.raidcraft.RaidCraft;
-import de.raidcraft.api.RaidCraftException;
-import de.raidcraft.rccities.api.city.City;
-import de.raidcraft.rccities.api.plot.AbstractPlot;
-import de.raidcraft.rccities.api.resident.Resident;
-import de.raidcraft.rccities.tables.TAssignment;
-import de.raidcraft.rccities.tables.TPlot;
+import net.silthus.rccities.api.city.City;
+import net.silthus.rccities.api.plot.AbstractPlot;
+import net.silthus.rccities.api.resident.Resident;
+import net.silthus.rccities.tables.TAssignment;
+import net.silthus.rccities.tables.TPlot;
+import net.silthus.rccities.util.RaidCraftException;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
@@ -31,35 +30,35 @@ public class DatabasePlot extends AbstractPlot {
     public DatabasePlot(TPlot tPlot) {
 
         //XXX setter call order is important!!!
-        this.id = tPlot.getId();
+        this.id = tPlot.id();
 
-        City city = RaidCraft.getComponent(RCCitiesPlugin.class).getCityManager().getCity(tPlot.getCity().getName());
+        City city = RCCitiesPlugin.getPlugin().getCityManager().getCity(tPlot.getCity().getName());
         assert city != null : "City of plot is null!";
         this.city = city;
 
         Location location = new Location(city.getSpawn().getWorld(), tPlot.getX(), 0, tPlot.getZ());
         this.location = location;
 
-        this.region = RaidCraft.getComponent(RCCitiesPlugin.class).getWorldGuard().getRegionManager(location.getWorld()).getRegion(getRegionName());
+        this.region = RCCitiesPlugin.getPlugin().getWorldGuard().getRegionManager(location.getWorld()).getRegion(getRegionName());
         loadAssignments();
     }
 
     @Override
     public void setFlag(Player player, String flagName, String flagValue) throws RaidCraftException {
 
-        RaidCraft.getComponent(RCCitiesPlugin.class).getFlagManager().setPlotFlag(this, player, flagName, flagValue);
+        RCCitiesPlugin.getPlugin().getFlagManager().setPlotFlag(this, player, flagName, flagValue);
     }
 
     @Override
     public void removeFlag(String flagName) {
 
-        RaidCraft.getComponent(RCCitiesPlugin.class).getFlagManager().removePlotFlag(this, flagName);
+        RCCitiesPlugin.getPlugin().getFlagManager().removePlotFlag(this, flagName);
     }
 
     @Override
     public void refreshFlags() {
 
-        RaidCraft.getComponent(RCCitiesPlugin.class).getFlagManager().refreshPlotFlags(this);
+        RCCitiesPlugin.getPlugin().getFlagManager().refreshPlotFlags(this);
     }
 
     @Override
@@ -80,7 +79,7 @@ public class DatabasePlot extends AbstractPlot {
         TAssignment tAssignment = new TAssignment();
         tAssignment.setPlot(this);
         tAssignment.setResident(resident);
-        RaidCraft.getDatabase(RCCitiesPlugin.class).save(tAssignment);
+        tAssignment.save();
         updateRegion(false);
     }
 
@@ -90,10 +89,10 @@ public class DatabasePlot extends AbstractPlot {
         Resident removedResident = assignedResidents.remove(resident.getPlayerId());
         if (removedResident != null) {
             // delete assignment
-            TAssignment assignment = RaidCraft.getDatabase(RCCitiesPlugin.class).find(TAssignment.class)
+            TAssignment assignment = TAssignment.find.query()
                     .where().eq("resident_id", removedResident.getId())
-                    .eq("plot_id", getId()).findUnique();
-            RaidCraft.getDatabase(RCCitiesPlugin.class).delete(assignment);
+                    .eq("plot_id", getId()).findOne();
+            assignment.delete();
             // update region
             updateRegion(false);
         }
@@ -101,11 +100,11 @@ public class DatabasePlot extends AbstractPlot {
 
     private void loadAssignments() {
 
-        List<TAssignment> assignments = RaidCraft.getDatabase(RCCitiesPlugin.class).find(TAssignment.class)
+        List<TAssignment> assignments = TAssignment.find.query()
                 .where().eq("plot_id", getId()).findList();
         for (TAssignment assignment : assignments) {
 
-            Resident resident = RaidCraft.getComponent(RCCitiesPlugin.class).getResidentManager()
+            Resident resident = RCCitiesPlugin.getPlugin().getResidentManager()
                     .getResident(assignment.getResident().getPlayerId(), getCity());
             if (resident == null) continue;
             assignedResidents.put(resident.getPlayerId(), resident);
@@ -119,21 +118,21 @@ public class DatabasePlot extends AbstractPlot {
         tPlot.setCity(getCity());
         tPlot.setX(getLocation().getBlockX());
         tPlot.setZ(getLocation().getBlockZ());
-        RaidCraft.getDatabase(RCCitiesPlugin.class).save(tPlot);
-        this.id = tPlot.getId();
+        tPlot.save();
+        this.id = tPlot.id();
     }
 
     @Override
     public void delete() {
 
         super.delete();
-        RCCitiesPlugin plugin = RaidCraft.getComponent(RCCitiesPlugin.class);
+        RCCitiesPlugin plugin = RCCitiesPlugin.getPlugin();
 
         // delete from cache
         plugin.getPlotManager().removeFromCache(this);
 
         // delete plot
-        TPlot tPlot = RaidCraft.getDatabase(RCCitiesPlugin.class).find(TPlot.class, getId());
-        RaidCraft.getDatabase(RCCitiesPlugin.class).delete(tPlot);
+        TPlot tPlot = TPlot.find.byId(getId());
+        tPlot.delete();
     }
 }

@@ -1,9 +1,9 @@
 package net.silthus.rccities.tables;
 
-import de.raidcraft.RaidCraft;
-import de.raidcraft.rccities.RCCitiesPlugin;
+import io.ebean.Finder;
 import lombok.Getter;
 import lombok.Setter;
+import net.silthus.ebean.BaseEntity;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -23,10 +23,10 @@ import java.util.UUID;
 @Getter
 @Entity
 @Table(name = "rccities_cities")
-public class TCity {
+public class TCity extends BaseEntity {
 
-    @Id
-    private int id;
+    public static final Finder<UUID, TCity> find = new Finder<>(TCity.class);
+
     private String name;
     private UUID creatorId;
     private Timestamp creationDate;
@@ -61,9 +61,9 @@ public class TCity {
 
     public void loadChildren() {
 
-        plots = RaidCraft.getDatabase(RCCitiesPlugin.class).find(TPlot.class).where().eq("city_id", id).findSet();
-        residents = RaidCraft.getDatabase(RCCitiesPlugin.class).find(TResident.class).where().eq("city_id", id).findSet();
-        settings = RaidCraft.getDatabase(RCCitiesPlugin.class).find(TCityFlag.class).where().eq("city_id", id).findSet();
-        requests = RaidCraft.getDatabase(RCCitiesPlugin.class).find(TJoinRequest.class).where().eq("city_id", id).findSet();
+        plots = TPlot.find.query().where().eq("city_id", id()).findSet();
+        residents = TResident.find.query().where().eq("city_id", id()).findSet();
+        settings = TCityFlag.find.query().where().eq("city_id", id()).findSet();
+        requests = TJoinRequest.find.query().where().eq("city_id", id()).findSet();
     }
 }

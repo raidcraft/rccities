@@ -1,26 +1,33 @@
 package net.silthus.rccities.tables;
 
-import de.raidcraft.RaidCraft;
-import de.raidcraft.rccities.RCCitiesPlugin;
-import de.raidcraft.rccities.api.city.City;
-import de.raidcraft.rcupgrades.api.level.UpgradeLevel;
-import de.raidcraft.rcupgrades.api.upgrade.Upgrade;
+
+import io.ebean.Finder;
+import lombok.Getter;
+import lombok.Setter;
+import net.silthus.ebean.BaseEntity;
+import net.silthus.rccities.RCCitiesPlugin;
+import net.silthus.rccities.api.city.City;
+import net.silthus.rccities.upgrades.api.level.UpgradeLevel;
+import net.silthus.rccities.upgrades.api.upgrade.Upgrade;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import java.sql.Timestamp;
+import java.util.UUID;
 
 /**
  * @author Philip Urban
  */
 @Entity
+@Getter
+@Setter
 @Table(name = "rccities_upgrade_requests")
-public class TUpgradeRequest {
+public class TUpgradeRequest extends BaseEntity {
 
-    @Id
-    private int id;
+    public static final Finder<UUID, TUpgradeRequest> find = new Finder<>(TUpgradeRequest.class);
+
     @ManyToOne
     private TCity city;
     private String levelIdentifier;
@@ -30,40 +37,15 @@ public class TUpgradeRequest {
     private String rejectReason;
     private Timestamp rejectDate;
 
-    public int getId() {
-
-        return id;
-    }
-
-    public void setId(int id) {
-
-        this.id = id;
-    }
-
-    public TCity getCity() {
-
-        return city;
-    }
-
     public City getRCCity() {
 
-        return RaidCraft.getComponent(RCCitiesPlugin.class).getCityManager().getCity(city.getName());
+        return RCCitiesPlugin.getPlugin().getCityManager().getCity(city.getName());
     }
 
     public void setCity(City city) {
 
-        TCity tCity = RaidCraft.getDatabase(RCCitiesPlugin.class).find(TCity.class, city.getId());
+        TCity tCity = TCity.find.byId(city.getId());
         this.city = tCity;
-    }
-
-    public void setCity(TCity city) {
-
-        this.city = city;
-    }
-
-    public String getLevelIdentifier() {
-
-        return levelIdentifier;
     }
 
     public UpgradeLevel<City> getUpgradeLevel() {
@@ -76,60 +58,5 @@ public class TUpgradeRequest {
             }
         }
         return null;
-    }
-
-    public void setLevelIdentifier(String levelIdentifier) {
-
-        this.levelIdentifier = levelIdentifier;
-    }
-
-    public String getInfo() {
-
-        return info;
-    }
-
-    public void setInfo(String info) {
-
-        this.info = info;
-    }
-
-    public boolean isRejected() {
-
-        return rejected;
-    }
-
-    public void setRejected(boolean rejected) {
-
-        this.rejected = rejected;
-    }
-
-    public boolean isAccepted() {
-
-        return accepted;
-    }
-
-    public void setAccepted(boolean accepted) {
-
-        this.accepted = accepted;
-    }
-
-    public String getRejectReason() {
-
-        return rejectReason;
-    }
-
-    public void setRejectReason(String rejectReason) {
-
-        this.rejectReason = rejectReason;
-    }
-
-    public Timestamp getRejectDate() {
-
-        return rejectDate;
-    }
-
-    public void setRejectDate(Timestamp rejectDate) {
-
-        this.rejectDate = rejectDate;
     }
 }
