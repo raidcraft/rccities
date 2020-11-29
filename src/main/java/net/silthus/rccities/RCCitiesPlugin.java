@@ -26,6 +26,7 @@ import net.silthus.rccities.upgrades.RCUpgrades;
 import net.silthus.rccities.util.QueuedCommand;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -72,7 +73,7 @@ public class RCCitiesPlugin extends JavaPlugin {
     private RCUpgrades upgrades;
 
     private RCCitiesPluginConfig pluginConfig;
-    private RCCitiesUpgradeConfig upgradeConfiguration;
+    private YamlConfiguration upgradeConfiguration;
 
     private boolean testing = false;
 
@@ -183,8 +184,8 @@ public class RCCitiesPlugin extends JavaPlugin {
         getDataFolder().mkdirs();
         this.pluginConfig = new RCCitiesPluginConfig(new File(getDataFolder(), "config.yml").toPath());
         this.pluginConfig.loadAndSave();
-        this.upgradeConfiguration = new RCCitiesUpgradeConfig(new File(getDataFolder(), "upgrades.yml").toPath());
-        this.upgradeConfiguration.loadAndSave();
+
+        this.upgradeConfiguration = YamlConfiguration.loadConfiguration(new File(getDataFolder(), "upgrades.yml"));
     }
 
     private void setupDatabase() {
