@@ -22,6 +22,7 @@ import net.silthus.rccities.listener.UpgradeListener;
 import net.silthus.rccities.manager.*;
 import net.silthus.rccities.tables.*;
 import net.silthus.rccities.upgrades.RCUpgrades;
+import net.silthus.rccities.util.QueuedCommand;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandException;
 import org.bukkit.configuration.ConfigurationSection;
@@ -45,7 +46,9 @@ import net.milkbowl.vault.permission.Permission;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Philip Urban
@@ -54,6 +57,7 @@ import java.util.List;
 @Getter
 public class RCCitiesPlugin extends JavaPlugin {
 
+    private final Map<String, QueuedCommand> queuedCommands = new HashMap<>();
     private Economy economy;
     private Permission permission;
     private Database database;
@@ -255,6 +259,24 @@ public class RCCitiesPlugin extends JavaPlugin {
         commandManager.registerCommand(new PlotCommands(this));
         commandManager.registerCommand(new ResidentCommands(this));
         commandManager.registerCommand(new TownCommands(this));
+    }
+
+    public final void queueCommand(final QueuedCommand command) {
+
+        queuedCommands.put(command.getSender().getName(), command);
+        Bukkit.getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
+            @Override
+            public void run() {
+
+                queuedCommands.remove(command.getSender().getName());
+            }
+        }, 600L);
+        // 30 second remove delay
+    }
+
+    public final Map<String, QueuedCommand> getQueuedCommands() {
+
+        return queuedCommands;
     }
 
     /**

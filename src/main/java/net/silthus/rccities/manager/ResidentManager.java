@@ -1,12 +1,17 @@
 package net.silthus.rccities.manager;
 
+import net.silthus.rccities.DatabaseResident;
 import net.silthus.rccities.RCCitiesPlugin;
 import net.silthus.rccities.api.city.City;
 import net.silthus.rccities.api.resident.Resident;
+import net.silthus.rccities.api.resident.Role;
 import net.silthus.rccities.api.resident.RolePermission;
+import net.silthus.rccities.tables.TJoinRequest;
+import net.silthus.rccities.tables.TResident;
 import net.silthus.rccities.util.RaidCraftException;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -56,7 +61,7 @@ public class ResidentManager {
         }
     }
 
-    public Resident addResident(City city, Player player) throws RaidCraftException {
+    public Resident addResident(City city, OfflinePlayer player) throws RaidCraftException {
 
         return addResident(city, player.getUniqueId());
     }
@@ -65,7 +70,8 @@ public class ResidentManager {
 
         Resident resident = getResident(playerId, city);
         if (resident != null) {
-            throw new RaidCraftException(UUIDUtil.getNameFromUUID(playerId)
+            OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(playerId);
+            throw new RaidCraftException(offlinePlayer.getName()
                     + " ist bereits Einwohner von '" + city.getFriendlyName() + "'!");
         }
 
@@ -90,7 +96,8 @@ public class ResidentManager {
 
         List<Resident> citizenships = getCitizenships(playerId);
         if (citizenships == null || citizenships.size() == 0) {
-            sender.sendMessage(ChatColor.RED + "Keine Einwohner Informationen zu '" + UUIDUtil.getNameFromUUID(playerId) + "' gefunden!");
+            OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(playerId);
+            sender.sendMessage(ChatColor.RED + "Keine Einwohner Informationen zu '" + offlinePlayer.getName() + "' gefunden!");
             return;
         }
 
@@ -109,10 +116,10 @@ public class ResidentManager {
 
     public void deleteOtherJoinRequests(UUID playerId, City exceptedCity) {
 
-        List<TJoinRequest> tJoinRequests = RaidCraft.getDatabase(RCCitiesPlugin.class)
-                .find(TJoinRequest.class).where().ieq("player_id", playerId.toString()).ne("city_id", exceptedCity.getId()).findList();
+        List<TJoinRequest> tJoinRequests = TJoinRequest.find.query()
+                .where().ieq("player_id", playerId.toString()).ne("city_id", exceptedCity.getId()).findList();
         if (tJoinRequests == null || tJoinRequests.size() == 0) return;
-        RaidCraft.getDatabase(RCCitiesPlugin.class).delete(tJoinRequests);
+        tJoinRequests.forEach(tJoinRequest -> tJoinRequest.delete());
     }
 
     public void addPrefixSkill(Resident resident) {
@@ -146,8 +153,8 @@ public class ResidentManager {
         }
 
         if (residents == null || residents.size() == 0) {
-            List<TResident> tResidents = RaidCraft.getDatabase(RCCitiesPlugin.class)
-                    .find(TResident.class).where().ieq("player_id", playerId.toString()).findList();
+            List<TResident> tResidents = TResident.find.query()
+                    .where().ieq("player_id", playerId.toString()).findList();
             if (tResidents != null && tResidents.size() > 0) {
                 cachedResidents.put(playerId, new ArrayList<Resident>());
                 for (TResident tResident : tResidents) {
@@ -212,7 +219,7 @@ public class ResidentManager {
             return residents;
         }
 
-        List<TResident> tResidents = RaidCraft.getDatabase(RCCitiesPlugin.class).find(TResident.class)
+        List<TResident> tResidents = TResident.find.query()
                 .where().eq("city_id", city.getId()).findList();
         for (TResident tResident : tResidents) {
             if (!cachedResidents.containsKey(tResident.getPlayerId())) {

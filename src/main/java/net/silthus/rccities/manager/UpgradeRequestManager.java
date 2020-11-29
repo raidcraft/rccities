@@ -85,8 +85,8 @@ public class UpgradeRequestManager {
 
                 if (!player.hasPermission("rccities.upgrades.process")) continue;
 
-                player.sendMessage(ChatColor.GRAY + "Es liegen Upgrade-Anfragen von Gilden vor:");
-                player.sendMessage(ChatColor.GRAY + list + " (nutze /gilde upgrade <Gilde>)");
+                player.sendMessage(ChatColor.GRAY + "Es liegen Upgrade-Anfragen von Städten vor:");
+                player.sendMessage(ChatColor.GRAY + list + " (nutze /town upgrade <Stadt>)");
             }
         }
     }

@@ -24,6 +24,6 @@ public class UpgradeListener implements Listener {
         Upgrade mainUpgrade = RaidCraft.getComponent(RCCitiesPlugin.class).getCityManager().getMainUpgrade(city);
         if (mainUpgrade.getLevel(event.getUpgradeLevel().getId()) == null) return;
         int maxLevel = event.getUpgradeLevel().getLevel();
-        Bukkit.broadcastMessage(ChatColor.GOLD + "Die Gilde '" + city.getFriendlyName() + "' ist auf Level " + ChatColor.RED + maxLevel + ChatColor.GOLD + " aufgestiegen!");
+        Bukkit.broadcastMessage(ChatColor.GOLD + "Die Stadt '" + city.getFriendlyName() + "' ist auf Level " + ChatColor.RED + maxLevel + ChatColor.GOLD + " aufgestiegen!");
     }
 }
