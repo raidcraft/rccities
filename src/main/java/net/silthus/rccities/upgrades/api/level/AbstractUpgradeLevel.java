@@ -1,6 +1,7 @@
 package net.silthus.rccities.upgrades.api.level;
 
-import de.raidcraft.rcupgrades.api.holder.UpgradeHolder;
+
+import net.silthus.rccities.upgrades.api.holder.UpgradeHolder;
 
 import java.util.List;
 

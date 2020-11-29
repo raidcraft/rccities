@@ -1,7 +1,7 @@
 package net.silthus.rccities.upgrades.events;
 
-import de.raidcraft.rcupgrades.api.level.UpgradeLevel;
-import de.raidcraft.rcupgrades.api.unlockresult.UnlockResult;
+import net.silthus.rccities.upgrades.api.level.UpgradeLevel;
+import net.silthus.rccities.upgrades.api.unlockresult.UnlockResult;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;

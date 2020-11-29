@@ -1,13 +1,14 @@
 package net.silthus.rccities.upgrades;
 
-import de.raidcraft.RaidCraft;
-import de.raidcraft.rcupgrades.api.holder.ConfigurationUpgradeHolder;
-import de.raidcraft.rcupgrades.api.level.UpgradeLevel;
-import de.raidcraft.rcupgrades.api.upgrade.Upgrade;
-import de.raidcraft.rcupgrades.tables.TUpgrade;
-import de.raidcraft.rcupgrades.tables.TUpgradeHolder;
-import de.raidcraft.rcupgrades.tables.TUpgradeLevel;
+import net.silthus.rccities.upgrades.api.holder.ConfigurationUpgradeHolder;
+import net.silthus.rccities.upgrades.api.level.UpgradeLevel;
+import net.silthus.rccities.upgrades.api.upgrade.Upgrade;
+import net.silthus.rccities.upgrades.tables.TUpgrade;
+import net.silthus.rccities.upgrades.tables.TUpgradeHolder;
+import net.silthus.rccities.upgrades.tables.TUpgradeLevel;
 import org.bukkit.configuration.ConfigurationSection;
+
+import java.util.UUID;
 
 /**
  * @author Philip Urban
@@ -19,7 +20,7 @@ public class DatabaseUpgradeHolder<T> extends ConfigurationUpgradeHolder<T> {
         super(object, config, clazz);
     }
 
-    public DatabaseUpgradeHolder(T object, ConfigurationSection config, int id, Class<T> clazz) {
+    public DatabaseUpgradeHolder(T object, ConfigurationSection config, UUID id, Class<T> clazz) {
 
         super(object, config, clazz);
         this.id = id;
@@ -30,13 +31,13 @@ public class DatabaseUpgradeHolder<T> extends ConfigurationUpgradeHolder<T> {
     public void save() {
 
         // save new
-        if(getId() == 0) {
+        if(getId() == null) {
 
             //save holder
             TUpgradeHolder tUpgradeHolder = new TUpgradeHolder();
             tUpgradeHolder.setName(getName());
-            RaidCraft.getDatabase(de.raidcraft.rcupgrades.RCUpgradesPlugin.class).save(tUpgradeHolder);
-            id = tUpgradeHolder.getId();
+            tUpgradeHolder.save();
+            id = tUpgradeHolder.id();
         }
         // update
         else {
@@ -82,7 +83,7 @@ public class DatabaseUpgradeHolder<T> extends ConfigurationUpgradeHolder<T> {
 
     private void load() {
 
-        if(id == 0) return;
+        if(id == null) return;
 
         // get holder
         TUpgradeHolder tUpgradeHolder = RaidCraft.getDatabase(de.raidcraft.rcupgrades.RCUpgradesPlugin.class).find(TUpgradeHolder.class, getId());

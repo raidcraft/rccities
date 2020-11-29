@@ -4,13 +4,14 @@ package net.silthus.rccities.upgrades.api.holder;
 import net.silthus.rccities.upgrades.api.upgrade.Upgrade;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * @author Philip Urban
  */
 public interface UpgradeHolder<T> {
 
-    int getId();
+    UUID getId();
 
     String getName();
 

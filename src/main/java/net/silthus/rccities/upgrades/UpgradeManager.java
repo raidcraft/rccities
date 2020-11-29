@@ -1,14 +1,13 @@
 package net.silthus.rccities.upgrades;
 
 import com.google.common.base.Joiner;
-import de.raidcraft.RaidCraft;
-import de.raidcraft.rcupgrades.api.holder.UpgradeHolder;
-import de.raidcraft.rcupgrades.api.level.UpgradeLevel;
-import de.raidcraft.rcupgrades.api.upgrade.Upgrade;
-import de.raidcraft.rcupgrades.tables.TLevelInfo;
-import de.raidcraft.rcupgrades.tables.TUpgradeHolder;
-import de.raidcraft.rcupgrades.tables.TUpgradeInfo;
-import de.raidcraft.util.StringUtils;
+import net.silthus.rccities.upgrades.api.holder.UpgradeHolder;
+import net.silthus.rccities.upgrades.api.level.UpgradeLevel;
+import net.silthus.rccities.upgrades.api.upgrade.Upgrade;
+import net.silthus.rccities.upgrades.tables.TLevelInfo;
+import net.silthus.rccities.upgrades.tables.TUpgradeHolder;
+import net.silthus.rccities.upgrades.tables.TUpgradeInfo;
+import net.silthus.rccities.util.StringUtils;
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.HashSet;

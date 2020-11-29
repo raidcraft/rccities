@@ -1,18 +1,21 @@
 package net.silthus.rccities.upgrades.api.holder;
 
+import lombok.Getter;
 import net.silthus.rccities.upgrades.api.upgrade.Upgrade;
 import net.silthus.rccities.util.CaseInsensitiveMap;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * @author Philip Urban
  */
+@Getter
 public abstract class AbstractUpgradeHolder<T> implements UpgradeHolder<T> {
 
-    protected int id;
+    protected UUID id;
     protected String name;
     protected String description;
     protected T object;
@@ -22,29 +25,6 @@ public abstract class AbstractUpgradeHolder<T> implements UpgradeHolder<T> {
     public AbstractUpgradeHolder(T object, Class<T> clazz) {
         this.clazz = clazz;
         this.object = object;
-    }
-
-    @Override
-    public int getId() {
-
-        return id;
-    }
-
-    @Override
-    public String getName() {
-
-        return name;
-    }
-
-    @Override
-    public String getDescription() {
-
-        return description;
-    }
-
-    @Override
-    public T getObject() {
-        return object;
     }
 
     @Override

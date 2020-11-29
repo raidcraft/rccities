@@ -18,6 +18,7 @@ import net.silthus.rccities.listener.ResidentListener;
 import net.silthus.rccities.listener.UpgradeListener;
 import net.silthus.rccities.manager.*;
 import net.silthus.rccities.tables.*;
+import net.silthus.rccities.upgrades.RCUpgrades;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandException;
 import org.bukkit.configuration.ConfigurationSection;
@@ -74,6 +75,7 @@ public class RCCitiesPlugin extends JavaPlugin {
     private ExpListener expListener;
     private ResidentListener residentListener;
     private UpgradeListener upgradeListener;
+    private RCUpgrades upgrades;
 
     private RCCitiesPluginConfig pluginConfig;
 
@@ -112,6 +114,7 @@ public class RCCitiesPlugin extends JavaPlugin {
             setupCommands();
         }
 
+        upgrades = new RCUpgrades(this);
         worldGuard = (WorldGuardPlugin) getServer().getPluginManager().getPlugin("WorldGuard");
         worldEdit = (WorldEditPlugin) getServer().getPluginManager().getPlugin("WorldEdit");
 

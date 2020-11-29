@@ -1,13 +1,12 @@
 package net.silthus.rccities.upgrades.api.holder;
 
-import de.raidcraft.api.action.ActionAPI;
-import de.raidcraft.api.action.requirement.Requirement;
-import de.raidcraft.api.reward.Reward;
-import de.raidcraft.api.reward.RewardManager;
-import de.raidcraft.rcupgrades.api.level.SimpleUpgradeLevel;
-import de.raidcraft.rcupgrades.api.level.UpgradeLevel;
-import de.raidcraft.rcupgrades.api.upgrade.SimpleUpgrade;
-import de.raidcraft.rcupgrades.api.upgrade.Upgrade;
+import net.silthus.rccities.requirement.Requirement;
+import net.silthus.rccities.reward.Reward;
+import net.silthus.rccities.reward.RewardManager;
+import net.silthus.rccities.upgrades.api.level.SimpleUpgradeLevel;
+import net.silthus.rccities.upgrades.api.level.UpgradeLevel;
+import net.silthus.rccities.upgrades.api.upgrade.SimpleUpgrade;
+import net.silthus.rccities.upgrades.api.upgrade.Upgrade;
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.List;
