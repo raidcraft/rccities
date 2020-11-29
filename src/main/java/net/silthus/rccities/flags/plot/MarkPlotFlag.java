@@ -1,14 +1,15 @@
 package net.silthus.rccities.flags.plot;
 
-import de.raidcraft.RaidCraft;
-import de.raidcraft.api.RaidCraftException;
-import de.raidcraft.api.economy.AccountType;
-import de.raidcraft.api.economy.Economy;
-import de.raidcraft.rccities.RCCitiesPlugin;
-import de.raidcraft.rccities.api.flags.AbstractPlotFlag;
-import de.raidcraft.rccities.api.flags.FlagInformation;
-import de.raidcraft.rccities.api.flags.FlagType;
-import de.raidcraft.rccities.api.plot.Plot;
+import com.sk89q.worldguard.protection.flags.Flags;
+import com.sk89q.worldguard.protection.flags.StateFlag;
+import net.milkbowl.vault.economy.Economy;
+import net.milkbowl.vault.economy.EconomyResponse;
+import net.silthus.rccities.RCCitiesPlugin;
+import net.silthus.rccities.api.flags.AbstractPlotFlag;
+import net.silthus.rccities.api.flags.FlagInformation;
+import net.silthus.rccities.api.flags.FlagType;
+import net.silthus.rccities.api.plot.Plot;
+import net.silthus.rccities.util.RaidCraftException;
 import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
 import org.bukkit.ChunkSnapshot;
@@ -39,19 +40,19 @@ public class MarkPlotFlag extends AbstractPlotFlag {
 
         boolean currentValue = getType().convertToBoolean(getValue());
         String bankAccount = getPlot().getCity().getBankAccountName();
-        double markCost = RaidCraft.getComponent(RCCitiesPlugin.class).getConfig().flagPlotMarkCost;
+        double markCost = RCCitiesPlugin.getPlugin().getPluginConfig().getFlagPlotMarkCost();
 
         if (currentValue) {
 
-            Economy economy = RaidCraft.getEconomy();
-            if (!economy.hasEnough(AccountType.CITY, bankAccount, markCost)) {
-                throw new RaidCraftException("Es ist nicht genug Geld in der Stadtkasse! " + economy.getFormattedAmount(markCost) + " benötigt!");
+            Economy economy = RCCitiesPlugin.getPlugin().getEconomy();
+            if (economy.bankHas(bankAccount, markCost).type == EconomyResponse.ResponseType.SUCCESS) {
+                throw new RaidCraftException("Es ist nicht genug Geld in der Stadtkasse! " + economy.format(markCost) + " benötigt!");
             }
 
             // withdraw
-            economy.substract(AccountType.CITY, bankAccount, markCost);
-            RaidCraft.getComponent(RCCitiesPlugin.class).getResidentManager()
-                    .broadcastCityMessage(getPlot().getCity(), "Plot Markierung: " + economy.getFormattedAmount(markCost) + ChatColor.GOLD + " abgezogen!");
+            economy.bankWithdraw(bankAccount, markCost);
+            RCCitiesPlugin.getPlugin().getResidentManager()
+                    .broadcastCityMessage(getPlot().getCity(), "Plot Markierung: " + economy.format(markCost) + ChatColor.GOLD + " abgezogen!");
 
             //set torches
             Chunk chunk = getPlot().getLocation().getChunk();
@@ -135,24 +136,18 @@ public class MarkPlotFlag extends AbstractPlotFlag {
 
         Material material = block.getType();
 
+        // TODO: Extend list with new materials
         if (material == Material.GRASS
                 || material == Material.DIRT
                 || material == Material.COBBLESTONE
                 || material == Material.STONE
-                || material == Material.LOG
                 || material == Material.SAND
                 || material == Material.GRAVEL
-                || material == Material.WOOD
-                || material == Material.FENCE
-                || material == Material.IRON_FENCE
-                || material == Material.NETHER_FENCE
-                || material == Material.SMOOTH_BRICK
                 || material == Material.OBSIDIAN
-                || material == Material.DOUBLE_STEP
-                || material == Material.WOOL
+                || material == Material.WHITE_WOOL
                 || material == Material.BRICK
                 || material == Material.QUARTZ_BLOCK
-                || material == Material.QUARTZ_ORE
+                || material == Material.QUARTZ
                 || material == Material.DIAMOND_ORE
                 || material == Material.IRON_ORE
                 || material == Material.COAL_ORE

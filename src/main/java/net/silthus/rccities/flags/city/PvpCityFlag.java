@@ -1,15 +1,15 @@
 package net.silthus.rccities.flags.city;
 
-import com.sk89q.worldguard.protection.flags.DefaultFlag;
+import com.sk89q.worldguard.protection.flags.Flags;
 import com.sk89q.worldguard.protection.flags.StateFlag;
-import de.raidcraft.RaidCraft;
-import de.raidcraft.rccities.RCCitiesPlugin;
-import de.raidcraft.rccities.api.city.City;
-import de.raidcraft.rccities.api.flags.FlagInformation;
-import de.raidcraft.rccities.api.flags.FlagType;
-import de.raidcraft.rccities.api.flags.PlotFlag;
-import de.raidcraft.rccities.api.plot.Plot;
-import de.raidcraft.rccities.flags.plot.PvpPlotFlag;
+import net.silthus.rccities.RCCitiesPlugin;
+import net.silthus.rccities.api.city.City;
+import net.silthus.rccities.api.flags.FlagInformation;
+import net.silthus.rccities.api.flags.FlagType;
+import net.silthus.rccities.api.flags.PlotFlag;
+import net.silthus.rccities.api.plot.Plot;
+import net.silthus.rccities.flags.plot.PvpPlotFlag;
+
 
 /**
  * @author Philip Urban
@@ -30,9 +30,9 @@ public class PvpCityFlag extends AbstractBooleanPlotwiseCityFlag {
     public void announce(boolean state) {
 
         if (state) {
-            RaidCraft.getComponent(RCCitiesPlugin.class).getResidentManager().broadcastCityMessage(getCity(), "PvP ist im Stadtgebiet erlaubt!");
+            RCCitiesPlugin.getPlugin().getResidentManager().broadcastCityMessage(getCity(), "PvP ist im Stadtgebiet erlaubt!");
         } else {
-            RaidCraft.getComponent(RCCitiesPlugin.class).getResidentManager().broadcastCityMessage(getCity(), "PvP ist im Stadtgebiet verboten!");
+            RCCitiesPlugin.getPlugin().getResidentManager().broadcastCityMessage(getCity(), "PvP ist im Stadtgebiet verboten!");
         }
     }
 
@@ -40,19 +40,19 @@ public class PvpCityFlag extends AbstractBooleanPlotwiseCityFlag {
     public void allow(Plot plot) {
 
         // check if plot has its own pvp setting -> skip
-        PlotFlag existingFlag = RaidCraft.getComponent(RCCitiesPlugin.class).getFlagManager().getPlotFlag(plot, PvpPlotFlag.class);
+        PlotFlag existingFlag = RCCitiesPlugin.getPlugin().getFlagManager().getPlotFlag(plot, PvpPlotFlag.class);
         if (existingFlag != null && !existingFlag.getType().convertToBoolean(existingFlag.getValue())) return;
 
-        plot.getRegion().setFlag(DefaultFlag.PVP, StateFlag.State.ALLOW);
+        plot.getRegion().setFlag(Flags.PVP, StateFlag.State.ALLOW);
     }
 
     @Override
     public void deny(Plot plot) {
 
         // check if plot has its own pvp setting -> skip
-        PlotFlag existingFlag = RaidCraft.getComponent(RCCitiesPlugin.class).getFlagManager().getPlotFlag(plot, PvpPlotFlag.class);
+        PlotFlag existingFlag = RCCitiesPlugin.getPlugin().getFlagManager().getPlotFlag(plot, PvpPlotFlag.class);
         if (existingFlag != null && existingFlag.getType().convertToBoolean(existingFlag.getValue())) return;
 
-        plot.getRegion().setFlag(DefaultFlag.PVP, StateFlag.State.DENY);
+        plot.getRegion().setFlag(Flags.PVP, StateFlag.State.DENY);
     }
 }

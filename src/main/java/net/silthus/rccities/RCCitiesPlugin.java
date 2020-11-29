@@ -12,6 +12,9 @@ import net.silthus.rccities.api.plot.Plot;
 import net.silthus.rccities.commands.PlotCommands;
 import net.silthus.rccities.commands.ResidentCommands;
 import net.silthus.rccities.commands.TownCommands;
+import net.silthus.rccities.flags.city.*;
+import net.silthus.rccities.flags.city.admin.InviteCityFlag;
+import net.silthus.rccities.flags.plot.*;
 import net.silthus.rccities.listener.EntityListener;
 import net.silthus.rccities.listener.ExpListener;
 import net.silthus.rccities.listener.ResidentListener;
@@ -66,8 +69,6 @@ public class RCCitiesPlugin extends JavaPlugin {
     private ResidentManager residentManager;
     private AssignmentManager assignmentManager;
     private FlagManager flagManager;
-    private SchematicManager schematicManager;
-    private DynmapManager dynmapManager;
     private WorldGuardManager worldGuardManager;
     private UpgradeRequestManager upgradeRequestManager;
 
@@ -125,8 +126,6 @@ public class RCCitiesPlugin extends JavaPlugin {
         residentManager = new ResidentManager(this);
         assignmentManager = new AssignmentManager(this);
         flagManager = new FlagManager(this);
-        schematicManager = new SchematicManager(this);
-        dynmapManager = new DynmapManager();
         worldGuardManager = new WorldGuardManager(this, worldGuard);
         upgradeRequestManager = new UpgradeRequestManager(this);
 

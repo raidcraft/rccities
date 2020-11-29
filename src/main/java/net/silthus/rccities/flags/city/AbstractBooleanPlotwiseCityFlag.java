@@ -1,11 +1,11 @@
 package net.silthus.rccities.flags.city;
 
-import de.raidcraft.RaidCraft;
-import de.raidcraft.api.RaidCraftException;
-import de.raidcraft.rccities.RCCitiesPlugin;
-import de.raidcraft.rccities.api.city.City;
-import de.raidcraft.rccities.api.flags.AbstractCityFlag;
-import de.raidcraft.rccities.api.plot.Plot;
+
+import net.silthus.rccities.RCCitiesPlugin;
+import net.silthus.rccities.api.city.City;
+import net.silthus.rccities.api.flags.AbstractCityFlag;
+import net.silthus.rccities.api.plot.Plot;
+import net.silthus.rccities.util.RaidCraftException;
 
 /**
  * @author Philip Urban
@@ -25,7 +25,7 @@ public abstract class AbstractBooleanPlotwiseCityFlag extends AbstractCityFlag {
         boolean currentValue = getType().convertToBoolean(getValue());
         announce(currentValue);
 
-        for (Plot plot : RaidCraft.getComponent(RCCitiesPlugin.class).getPlotManager().getPlots(getCity())) {
+        for (Plot plot : RCCitiesPlugin.getPlugin().getPlotManager().getPlots(getCity())) {
             if (currentValue) {
                 allow(plot);
             } else {

@@ -1,11 +1,11 @@
 package net.silthus.rccities.flags.city;
 
-import com.sk89q.worldguard.protection.flags.DefaultFlag;
-import de.raidcraft.rccities.api.city.City;
-import de.raidcraft.rccities.api.flags.FlagInformation;
-import de.raidcraft.rccities.api.flags.FlagType;
-import de.raidcraft.rccities.api.plot.Plot;
-import de.raidcraft.rccities.api.resident.Resident;
+import com.sk89q.worldguard.protection.flags.Flags;
+import net.silthus.rccities.api.city.City;
+import net.silthus.rccities.api.flags.FlagInformation;
+import net.silthus.rccities.api.flags.FlagType;
+import net.silthus.rccities.api.plot.Plot;
+import net.silthus.rccities.api.resident.Resident;
 import org.bukkit.ChatColor;
 
 /**
@@ -39,12 +39,12 @@ public class GreetingsCityFlag extends AbstractBooleanPlotwiseCityFlag {
         if (residentList.isEmpty()) {
             residentList = "No owners";
         }
-        plot.getRegion().setFlag(DefaultFlag.GREET_MESSAGE, ChatColor.GREEN + "~ " + plot.getRegionName() + ": " + residentList + " ~");
+        plot.getRegion().setFlag(Flags.GREET_MESSAGE, ChatColor.GREEN + "~ " + plot.getRegionName() + ": " + residentList + " ~");
     }
 
     @Override
     public void deny(Plot plot) {
 
-        plot.getRegion().setFlag(DefaultFlag.GREET_MESSAGE, null);
+        plot.getRegion().setFlag(Flags.GREET_MESSAGE, null);
     }
 }

@@ -1,11 +1,11 @@
 package net.silthus.rccities.flags.city;
 
-import com.sk89q.worldguard.protection.flags.DefaultFlag;
+import com.sk89q.worldguard.protection.flags.Flags;
 import com.sk89q.worldguard.protection.flags.StateFlag;
-import de.raidcraft.rccities.api.city.City;
-import de.raidcraft.rccities.api.flags.FlagInformation;
-import de.raidcraft.rccities.api.flags.FlagType;
-import de.raidcraft.rccities.api.plot.Plot;
+import net.silthus.rccities.api.city.City;
+import net.silthus.rccities.api.flags.FlagInformation;
+import net.silthus.rccities.api.flags.FlagType;
+import net.silthus.rccities.api.plot.Plot;
 
 /**
  * @author Philip Urban
@@ -30,12 +30,12 @@ public class LeafDecayCityFlag extends AbstractBooleanPlotwiseCityFlag {
     @Override
     public void allow(Plot plot) {
 
-        plot.getRegion().setFlag(DefaultFlag.LEAF_DECAY, StateFlag.State.ALLOW);
+        plot.getRegion().setFlag(Flags.LEAF_DECAY, StateFlag.State.ALLOW);
     }
 
     @Override
     public void deny(Plot plot) {
 
-        plot.getRegion().setFlag(DefaultFlag.LEAF_DECAY, StateFlag.State.DENY);
+        plot.getRegion().setFlag(Flags.LEAF_DECAY, StateFlag.State.DENY);
     }
 }
