@@ -1,8 +1,7 @@
 package net.silthus.rccities.listener;
 
-import de.raidcraft.RaidCraft;
-import de.raidcraft.rccities.RCCitiesPlugin;
-import de.raidcraft.rccities.api.resident.Resident;
+import net.silthus.rccities.RCCitiesPlugin;
+import net.silthus.rccities.api.resident.Resident;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -16,10 +15,14 @@ import java.util.List;
 
 public class ResidentListener implements Listener {
 
+    private final RCCitiesPlugin plugin;
+
+    public ResidentListener(RCCitiesPlugin plugin) {
+        this.plugin = plugin;
+    }
+
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
-
-        RCCitiesPlugin plugin = RaidCraft.getComponent(RCCitiesPlugin.class);
 
         Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
             @Override

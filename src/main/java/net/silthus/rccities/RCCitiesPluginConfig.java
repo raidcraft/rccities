@@ -21,7 +21,7 @@ public class RCCitiesPluginConfig extends BukkitYamlConfiguration {
     private int initialPlotCredit = 3;
     private double flagPlotMarkCost = 0.01;
     private String cityUpgradeHolder = "cit-upgrade-holder";
-    private String jounCosts = "10s";
+    private double joinCosts = 100.;
 
     @Comment("Cooldown between a city can make requests to process their upgrade to a higher level")
     private int upgradeRequestCooldown = 5 * 24 * 60;// 5 days in minutes

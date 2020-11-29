@@ -16,7 +16,6 @@ import net.silthus.rccities.flags.city.*;
 import net.silthus.rccities.flags.city.admin.InviteCityFlag;
 import net.silthus.rccities.flags.plot.*;
 import net.silthus.rccities.listener.EntityListener;
-import net.silthus.rccities.listener.ExpListener;
 import net.silthus.rccities.listener.ResidentListener;
 import net.silthus.rccities.listener.UpgradeListener;
 import net.silthus.rccities.manager.*;
@@ -24,30 +23,19 @@ import net.silthus.rccities.tables.*;
 import net.silthus.rccities.upgrades.RCUpgrades;
 import net.silthus.rccities.util.QueuedCommand;
 import org.bukkit.Bukkit;
-import org.bukkit.command.CommandException;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.java.JavaPluginLoader;
 import co.aikar.commands.PaperCommandManager;
-import com.comphenix.protocol.ProtocolLibrary;
-import com.google.common.base.Strings;
-import com.sk89q.worldedit.bukkit.BukkitPlayer;
-import com.sk89q.worldedit.bukkit.BukkitWorld;
-import com.sk89q.worldguard.WorldGuard;
 import io.ebean.Database;
-import kr.entree.spigradle.annotations.PluginMain;
-import lombok.Getter;
 import me.wiefferink.interactivemessenger.processing.Message;
 import me.wiefferink.interactivemessenger.source.LanguageManager;
-import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -66,7 +54,6 @@ public class RCCitiesPlugin extends JavaPlugin {
 
     private WorldGuardPlugin worldGuard;
     private WorldEditPlugin worldEdit;
-    private ConfigurationSection upgradeConfiguration;
 
     private CityManager cityManager;
     private PlotManager plotManager;
@@ -77,12 +64,12 @@ public class RCCitiesPlugin extends JavaPlugin {
     private UpgradeRequestManager upgradeRequestManager;
 
     private EntityListener entityListener;
-    private ExpListener expListener;
     private ResidentListener residentListener;
     private UpgradeListener upgradeListener;
     private RCUpgrades upgrades;
 
     private RCCitiesPluginConfig pluginConfig;
+    private RCCitiesUpgradeConfig upgradeConfiguration;
 
     private boolean testing = false;
 
@@ -113,7 +100,6 @@ public class RCCitiesPlugin extends JavaPlugin {
         loadConfig();
         setupLanguageManager();
         setupDatabase();
-        setupRegionManager();
         if (!isTesting()) {
             setupListeners();
             setupCommands();
@@ -165,14 +151,6 @@ public class RCCitiesPlugin extends JavaPlugin {
     public void reload() {
 
         loadConfig();
-
-        // TODO load upgrade config
-        // load upgrade holder
-        for (File file : getDataFolder().listFiles()) {
-            if (file.getName().equalsIgnoreCase(config.upgradeHolder + ".yml")) {
-                upgradeConfiguration = configure(new SimpleConfiguration<>(this, file));
-            }
-        }
     }
 
     private boolean setupVault() {
@@ -201,6 +179,8 @@ public class RCCitiesPlugin extends JavaPlugin {
         getDataFolder().mkdirs();
         this.pluginConfig = new RCCitiesPluginConfig(new File(getDataFolder(), "config.yml").toPath());
         this.pluginConfig.loadAndSave();
+        this.upgradeConfiguration = new RCCitiesUpgradeConfig(new File(getDataFolder(), "upgrades.yml").toPath());
+        this.upgradeConfiguration.loadAndSave();
     }
 
     private void setupDatabase() {
@@ -234,9 +214,6 @@ public class RCCitiesPlugin extends JavaPlugin {
 
         entityListener = new EntityListener(this);
         Bukkit.getPluginManager().registerEvents(entityListener, this);
-
-        expListener = new ExpListener(this);
-        Bukkit.getPluginManager().registerEvents(expListener, this);
 
         residentListener = new ResidentListener(this);
         Bukkit.getPluginManager().registerEvents(residentListener, this);

@@ -1,5 +1,6 @@
 package net.silthus.rccities.commands;
 
+import co.aikar.commands.BaseCommand;
 import com.sk89q.minecraft.util.commands.Command;
 import com.sk89q.minecraft.util.commands.CommandContext;
 import com.sk89q.minecraft.util.commands.CommandException;
@@ -28,7 +29,7 @@ import java.util.UUID;
 /**
  * @author Philip Urban
  */
-public class PlotCommands {
+public class PlotCommands extends BaseCommand {
 
     private RCCitiesPlugin plugin;
 

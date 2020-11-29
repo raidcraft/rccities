@@ -2,11 +2,10 @@ package net.silthus.rccities.manager;
 
 import net.silthus.rccities.RCCitiesPlugin;
 import net.silthus.rccities.api.city.City;
-import net.silthus.rccities.api.flags.CityFlag;
-import net.silthus.rccities.api.flags.Flag;
-import net.silthus.rccities.api.flags.FlagInformation;
-import net.silthus.rccities.api.flags.PlotFlag;
+import net.silthus.rccities.api.flags.*;
 import net.silthus.rccities.api.plot.Plot;
+import net.silthus.rccities.tables.TCityFlag;
+import net.silthus.rccities.tables.TPlotFlag;
 import net.silthus.rccities.util.CaseInsensitiveMap;
 import net.silthus.rccities.util.RaidCraftException;
 import net.silthus.rccities.util.StringUtils;
@@ -15,10 +14,7 @@ import org.bukkit.entity.Player;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author Philip Urban
@@ -32,7 +28,7 @@ public class FlagManager {
     // city name -> map(flag name, flag)
     private Map<String, Map<String, CityFlag>> cachedCityFlags = new CaseInsensitiveMap<>();
     // plot id -> map(flag name, flag)
-    private Map<Integer, Map<String, PlotFlag>> cachedPlotFlags = new HashMap<>();
+    private Map<UUID, Map<String, PlotFlag>> cachedPlotFlags = new HashMap<>();
 
     private FlagRefreshTask refreshTask;
 
@@ -69,9 +65,9 @@ public class FlagManager {
 
         // delete flag if value is null
         if (flagValue == null) {
-            TCityFlag tCityFlag = RaidCraft.getDatabase(RCCitiesPlugin.class).find(TCityFlag.class).where().eq("city_id", city.getId()).ieq("name", flagName).findUnique();
+            TCityFlag tCityFlag = TCityFlag.find.query().where().eq("city_id", city.getId()).ieq("name", flagName).findOne();
             if (tCityFlag != null) {
-                RaidCraft.getDatabase(RCCitiesPlugin.class).delete(tCityFlag);
+                tCityFlag.delete();
             }
             if (cachedCityFlags.containsKey(city.getName())) {
                 cachedCityFlags.get(city.getName()).remove(flagName);
@@ -111,25 +107,23 @@ public class FlagManager {
         cachedCityFlags.get(city.getName()).put(flag.getName(), flag);
 
         flagName = flagName.toLowerCase();
-        TCityFlag tFlag = RaidCraft.getDatabase(RCCitiesPlugin.class)
-                .find(TCityFlag.class).where().eq("city_id", city.getId()).eq("name", flagName).findUnique();
+        TCityFlag tFlag = TCityFlag.find.query().where().eq("city_id", city.getId()).eq("name", flagName).findOne();
         if (tFlag != null) {
             tFlag.setValue(flagValue);
-            RaidCraft.getDatabase(RCCitiesPlugin.class).update(tFlag);
+            tFlag.update();
         } else {
             tFlag = new TCityFlag();
             tFlag.setCity(city);
             tFlag.setName(flagName);
             tFlag.setValue(flagValue);
-            RaidCraft.getDatabase(RCCitiesPlugin.class).save(tFlag);
+            tFlag.save();
         }
     }
 
     public void removeCityFlag(City city, String flagName) {
 
-        TCityFlag flag = RaidCraft.getDatabase(RCCitiesPlugin.class)
-                .find(TCityFlag.class).where().eq("city_id", city.getId()).ieq("name", flagName).findUnique();
-        RaidCraft.getDatabase(RCCitiesPlugin.class).delete(flag);
+        TCityFlag flag = TCityFlag.find.query().where().eq("city_id", city.getId()).ieq("name", flagName).findOne();
+        flag.delete();
 
         if (!cachedCityFlags.containsKey(city.getName())) return;
         cachedCityFlags.get(city.getName()).remove(flagName);
@@ -148,9 +142,9 @@ public class FlagManager {
 
         // delete flag if value is null
         if (flagValue == null) {
-            TPlotFlag tPlotFlag = RaidCraft.getDatabase(RCCitiesPlugin.class).find(TPlotFlag.class).where().eq("plot_id", plot.getId()).ieq("name", flagName).findUnique();
+            TPlotFlag tPlotFlag = TPlotFlag.find.query().where().eq("plot_id", plot.getId()).ieq("name", flagName).findOne();
             if (tPlotFlag != null) {
-                RaidCraft.getDatabase(RCCitiesPlugin.class).delete(tPlotFlag);
+                tPlotFlag.delete();
             }
             if (cachedCityFlags.containsKey(plot.getId())) {
                 cachedCityFlags.get(plot.getId()).remove(flagName);
@@ -190,17 +184,16 @@ public class FlagManager {
         cachedPlotFlags.get(plot.getId()).put(flag.getName(), flag);
 
         flagName = flagName.toLowerCase();
-        TPlotFlag tFlag = RaidCraft.getDatabase(RCCitiesPlugin.class)
-                .find(TPlotFlag.class).where().eq("plot_id", plot.getId()).eq("name", flagName).findUnique();
+        TPlotFlag tFlag = TPlotFlag.find.query().where().eq("plot_id", plot.getId()).eq("name", flagName).findOne();
         if (tFlag != null) {
             tFlag.setValue(flagValue);
-            RaidCraft.getDatabase(RCCitiesPlugin.class).update(tFlag);
+            tFlag.update();
         } else {
             tFlag = new TPlotFlag();
             tFlag.setPlot(plot);
             tFlag.setName(flagName);
             tFlag.setValue(flagValue);
-            RaidCraft.getDatabase(RCCitiesPlugin.class).save(tFlag);
+            tFlag.save();
         }
     }
 
@@ -218,9 +211,8 @@ public class FlagManager {
 
     public void removePlotFlag(Plot plot, String flagName) {
 
-        TPlotFlag flag = RaidCraft.getDatabase(RCCitiesPlugin.class)
-                .find(TPlotFlag.class).where().eq("plot_id", plot.getId()).ieq("name", flagName).findUnique();
-        RaidCraft.getDatabase(RCCitiesPlugin.class).delete(flag);
+        TPlotFlag flag = TPlotFlag.find.query().where().eq("plot_id", plot.getId()).ieq("name", flagName).findOne();
+        flag.delete();
 
         if (!cachedPlotFlags.containsKey(plot.getId())) return;
         cachedPlotFlags.get(plot.getId()).remove(flagName);
@@ -257,7 +249,7 @@ public class FlagManager {
 
         clearCache();
 
-        List<TCityFlag> tCityFlags = RaidCraft.getDatabase(RCCitiesPlugin.class).find(TCityFlag.class).findList();
+        List<TCityFlag> tCityFlags = TCityFlag.find.all();
         for (TCityFlag tCityFlag : tCityFlags) {
 
             Class<? extends CityFlag> clazz = registeredCityFlags.get(tCityFlag.getName());
@@ -279,13 +271,13 @@ public class FlagManager {
             }
         }
 
-        List<TPlotFlag> tPlotFlags = RaidCraft.getDatabase(RCCitiesPlugin.class).find(TPlotFlag.class).findList();
+        List<TPlotFlag> tPlotFlags = TPlotFlag.find.all();
         for (TPlotFlag tPlotFlag : tPlotFlags) {
 
             Class<? extends PlotFlag> clazz = registeredPlotFlags.get(tPlotFlag.getName());
             if (clazz == null) continue;
             FlagInformation annotation = clazz.getAnnotation(FlagInformation.class);
-            Plot plot = plugin.getPlotManager().getPlot(tPlotFlag.getPlot().getId());
+            Plot plot = plugin.getPlotManager().getPlot(tPlotFlag.getPlot().id());
             if (plot == null) continue;
             try {
                 PlotFlag flag = loadPlotFlag(clazz, plot);

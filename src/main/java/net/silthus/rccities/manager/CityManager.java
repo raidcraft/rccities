@@ -1,11 +1,14 @@
 package net.silthus.rccities.manager;
 
+import net.milkbowl.vault.economy.Economy;
+import net.silthus.rccities.DatabaseCity;
 import net.silthus.rccities.RCCitiesPlugin;
 import net.silthus.rccities.api.city.City;
 import net.silthus.rccities.api.flags.CityFlag;
 import net.silthus.rccities.api.resident.Resident;
 import net.silthus.rccities.api.resident.Role;
 import net.silthus.rccities.flags.city.JoinCostsCityFlag;
+import net.silthus.rccities.tables.TCity;
 import net.silthus.rccities.upgrades.api.level.UpgradeLevel;
 import net.silthus.rccities.upgrades.api.upgrade.Upgrade;
 import net.silthus.rccities.util.CaseInsensitiveMap;
@@ -83,6 +86,9 @@ public class CityManager {
             joinCosts = joinCostsCityFlag.getType().convertToMoney(joinCostsCityFlag.getValue());
         }
 
+        Economy economy = plugin.getEconomy();
+        double balance = economy.bankBalance(city.getBankAccountName()).balance;
+
         sender.sendMessage("*********************************");
         sender.sendMessage(ChatColor.GOLD + "Informationen zur Stadt '" + ChatColor.YELLOW + city.getFriendlyName() + ChatColor.GOLD + "'");
         sender.sendMessage(ChatColor.GOLD + "Beschreibung: " + ChatColor.YELLOW + city.getDescription());
@@ -92,9 +98,8 @@ public class CityManager {
         sender.sendMessage(ChatColor.GOLD + "Unclaimed Plots: " + ChatColor.YELLOW + city.getPlotCredit());
         sender.sendMessage(ChatColor.GOLD + "Level: " + ChatColor.YELLOW + getCityLevel(city));
         sender.sendMessage(ChatColor.GOLD + "EXP: " + ChatColor.YELLOW + city.getExp());
-        sender.sendMessage(ChatColor.GOLD + "Stadtkasse: " + ChatColor.YELLOW + RaidCraft.getEconomy()
-                .getFormattedBalance(AccountType.CITY, city.getBankAccountName()));
-        sender.sendMessage(ChatColor.GOLD + "Beitrittskosten: " + ChatColor.YELLOW + RaidCraft.getEconomy().getFormattedAmount(joinCosts));
+        sender.sendMessage(ChatColor.GOLD + "Stadtkasse: " + ChatColor.YELLOW + economy.format(balance));
+        sender.sendMessage(ChatColor.GOLD + "Beitrittskosten: " + ChatColor.YELLOW + economy.format(joinCosts));
         sender.sendMessage(ChatColor.GOLD + "Bürgermeister (" + mayorCount + "): " + ChatColor.YELLOW + mayorList);
         sender.sendMessage(ChatColor.GOLD + "Einwohner (" + residentCount + "): " + ChatColor.YELLOW + residentList);
         sender.sendMessage("*********************************");
@@ -121,7 +126,7 @@ public class CityManager {
             if (level.isUnlocked()) multiplier++;
         }
 
-        double baseJoinCosts = RaidCraft.getEconomy().parseCurrencyInput(plugin.getConfig().joinCosts);
+        double baseJoinCosts = plugin.getPluginConfig().getJoinCosts();
         return baseJoinCosts + (baseJoinCosts / 2. * multiplier);
     }
 
@@ -130,7 +135,7 @@ public class CityManager {
         City city = cachedCities.get(name);
 
         if (city == null) {
-            TCity tCity = RaidCraft.getDatabase(RCCitiesPlugin.class).find(TCity.class).where().ieq("name", name).findUnique();
+            TCity tCity = TCity.find.query().where().ieq("name", name).findOne();
             if (tCity != null) {
                 if (Bukkit.getWorld(tCity.getWorld()) != null) {
                     city = new DatabaseCity(tCity);
@@ -153,7 +158,7 @@ public class CityManager {
 
     public Collection<City> getCities() {
 
-        for (TCity tCity : RaidCraft.getDatabase(RCCitiesPlugin.class).find(TCity.class).findList()) {
+        for (TCity tCity : TCity.find.all()) {
 
             if (!cachedCities.containsKey(tCity.getName())) {
                 if (Bukkit.getWorld(tCity.getWorld()) == null) continue;

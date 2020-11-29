@@ -1,19 +1,18 @@
 package net.silthus.rccities.manager;
 
+import net.silthus.rccities.DatabasePlot;
 import net.silthus.rccities.RCCitiesPlugin;
 import net.silthus.rccities.api.city.City;
 import net.silthus.rccities.api.plot.Plot;
 import net.silthus.rccities.api.resident.Resident;
+import net.silthus.rccities.tables.TPlot;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author Philip Urban
@@ -48,7 +47,7 @@ public class PlotManager {
     public List<Plot> getPlots(City city) {
 
         List<Plot> plots = new ArrayList<>();
-        List<TPlot> tPlots = RaidCraft.getDatabase(RCCitiesPlugin.class).find(TPlot.class).where().eq("city_id", city.getId()).findList();
+        List<TPlot> tPlots = TPlot.find.query().where().eq("city_id", city.getId()).findList();
         for (TPlot tPlot : tPlots) {
             Location plotLocation = new Location(city.getSpawn().getWorld(), tPlot.getX(), 0, tPlot.getZ());
             if (!cachedPlots.containsKey(plotLocation) && Bukkit.getWorld(tPlot.getCity().getWorld()) != null) {
@@ -67,14 +66,14 @@ public class PlotManager {
         cachedPlots.remove(plot.getLocation());
     }
 
-    public Plot getPlot(int id) {
+    public Plot getPlot(UUID id) {
 
         for (Plot plot : cachedPlots.values()) {
             if (plot.getId() == id) {
                 return plot;
             }
         }
-        TPlot tPlot = RaidCraft.getDatabase(RCCitiesPlugin.class).find(TPlot.class, id);
+        TPlot tPlot = TPlot.find.byId(id);
         if (tPlot != null && Bukkit.getWorld(tPlot.getCity().getWorld()) != null) {
             Plot plot = new DatabasePlot(tPlot);
             cachedPlots.put(plot.getLocation(), plot);
@@ -89,7 +88,7 @@ public class PlotManager {
         Plot plot = cachedPlots.get(simpleLocation);
 
         if (plot == null) {
-            TPlot tPlot = RaidCraft.getDatabase(RCCitiesPlugin.class).find(TPlot.class).where().eq("x", simpleLocation.getX()).eq("z", simpleLocation.getZ()).findUnique();
+            TPlot tPlot = TPlot.find.query().where().eq("x", simpleLocation.getX()).eq("z", simpleLocation.getZ()).findOne();
             if (tPlot != null && Bukkit.getWorld(tPlot.getCity().getWorld()) != null) {
                 plot = new DatabasePlot(tPlot);
                 cachedPlots.put(plot.getLocation(), plot);

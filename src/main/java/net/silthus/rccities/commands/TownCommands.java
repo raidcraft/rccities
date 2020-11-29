@@ -1,5 +1,6 @@
 package net.silthus.rccities.commands;
 
+import co.aikar.commands.BaseCommand;
 import com.sk89q.minecraft.util.commands.Command;
 import com.sk89q.minecraft.util.commands.CommandContext;
 import com.sk89q.minecraft.util.commands.CommandException;
@@ -37,7 +38,7 @@ import java.util.Map;
 /**
  * @author Philip Urban
  */
-public class TownCommands {
+public class TownCommands extends BaseCommand {
 
     private RCCitiesPlugin plugin;
 
@@ -146,7 +147,7 @@ public class TownCommands {
                 plugin.getFlagManager().setCityFlag(city, player, PvpCityFlag.class, false);        // disable pvp
                 plugin.getFlagManager().setCityFlag(city, player, InviteCityFlag.class, false);     // disable invites
                 plugin.getFlagManager().setCityFlag(city, player, GreetingsCityFlag.class, true);   // enable greetings
-                plugin.getFlagManager().setCityFlag(city, player, JoinCostsCityFlag.class, plugin.getPluginConfig().getJounCosts());   // default join costs
+                plugin.getFlagManager().setCityFlag(city, player, JoinCostsCityFlag.class, plugin.getPluginConfig().getJoinCosts());   // default join costs
 
             } catch (RaidCraftException e) {
                 throw new CommandException(e.getMessage());

@@ -1,5 +1,6 @@
 package net.silthus.rccities.commands;
 
+import co.aikar.commands.BaseCommand;
 import com.sk89q.minecraft.util.commands.Command;
 import com.sk89q.minecraft.util.commands.CommandContext;
 import com.sk89q.minecraft.util.commands.CommandException;
@@ -25,7 +26,7 @@ import java.util.List;
 /**
  * @author Philip Urban
  */
-public class ResidentCommands {
+public class ResidentCommands extends BaseCommand {
 
     private RCCitiesPlugin plugin;
 

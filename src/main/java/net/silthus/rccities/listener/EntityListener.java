@@ -1,7 +1,6 @@
 package net.silthus.rccities.listener;
 
-import de.raidcraft.RaidCraft;
-import de.raidcraft.rccities.RCCitiesPlugin;
+import net.silthus.rccities.RCCitiesPlugin;
 import org.bukkit.entity.IronGolem;
 import org.bukkit.entity.Monster;
 import org.bukkit.entity.Snowman;
@@ -16,6 +15,12 @@ import org.bukkit.event.entity.CreatureSpawnEvent;
  */
 public class EntityListener implements Listener {
 
+    private final RCCitiesPlugin plugin;
+
+    public EntityListener(RCCitiesPlugin plugin) {
+        this.plugin = plugin;
+    }
+
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
     public void onEntitySpwan(CreatureSpawnEvent event) {
 
@@ -24,7 +29,7 @@ public class EntityListener implements Listener {
         if((event.getEntity() instanceof IronGolem) || (event.getEntity() instanceof Snowman) || (event.getEntity() instanceof Wither)) return;
         // allow CUSTOM spawns, e.g. NPCs
         if (event.getSpawnReason() == CreatureSpawnEvent.SpawnReason.CUSTOM) return;
-        if (RaidCraft.getComponent(RCCitiesPlugin.class).getPlotManager().getPlot(event.getEntity().getLocation().getChunk()) == null) {
+        if (plugin.getPlotManager().getPlot(event.getEntity().getLocation().getChunk()) == null) {
             return;
         }
 

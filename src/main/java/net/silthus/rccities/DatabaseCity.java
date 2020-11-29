@@ -40,8 +40,8 @@ public class DatabaseCity extends AbstractCity {
         spawn = new Location(Bukkit.getWorld(tCity.getWorld()), (double) tCity.getX() / 1000D,
                 (double) tCity.getY() / 1000D, (double) tCity.getZ() / 1000D,
                 (float) tCity.getYaw() / 1000F, (float) tCity.getPitch() / 1000F);
-        upgradeHolder = RCCitiesPlugin.getPlugin().getUpgradeManager()
-                .loadDatabaseUpgradeHolder(this, RaidCraft.getComponent(RCCitiesPlugin.class).getUpgradeConfiguration(), id, City.class);
+        upgradeHolder = RCCitiesPlugin.getPlugin().getUpgrades().getUpgradeManager()
+                .loadDatabaseUpgradeHolder(this, RCCitiesPlugin.getPlugin().getUpgradeConfiguration(), id, City.class);
     }
 
     @Override
@@ -122,8 +122,8 @@ public class DatabaseCity extends AbstractCity {
             tCity.setYaw((int) getSpawn().getYaw() * 1000);
             tCity.setMaxRadius(getMaxRadius());
             tCity.setPlotCredit(getPlotCredit());
-            upgradeHolder = RaidCraft.getComponent(RCUpgradesPlugin.class).getUpgradeManager()
-                    .createDatabaseUpgradeHolder(this, RaidCraft.getComponent(RCCitiesPlugin.class).getUpgradeConfiguration(), City.class);
+            upgradeHolder = RCCitiesPlugin.getPlugin().getUpgrades().getUpgradeManager()
+                    .createDatabaseUpgradeHolder(this, RCCitiesPlugin.getPlugin().getUpgradeConfiguration(), City.class);
             tCity.setUpgradeId(upgradeHolder.getId());
             tCity.save();
             id = tCity.id();
@@ -159,7 +159,7 @@ public class DatabaseCity extends AbstractCity {
         }
 
         plugin.getEconomy().deleteBank(getBankAccountName());
-        RaidCraft.getComponent(RCUpgradesPlugin.class).getUpgradeManager().deleteUpgradeHolder(getUpgrades().getId());
+        RCCitiesPlugin.getPlugin().getUpgrades().getUpgradeManager().deleteUpgradeHolder(getUpgrades().getId());
 
         plugin.getCityManager().removeFromCache(this);
         TCity tCity = TCity.find.byId(getId());

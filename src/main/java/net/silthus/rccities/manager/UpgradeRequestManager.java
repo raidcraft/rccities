@@ -1,8 +1,10 @@
 package net.silthus.rccities.manager;
 
+import net.silthus.rccities.DatabaseUpgradeRequest;
 import net.silthus.rccities.RCCitiesPlugin;
 import net.silthus.rccities.api.city.City;
 import net.silthus.rccities.api.request.UpgradeRequest;
+import net.silthus.rccities.tables.TUpgradeRequest;
 import net.silthus.rccities.upgrades.api.level.UpgradeLevel;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -29,8 +31,8 @@ public class UpgradeRequestManager {
 
     public UpgradeRequest getRequest(City city, UpgradeLevel upgradeLevel) {
 
-        TUpgradeRequest tUpgradeRequest = RaidCraft.getDatabase(RCCitiesPlugin.class).find(TUpgradeRequest.class)
-                .where().eq("city_id", city.getId()).ieq("level_identifier", upgradeLevel.getId()).findUnique();
+        TUpgradeRequest tUpgradeRequest = TUpgradeRequest.find.query()
+                .where().eq("city_id", city.getId()).ieq("level_identifier", upgradeLevel.getId()).findOne();
         if (tUpgradeRequest == null) {
             return null;
         }
@@ -40,7 +42,7 @@ public class UpgradeRequestManager {
     public List<UpgradeRequest> getOpenRequests() {
 
         List<UpgradeRequest> requests = new ArrayList<>();
-        List<TUpgradeRequest> tUpgradeRequests = RaidCraft.getDatabase(RCCitiesPlugin.class).find(TUpgradeRequest.class)
+        List<TUpgradeRequest> tUpgradeRequests = TUpgradeRequest.find.query()
                 .where().eq("rejected", false).eq("accepted", false).findList();
         for (TUpgradeRequest tUpgradeRequest : tUpgradeRequests) {
             requests.add(new DatabaseUpgradeRequest(tUpgradeRequest));
@@ -51,7 +53,7 @@ public class UpgradeRequestManager {
     public List<UpgradeRequest> getOpenRequests(City city) {
 
         List<UpgradeRequest> requests = new ArrayList<>();
-        List<TUpgradeRequest> tUpgradeRequests = RaidCraft.getDatabase(RCCitiesPlugin.class).find(TUpgradeRequest.class)
+        List<TUpgradeRequest> tUpgradeRequests = TUpgradeRequest.find.query()
                 .where().eq("city_id", city.getId()).eq("rejected", false).eq("accepted", false).findList();
         for (TUpgradeRequest tUpgradeRequest : tUpgradeRequests) {
             if (tUpgradeRequest.getRCCity() == null) continue;
