@@ -108,8 +108,8 @@ public class RCCitiesPlugin extends JavaPlugin {
             setupCommands();
         }
 
-        worldGuard = (WorldGuardPlugin) Bukkit.getPluginManager().getPlugin("WorldGuard");
-        worldEdit = (WorldEditPlugin) Bukkit.getPluginManager().getPlugin("WorldEdit");
+        worldGuard = (WorldGuardPlugin) getServer().getPluginManager().getPlugin("WorldGuard");
+        worldEdit = (WorldEditPlugin) getServer().getPluginManager().getPlugin("WorldEdit");
 
         reload();
 

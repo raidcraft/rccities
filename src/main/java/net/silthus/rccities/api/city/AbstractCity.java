@@ -1,6 +1,8 @@
 package net.silthus.rccities.api.city;
 
+import net.silthus.rccities.RCCitiesPlugin;
 import net.silthus.rccities.upgrades.api.holder.UpgradeHolder;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 
 import java.sql.Timestamp;
@@ -11,6 +13,7 @@ import java.util.UUID;
  */
 public abstract class AbstractCity implements City {
 
+    protected RCCitiesPlugin plugin;
     protected int id;
     protected String name;
     protected UUID creator;
@@ -28,12 +31,13 @@ public abstract class AbstractCity implements City {
 
     protected AbstractCity(String name, Location spawn, UUID creator) {
 
+        this.plugin = (RCCitiesPlugin) Bukkit.getPluginManager().getPlugin("RCCities");
         this.name = name;
         this.spawn = spawn;
         this.creator = creator;
         this.creationDate = new Timestamp(System.currentTimeMillis());
-        this.plotCredit = RaidCraft.getComponent(RCCitiesPlugin.class).getConfig().initialPlotCredit;
-        this.maxRadius = RaidCraft.getComponent(RCCitiesPlugin.class).getConfig().defaultMaxRadius;
+        this.plotCredit = plugin.getPluginConfig().getInitialPlotCredit();
+        this.maxRadius = plugin.getPluginConfig().getDefaultTownRadius();
 
         save();
     }
