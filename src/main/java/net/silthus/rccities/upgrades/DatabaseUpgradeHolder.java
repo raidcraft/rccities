@@ -43,25 +43,27 @@ public class DatabaseUpgradeHolder<T> extends ConfigurationUpgradeHolder<T> {
         else {
 
             // get holder
-            TUpgradeHolder tUpgradeHolder = RaidCraft.getDatabase(de.raidcraft.rcupgrades.RCUpgradesPlugin.class).find(TUpgradeHolder.class, getId());
+            TUpgradeHolder tUpgradeHolder = TUpgradeHolder.find.byId(getId());
 
             // save upgrades
             for(Upgrade upgrade : getUpgrades()) {
-                TUpgrade tUpgrade = RaidCraft.getDatabase(de.raidcraft.rcupgrades.RCUpgradesPlugin.class).find(TUpgrade.class).where().eq("holder_id", tUpgradeHolder.getId()).ieq("name", upgrade.getId()).findUnique();
+                TUpgrade tUpgrade = TUpgrade.find.query().where().eq("holder_id", tUpgradeHolder.id())
+                        .ieq("name", upgrade.getId()).findOne();
 
                 // save upgrade if not exist
                 if(tUpgrade == null) {
                     tUpgrade = new TUpgrade();
                     tUpgrade.setName(upgrade.getId());
                     tUpgrade.setHolder(tUpgradeHolder);
-                    RaidCraft.getDatabase(de.raidcraft.rcupgrades.RCUpgradesPlugin.class).save(tUpgrade);
+                    tUpgrade.save();
                 }
 
                 // save levels
                 for(UpgradeLevel level : upgrade.getLevels()) {
                     if(!level.isStored()) continue;
-                    TUpgradeLevel tUpgradeLevel = RaidCraft.getDatabase(de.raidcraft.rcupgrades.RCUpgradesPlugin.class)
-                            .find(TUpgradeLevel.class).where().eq("upgrade_id", tUpgrade.getId()).ieq("identifier", level.getId()).findUnique();
+                    TUpgradeLevel tUpgradeLevel = TUpgradeLevel
+                            .find.query().where().eq("upgrade_id", tUpgrade.id())
+                            .ieq("identifier", level.getId()).findOne();
 
                     // save if not exist
                     if(tUpgradeLevel == null) {
@@ -69,12 +71,12 @@ public class DatabaseUpgradeHolder<T> extends ConfigurationUpgradeHolder<T> {
                         tUpgradeLevel.setIdentifier(level.getId());
                         tUpgradeLevel.setUpgrade(tUpgrade);
                         tUpgradeLevel.setUnlocked(level.isUnlocked());
-                        RaidCraft.getDatabase(de.raidcraft.rcupgrades.RCUpgradesPlugin.class).save(tUpgradeLevel);
+                        tUpgradeLevel.save();
                     }
                     // otherwise update
                     else {
                         tUpgradeLevel.setUnlocked(level.isUnlocked());
-                        RaidCraft.getDatabase(de.raidcraft.rcupgrades.RCUpgradesPlugin.class).update(tUpgradeLevel);
+                        tUpgradeLevel.update();
                     }
                 }
             }
@@ -86,18 +88,19 @@ public class DatabaseUpgradeHolder<T> extends ConfigurationUpgradeHolder<T> {
         if(id == null) return;
 
         // get holder
-        TUpgradeHolder tUpgradeHolder = RaidCraft.getDatabase(de.raidcraft.rcupgrades.RCUpgradesPlugin.class).find(TUpgradeHolder.class, getId());
+        TUpgradeHolder tUpgradeHolder = TUpgradeHolder.find.byId(getId());
 
         // load upgrades
         for(Upgrade upgrade : getUpgrades()) {
-            TUpgrade tUpgrade = RaidCraft.getDatabase(de.raidcraft.rcupgrades.RCUpgradesPlugin.class).find(TUpgrade.class).where().eq("holder_id", tUpgradeHolder.getId()).ieq("name", upgrade.getId()).findUnique();
+            TUpgrade tUpgrade = TUpgrade.find.query().where().eq("holder_id", tUpgradeHolder.id())
+                    .ieq("name", upgrade.getId()).findOne();
 
             if(tUpgrade == null) continue;
 
             // load levels
             for(UpgradeLevel level : upgrade.getLevels()) {
-                TUpgradeLevel tUpgradeLevel = RaidCraft.getDatabase(de.raidcraft.rcupgrades.RCUpgradesPlugin.class)
-                        .find(TUpgradeLevel.class).where().eq("upgrade_id", tUpgrade.getId()).eq("identifier", level.getId()).findUnique();
+                TUpgradeLevel tUpgradeLevel = TUpgradeLevel.find.query().where()
+                        .eq("upgrade_id", tUpgrade.id()).eq("identifier", level.getId()).findOne();
 
                 if(tUpgradeLevel == null) continue;
 

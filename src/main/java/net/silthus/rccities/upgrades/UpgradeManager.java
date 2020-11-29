@@ -13,6 +13,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 /**
  * @author Philip Urban
@@ -26,9 +27,9 @@ public class UpgradeManager {
      * Load and returns existing UpgradeHolder.
      *
      */
-    public <O> UpgradeHolder<O> loadDatabaseUpgradeHolder(O object, ConfigurationSection holderConfig, int id, Class<O> clazz) {
+    public <O> UpgradeHolder<O> loadDatabaseUpgradeHolder(O object, ConfigurationSection holderConfig, UUID id, Class<O> clazz) {
 
-        UpgradeHolder<O> upgradeHolder = new de.raidcraft.rcupgrades.DatabaseUpgradeHolder<O>(object, holderConfig, id, clazz);
+        UpgradeHolder<O> upgradeHolder = new DatabaseUpgradeHolder<O>(object, holderConfig, id, clazz);
         createDatabaseUpgradeInfo(upgradeHolder);
         return upgradeHolder;
     }
@@ -39,15 +40,15 @@ public class UpgradeManager {
      */
     public <O> UpgradeHolder createDatabaseUpgradeHolder(O object, ConfigurationSection holderConfig, Class<O> clazz) {
 
-        UpgradeHolder<O> upgradeHolder = new de.raidcraft.rcupgrades.DatabaseUpgradeHolder<O>(object, holderConfig, clazz);
+        UpgradeHolder<O> upgradeHolder = new DatabaseUpgradeHolder<O>(object, holderConfig, clazz);
         upgradeHolder.save();
         return upgradeHolder;
     }
 
-    public void deleteUpgradeHolder(int id) {
+    public void deleteUpgradeHolder(UUID id) {
 
-        TUpgradeHolder tUpgradeHolder = RaidCraft.getDatabase(de.raidcraft.rcupgrades.RCUpgradesPlugin.class).find(TUpgradeHolder.class, id);
-        RaidCraft.getDatabase(de.raidcraft.rcupgrades.RCUpgradesPlugin.class).delete(tUpgradeHolder);
+        TUpgradeHolder tUpgradeHolder = TUpgradeHolder.find.byId(id);
+        tUpgradeHolder.delete();
     }
 
     private <O> void createDatabaseUpgradeInfo(UpgradeHolder<O> upgradeHolder) {
@@ -56,9 +57,9 @@ public class UpgradeManager {
         createdUpgradeInfo.add(StringUtils.formatName(upgradeHolder.getName()));
 
         // delete existing
-        List<TUpgradeInfo> tUpgradeInfos = RaidCraft.getDatabase(de.raidcraft.rcupgrades.RCUpgradesPlugin.class)
-                .find(TUpgradeInfo.class).where().ieq("holder_id", StringUtils.formatName(upgradeHolder.getName())).findList();
-        RaidCraft.getDatabase(de.raidcraft.rcupgrades.RCUpgradesPlugin.class).delete(tUpgradeInfos);
+        List<TUpgradeInfo> tUpgradeInfos = TUpgradeInfo.find.query().where().ieq("holder_id", StringUtils.formatName(upgradeHolder.getName())).findList();
+        tUpgradeInfos.forEach((tUpgradeInfo ->
+                tUpgradeInfo.delete()));
 
         // create new
         for(Upgrade upgrade : upgradeHolder.getUpgrades()) {
@@ -67,7 +68,7 @@ public class UpgradeManager {
             tUpgradeInfo.setHolderName(upgradeHolder.getName());
             tUpgradeInfo.setDescription(upgrade.getDescription());
             tUpgradeInfo.setName(upgrade.getName());
-            RaidCraft.getDatabase(de.raidcraft.rcupgrades.RCUpgradesPlugin.class).save(tUpgradeInfo);
+            tUpgradeInfo.save();
 
             // save level info
             for(UpgradeLevel level : upgrade.getLevels()) {
@@ -79,7 +80,7 @@ public class UpgradeManager {
                 tLevelInfo.setUpgradeInfo(tUpgradeInfo);
                 tLevelInfo.setRequirementDescription(Joiner.on("|").join(level.getRequirementDescription()));
                 tLevelInfo.setRewardDescription(Joiner.on("|").join(level.getRewardDescription()));
-                RaidCraft.getDatabase(de.raidcraft.rcupgrades.RCUpgradesPlugin.class).save(tLevelInfo);
+                tLevelInfo.save();
             }
         }
 

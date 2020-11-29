@@ -1,11 +1,13 @@
 package net.silthus.rccities.upgrades.tables;
 
+import io.ebean.Finder;
 import lombok.Getter;
 import lombok.Setter;
 import net.silthus.ebean.BaseEntity;
 
 import javax.persistence.*;
 import java.util.Set;
+import java.util.UUID;
 
 /**
  * @author Philip Urban
@@ -15,6 +17,8 @@ import java.util.Set;
 @Setter
 @Table(name = "rccities_upgrades")
 public class TUpgrade extends BaseEntity {
+
+    public static final Finder<UUID, TUpgrade> find = new Finder<>(TUpgrade.class);
 
     private String name;
     @ManyToOne
