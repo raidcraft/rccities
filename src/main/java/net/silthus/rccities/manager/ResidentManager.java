@@ -127,7 +127,7 @@ public class ResidentManager {
         if (!resident.getRole().hasPermission(RolePermission.PREFIX_SKILL)) return;
         if (resident.getPlayer() == null || !resident.getPlayer().isOnline()) return;
 
-        RaidCraft.getPermissions().playerAdd(resident.getPlayer(), "group.c-" + resident.getCity().getName().toLowerCase());
+        plugin.getPermission().playerAdd(resident.getPlayer(), "group.c-" + resident.getCity().getName().toLowerCase());
     }
 
     public void removePrefixSkill(Resident resident) {
@@ -136,7 +136,7 @@ public class ResidentManager {
             return;
         }
 
-        RaidCraft.getPermissions().playerRemove(resident.getPlayer(), "group.c-" + resident.getCity().getName().toLowerCase());
+        plugin.getPermission().playerRemove(resident.getPlayer(), "group.c-" + resident.getCity().getName().toLowerCase());
     }
 
     public List<Resident> getCitizenships(UUID playerId) {

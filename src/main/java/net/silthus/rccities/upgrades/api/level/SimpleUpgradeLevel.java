@@ -1,10 +1,11 @@
 package net.silthus.rccities.upgrades.api.level;
 
 import net.silthus.rccities.requirement.Requirement;
-import net.silthus.rccities.reward.Reward;
+import net.silthus.rccities.requirementsapi.reward.Reward;
 import net.silthus.rccities.upgrades.api.holder.UpgradeHolder;
 import net.silthus.rccities.upgrades.api.unlockresult.UnlockResult;
 import net.silthus.rccities.upgrades.events.UpgradeUnlockEvent;
+import org.bukkit.Bukkit;
 
 import java.util.Collection;
 import java.util.List;
@@ -70,7 +71,7 @@ public class SimpleUpgradeLevel<T> extends AbstractUpgradeLevel<T> {
         if (isMeetingAllRequirements(object)) {
 
             UpgradeUnlockEvent event = new UpgradeUnlockEvent(this, unlockResult, object);
-            RaidCraft.callEvent(event);
+            Bukkit.getPluginManager().callEvent(event);
             if (event.isCancelled()) {
                 unlockResult.setSuccessful(false);
                 unlockResult.setLongReason("Unlock was cancelled by plugin!");

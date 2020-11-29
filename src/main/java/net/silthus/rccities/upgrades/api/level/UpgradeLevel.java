@@ -1,8 +1,8 @@
 package net.silthus.rccities.upgrades.api.level;
 
 
-import io.artframework.Requirement;
-import net.silthus.rccities.reward.Reward;
+import net.silthus.rccities.requirement.Requirement;
+import net.silthus.rccities.requirementsapi.reward.Reward;
 import net.silthus.rccities.upgrades.api.holder.UpgradeHolder;
 import net.silthus.rccities.upgrades.api.unlockresult.UnlockResult;
 

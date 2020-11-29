@@ -1,6 +1,8 @@
 package net.silthus.rccities.upgrades.api.level;
 
 
+import lombok.Getter;
+import lombok.Setter;
 import net.silthus.rccities.upgrades.api.holder.UpgradeHolder;
 
 import java.util.List;
@@ -8,6 +10,8 @@ import java.util.List;
 /**
  * @author Philip Urban
  */
+@Getter
+@Setter
 public abstract class AbstractUpgradeLevel<T> implements UpgradeLevel<T> {
 
     private UpgradeHolder<T> upgradeHolder;
@@ -40,61 +44,6 @@ public abstract class AbstractUpgradeLevel<T> implements UpgradeLevel<T> {
 
         rewardDescription.add(description);
     }
-
-    @Override
-    public UpgradeHolder<T> getUpgradeHolder() {
-
-        return upgradeHolder;
-    }
-
-    @Override
-    public String getId() {
-
-        return id;
-    }
-
-    @Override
-    public int getLevel() {
-
-        return level;
-    }
-
-    @Override
-    public String getName() {
-
-        return name;
-    }
-
-    @Override
-    public boolean isStored() {
-
-        return stored;
-    }
-
-    @Override
-    public List<String> getRequirementDescription() {
-
-        return requirementDescription;
-    }
-
-    @Override
-    public List<String> getRewardDescription() {
-
-        return rewardDescription;
-    }
-
-    @Override
-    public boolean isUnlocked() {
-
-        return unlocked;
-    }
-
-    @Override
-    public void setUnlocked(boolean unlocked) {
-
-        this.unlocked = unlocked;
-    }
-
 
     @Override
     public boolean equals(Object o) {

@@ -1,8 +1,8 @@
 package net.silthus.rccities.upgrades.api.holder;
 
 import net.silthus.rccities.requirement.Requirement;
-import net.silthus.rccities.reward.Reward;
-import net.silthus.rccities.reward.RewardManager;
+import net.silthus.rccities.requirementsapi.reward.Reward;
+import net.silthus.rccities.requirementsapi.reward.RewardManager;
 import net.silthus.rccities.upgrades.api.level.SimpleUpgradeLevel;
 import net.silthus.rccities.upgrades.api.level.UpgradeLevel;
 import net.silthus.rccities.upgrades.api.upgrade.SimpleUpgrade;
