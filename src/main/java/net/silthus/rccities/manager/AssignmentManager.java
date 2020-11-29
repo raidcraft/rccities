@@ -1,6 +1,7 @@
 package net.silthus.rccities.manager;
 
-import de.raidcraft.rccities.RCCitiesPlugin;
+
+import net.silthus.rccities.RCCitiesPlugin;
 
 /**
  * @author Philip Urban

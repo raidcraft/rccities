@@ -1,6 +1,6 @@
 package net.silthus.rccities.reward;
 
-import de.raidcraft.util.StringUtils;
+import net.silthus.rccities.util.StringUtils;
 import org.bukkit.configuration.ConfigurationSection;
 
 /**

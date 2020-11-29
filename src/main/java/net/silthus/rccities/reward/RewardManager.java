@@ -1,8 +1,8 @@
 package net.silthus.rccities.reward;
 
-import de.raidcraft.RaidCraft;
-import de.raidcraft.util.CaseInsensitiveMap;
-import de.raidcraft.util.StringUtils;
+import net.silthus.rccities.RCCitiesPlugin;
+import net.silthus.rccities.util.CaseInsensitiveMap;
+import net.silthus.rccities.util.StringUtils;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.MemoryConfiguration;
 
@@ -38,8 +38,8 @@ public class RewardManager {
 
             Class<? extends Reward<?>> rClass = rewardClasses.get(type);
             if (rClass == null) {
-                RaidCraft.LOGGER.warning("There are no reward types defined for the type " + type);
-                RaidCraft.LOGGER.warning("Available Reward Types are: " + String.join(", ", new ArrayList<>(rewardClasses.keySet())));
+                RCCitiesPlugin.getPlugin().getLogger().warning("There are no reward types defined for the type " + type);
+                RCCitiesPlugin.getPlugin().getLogger().warning("Available Reward Types are: " + String.join(", ", new ArrayList<>(rewardClasses.keySet())));
                 return rewards;
             }
             try {
@@ -49,7 +49,7 @@ public class RewardManager {
                 }
                 rewards.add(reward);
             } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
-                RaidCraft.LOGGER.warning(e.getMessage());
+                RCCitiesPlugin.getPlugin().getLogger().warning(e.getMessage());
                 e.printStackTrace();
             }
         }
@@ -59,7 +59,7 @@ public class RewardManager {
     public static <T extends Reward<?>> void registerRewardType(Class<T> rClass) {
 
         if (!rClass.isAnnotationPresent(RewardInformation.class)) {
-            RaidCraft.LOGGER.warning("Cannot register " + rClass.getCanonicalName() + " as Reward because it has no Information tag!");
+            RCCitiesPlugin.getPlugin().getLogger().warning("Cannot register " + rClass.getCanonicalName() + " as Reward because it has no Information tag!");
             return;
         }
         for (Constructor<?> constructor : rClass.getDeclaredConstructors()) {
@@ -69,7 +69,7 @@ public class RewardManager {
                 // get the displayName for aliasing
                 String name = StringUtils.formatName(rClass.getAnnotation(RewardInformation.class).value());
                 rewardClasses.put(name, rClass);
-                RaidCraft.info("Registered Reward Type: " + name, "RewardManager");
+                RCCitiesPlugin.getPlugin().getLogger().info("Registered Reward Type: " + name);
                 break;
             }
         }

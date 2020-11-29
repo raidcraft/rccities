@@ -7,11 +7,11 @@ import com.sk89q.worldguard.protection.flags.StateFlag;
 import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedCuboidRegion;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
-import de.raidcraft.RaidCraft;
-import de.raidcraft.rccities.RCCitiesPlugin;
-import de.raidcraft.rccities.api.city.City;
-import de.raidcraft.rccities.api.resident.Resident;
-import de.raidcraft.rccities.api.resident.RolePermission;
+import net.silthus.rccities.RCCitiesPlugin;
+import net.silthus.rccities.api.city.City;
+import net.silthus.rccities.api.resident.Resident;
+import net.silthus.rccities.api.resident.RolePermission;
+import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 
@@ -26,7 +26,6 @@ public abstract class AbstractPlot implements Plot {
     protected City city;
 
     protected AbstractPlot() {
-
     }
 
     protected AbstractPlot(Location location, City city) {
@@ -74,7 +73,7 @@ public abstract class AbstractPlot implements Plot {
 
         // force create region
         if (create) {
-            RegionManager regionManager = RaidCraft.getComponent(RCCitiesPlugin.class).getWorldGuard().getRegionManager(location.getWorld());
+            RegionManager regionManager = RCCitiesPlugin.getPlugin().getWorldGuard().getRegionManager(location.getWorld());
             if (regionManager.getRegion(getRegionName()) != null) {
                 regionManager.removeRegion(getRegionName());
             }
@@ -126,7 +125,7 @@ public abstract class AbstractPlot implements Plot {
             for (Resident resident : getCity().getResidents()) {
                 if (!resident.getRole().hasPermission(RolePermission.BUILD_EVERYWHERE)) continue;
                 if(resident.getName() == null) {
-                    RaidCraft.getComponent(RCCitiesPlugin.class).getLogger()
+                    plugin.getLogger()
                             .info("name of resident is null: " + resident.getId());
                     continue;
                 }
@@ -139,6 +138,6 @@ public abstract class AbstractPlot implements Plot {
     @Override
     public void delete() {
 
-        RaidCraft.getComponent(RCCitiesPlugin.class).getWorldGuard().getRegionManager(location.getWorld()).removeRegion(getRegionName());
+        RCCitiesPlugin.getPlugin().getWorldGuard().getRegionManager(location.getWorld()).removeRegion(getRegionName());
     }
 }

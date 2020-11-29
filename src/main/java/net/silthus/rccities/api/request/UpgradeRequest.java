@@ -1,7 +1,8 @@
 package net.silthus.rccities.api.request;
 
-import de.raidcraft.rccities.api.city.City;
-import de.raidcraft.rcupgrades.api.level.UpgradeLevel;
+
+import net.silthus.rccities.api.city.City;
+import net.silthus.rccities.upgrades.api.level.UpgradeLevel;
 
 /**
  * @author Philip Urban

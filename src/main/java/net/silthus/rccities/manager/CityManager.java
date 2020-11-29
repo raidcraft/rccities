@@ -1,19 +1,15 @@
 package net.silthus.rccities.manager;
 
-import de.raidcraft.RaidCraft;
-import de.raidcraft.api.RaidCraftException;
-import de.raidcraft.api.economy.AccountType;
-import de.raidcraft.rccities.DatabaseCity;
-import de.raidcraft.rccities.RCCitiesPlugin;
-import de.raidcraft.rccities.api.city.City;
-import de.raidcraft.rccities.api.flags.CityFlag;
-import de.raidcraft.rccities.api.resident.Resident;
-import de.raidcraft.rccities.api.resident.Role;
-import de.raidcraft.rccities.flags.city.JoinCostsCityFlag;
-import de.raidcraft.rccities.tables.TCity;
-import de.raidcraft.rcupgrades.api.level.UpgradeLevel;
-import de.raidcraft.rcupgrades.api.upgrade.Upgrade;
-import de.raidcraft.util.CaseInsensitiveMap;
+import net.silthus.rccities.RCCitiesPlugin;
+import net.silthus.rccities.api.city.City;
+import net.silthus.rccities.api.flags.CityFlag;
+import net.silthus.rccities.api.resident.Resident;
+import net.silthus.rccities.api.resident.Role;
+import net.silthus.rccities.flags.city.JoinCostsCityFlag;
+import net.silthus.rccities.upgrades.api.level.UpgradeLevel;
+import net.silthus.rccities.upgrades.api.upgrade.Upgrade;
+import net.silthus.rccities.util.CaseInsensitiveMap;
+import net.silthus.rccities.util.RaidCraftException;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -82,7 +78,7 @@ public class CityManager {
         }
 
         double joinCosts = 0;
-        CityFlag joinCostsCityFlag = RaidCraft.getComponent(RCCitiesPlugin.class).getFlagManager().getCityFlag(city, JoinCostsCityFlag.class);
+        CityFlag joinCostsCityFlag = plugin.getFlagManager().getCityFlag(city, JoinCostsCityFlag.class);
         if (joinCostsCityFlag != null) {
             joinCosts = joinCostsCityFlag.getType().convertToMoney(joinCostsCityFlag.getValue());
         }

@@ -1,9 +1,9 @@
 package net.silthus.rccities.api.resident;
 
-import de.raidcraft.rccities.api.city.City;
-import de.raidcraft.util.UUIDUtil;
 import lombok.Getter;
 import lombok.Setter;
+import net.silthus.rccities.RCCitiesPlugin;
+import net.silthus.rccities.api.city.City;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -50,7 +50,7 @@ public abstract class AbstractResident implements Resident {
     @Override
     public String getName() {
 
-        return UUIDUtil.getNameFromUUID(playerId);
+        return Bukkit.getOfflinePlayer(playerId).getName();
     }
 
 

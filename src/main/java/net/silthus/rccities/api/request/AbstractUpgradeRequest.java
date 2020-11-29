@@ -1,15 +1,16 @@
 package net.silthus.rccities.api.request;
 
-import de.raidcraft.RaidCraft;
-import de.raidcraft.rccities.RCCitiesPlugin;
-import de.raidcraft.rccities.api.city.City;
-import de.raidcraft.rcupgrades.api.level.UpgradeLevel;
+
+import net.silthus.rccities.RCCitiesPlugin;
+import net.silthus.rccities.api.city.City;
+import net.silthus.rccities.upgrades.api.level.UpgradeLevel;
 
 /**
  * @author Philip Urban
  */
 public abstract class AbstractUpgradeRequest extends AbstractRequest implements UpgradeRequest {
 
+    protected RCCitiesPlugin plugin;
     protected City city;
     protected UpgradeLevel<City> upgradeLevel;
     protected String info;
@@ -32,7 +33,7 @@ public abstract class AbstractUpgradeRequest extends AbstractRequest implements 
     @Override
     public long getRejectExpirationDate() {
 
-        return rejectDate + RaidCraft.getComponent(RCCitiesPlugin.class).getConfig().upgradeRequestCooldown * 60 * 1000;
+        return rejectDate + RCCitiesPlugin.getPlugin().getPluginConfig().getUpgradeRequestCooldown() * 60 * 1000;
     }
 
     @Override

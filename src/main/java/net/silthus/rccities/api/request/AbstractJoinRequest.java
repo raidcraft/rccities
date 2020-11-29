@@ -1,6 +1,7 @@
 package net.silthus.rccities.api.request;
 
-import de.raidcraft.rccities.api.city.City;
+
+import net.silthus.rccities.api.city.City;
 
 import java.util.UUID;
 

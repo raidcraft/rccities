@@ -1,17 +1,10 @@
 package net.silthus.rccities.manager;
 
-import de.raidcraft.RaidCraft;
-import de.raidcraft.api.RaidCraftException;
-import de.raidcraft.api.player.UnknownPlayerException;
-import de.raidcraft.rccities.DatabaseResident;
-import de.raidcraft.rccities.RCCitiesPlugin;
-import de.raidcraft.rccities.api.city.City;
-import de.raidcraft.rccities.api.resident.Resident;
-import de.raidcraft.rccities.api.resident.Role;
-import de.raidcraft.rccities.api.resident.RolePermission;
-import de.raidcraft.rccities.tables.TJoinRequest;
-import de.raidcraft.rccities.tables.TResident;
-import de.raidcraft.util.UUIDUtil;
+import net.silthus.rccities.RCCitiesPlugin;
+import net.silthus.rccities.api.city.City;
+import net.silthus.rccities.api.resident.Resident;
+import net.silthus.rccities.api.resident.RolePermission;
+import net.silthus.rccities.util.RaidCraftException;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;

@@ -1,19 +1,15 @@
 package net.silthus.rccities.manager;
 
-import de.raidcraft.RaidCraft;
-import de.raidcraft.api.RaidCraftException;
-import de.raidcraft.rccities.RCCitiesPlugin;
-import de.raidcraft.rccities.api.city.City;
-import de.raidcraft.rccities.api.flags.CityFlag;
-import de.raidcraft.rccities.api.flags.Flag;
-import de.raidcraft.rccities.api.flags.FlagInformation;
-import de.raidcraft.rccities.api.flags.FlagRefreshType;
-import de.raidcraft.rccities.api.flags.PlotFlag;
-import de.raidcraft.rccities.api.plot.Plot;
-import de.raidcraft.rccities.tables.TCityFlag;
-import de.raidcraft.rccities.tables.TPlotFlag;
-import de.raidcraft.util.CaseInsensitiveMap;
-import de.raidcraft.util.StringUtils;
+import net.silthus.rccities.RCCitiesPlugin;
+import net.silthus.rccities.api.city.City;
+import net.silthus.rccities.api.flags.CityFlag;
+import net.silthus.rccities.api.flags.Flag;
+import net.silthus.rccities.api.flags.FlagInformation;
+import net.silthus.rccities.api.flags.PlotFlag;
+import net.silthus.rccities.api.plot.Plot;
+import net.silthus.rccities.util.CaseInsensitiveMap;
+import net.silthus.rccities.util.RaidCraftException;
+import net.silthus.rccities.util.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -240,7 +236,7 @@ public class FlagManager {
                     flag.refresh();
                 }
             } catch (RaidCraftException e) {
-                RaidCraft.LOGGER.warning("Fehler beim aktualisieren einer Flag! " + e.getMessage());
+                plugin.getLogger().warning("Fehler beim aktualisieren einer Flag! " + e.getMessage());
             }
         }
     }
@@ -252,7 +248,7 @@ public class FlagManager {
             try {
                 flag.refresh();
             } catch (RaidCraftException e) {
-                RaidCraft.LOGGER.warning("Fehler beim aktualisieren einer Flag! " + e.getMessage());
+                plugin.getLogger().warning("Fehler beim aktualisieren einer Flag! " + e.getMessage());
             }
         }
     }
@@ -315,7 +311,7 @@ public class FlagManager {
             flag = (CityFlag) constructor.newInstance(city);
         } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
 
-            RaidCraft.LOGGER.warning("RCCities Flag Error: " + e.getMessage());
+            plugin.getLogger().warning("RCCities Flag Error: " + e.getMessage());
             e.printStackTrace();
             throw new RaidCraftException("Interner Fehler aufgetreten: " + e.getMessage());
         }
@@ -335,7 +331,7 @@ public class FlagManager {
             flag = (PlotFlag) constructor.newInstance(plot);
         } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
 
-            RaidCraft.LOGGER.warning("RCCities Flag Error: " + e.getMessage());
+            plugin.getLogger().warning("RCCities Flag Error: " + e.getMessage());
             e.printStackTrace();
             throw new RaidCraftException("Interner Fehler aufgetreten: " + e.getMessage());
         }
@@ -418,7 +414,7 @@ public class FlagManager {
                     try {
                         information.getFlag().refresh();
                     } catch (RaidCraftException e) {
-                        RaidCraft.LOGGER.warning("Fehler beim aktualisieren einer Flag! " + e.getMessage());
+                        plugin.getLogger().warning("Fehler beim aktualisieren einer Flag! " + e.getMessage());
                     }
                 }
             }

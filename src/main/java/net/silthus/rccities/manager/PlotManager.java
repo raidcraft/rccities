@@ -1,12 +1,9 @@
 package net.silthus.rccities.manager;
 
-import de.raidcraft.RaidCraft;
-import de.raidcraft.rccities.DatabasePlot;
-import de.raidcraft.rccities.RCCitiesPlugin;
-import de.raidcraft.rccities.api.city.City;
-import de.raidcraft.rccities.api.plot.Plot;
-import de.raidcraft.rccities.api.resident.Resident;
-import de.raidcraft.rccities.tables.TPlot;
+import net.silthus.rccities.RCCitiesPlugin;
+import net.silthus.rccities.api.city.City;
+import net.silthus.rccities.api.plot.Plot;
+import net.silthus.rccities.api.resident.Resident;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Chunk;

@@ -1,10 +1,8 @@
 package net.silthus.rccities.requirement;
 
-import de.raidcraft.RaidCraft;
-import de.raidcraft.RaidCraftPlugin;
-import de.raidcraft.api.action.RequirementFactory;
-import de.raidcraft.util.CaseInsensitiveMap;
-import de.raidcraft.util.StringUtils;
+import net.silthus.rccities.RCCitiesPlugin;
+import net.silthus.rccities.util.CaseInsensitiveMap;
+import net.silthus.rccities.util.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.MemoryConfiguration;
@@ -44,7 +42,7 @@ public final class RequirementManager {
                     try {
                         final ConfigurationSection section = config.getConfigurationSection(key + "." + reqName);
                         if (section == null) {
-                            RaidCraft.LOGGER.warning("Wrong requirement section " + key + "." + reqName + " defined for " + resolver);
+                            RCCitiesPlugin.getPlugin().getLogger().warning("Wrong requirement section " + key + "." + reqName + " defined for " + resolver);
                             continue;
                         }
                         final Requirement<O> requirement = (Requirement<O>) constructors.get(rClass).newInstance(
@@ -55,18 +53,18 @@ public final class RequirementManager {
                             // this helps to avoid stack overflow errors when a skill requires itself
                             ConfigurationSection args = section.isConfigurationSection("args")
                                     ? section.getConfigurationSection("args") : new MemoryConfiguration();
-                            Bukkit.getScheduler().runTaskLater(RaidCraft.getComponent(RaidCraftPlugin.class),
+                            Bukkit.getScheduler().runTaskLater(RCCitiesPlugin.getPlugin(),
                                     () -> ((AbstractRequirement) requirement).load(args), 1L);
                         }
                         requirements.add(requirement);
                     } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
-                        RaidCraft.LOGGER.warning(e.getMessage());
+                        RCCitiesPlugin.getPlugin().getLogger().warning(e.getMessage());
                         e.printStackTrace();
                     }
                 }
             } else {
-                RaidCraft.LOGGER.warning("There are no requirement types defined for the type " + key);
-                RaidCraft.LOGGER.warning("Available Requirement Types are: " + String.join(", ", new ArrayList<>(requirementClasses.keySet())));
+                RCCitiesPlugin.getPlugin().getLogger().warning("There are no requirement types defined for the type " + key);
+                RCCitiesPlugin.getPlugin().getLogger().warning("Available Requirement Types are: " + String.join(", ", new ArrayList<>(requirementClasses.keySet())));
             }
         }
         return requirements;
@@ -76,7 +74,7 @@ public final class RequirementManager {
     public static <T extends Requirement<?>> void registerRequirementType(Class<T> rClass) {
 
         if (!rClass.isAnnotationPresent(RequirementInformation.class)) {
-            RaidCraft.LOGGER.warning("Cannot register " + rClass.getCanonicalName() + " as Requirement because it has no Information tag!");
+            RCCitiesPlugin.getPlugin().getLogger().warning("Cannot register " + rClass.getCanonicalName() + " as Requirement because it has no Information tag!");
             return;
         }
         for (Constructor<?> constructor : rClass.getDeclaredConstructors()) {
@@ -86,7 +84,7 @@ public final class RequirementManager {
                 // get the displayName for aliasing
                 String name = StringUtils.formatName(rClass.getAnnotation(RequirementInformation.class).value());
                 requirementClasses.put(name, rClass);
-                RaidCraft.info("Registered Requirement Type: " + name, "RequirementManager");
+                RCCitiesPlugin.getPlugin().getLogger().info("Registered Requirement Type: " + name);
                 break;
             }
         }

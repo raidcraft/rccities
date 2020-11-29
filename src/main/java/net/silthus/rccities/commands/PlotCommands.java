@@ -6,18 +6,13 @@ import com.sk89q.minecraft.util.commands.CommandException;
 import com.sk89q.minecraft.util.commands.CommandPermissions;
 import com.sk89q.minecraft.util.commands.NestedCommand;
 import com.sk89q.worldguard.bukkit.util.Entities;
-import de.raidcraft.RaidCraft;
-import de.raidcraft.api.RaidCraftException;
-import de.raidcraft.api.commands.QueuedCaptchaCommand;
-import de.raidcraft.rccities.DatabasePlot;
-import de.raidcraft.rccities.RCCitiesPlugin;
-import de.raidcraft.rccities.api.city.City;
-import de.raidcraft.rccities.api.flags.FlagInformation;
-import de.raidcraft.rccities.api.plot.Plot;
-import de.raidcraft.rccities.api.resident.Resident;
-import de.raidcraft.rccities.api.resident.RolePermission;
-import de.raidcraft.rccities.manager.CityManager;
-import de.raidcraft.util.UUIDUtil;
+import net.silthus.rccities.RCCitiesPlugin;
+import net.silthus.rccities.api.city.City;
+import net.silthus.rccities.api.flags.FlagInformation;
+import net.silthus.rccities.api.plot.Plot;
+import net.silthus.rccities.api.resident.Resident;
+import net.silthus.rccities.api.resident.RolePermission;
+import net.silthus.rccities.util.RaidCraftException;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
@@ -431,7 +426,7 @@ public class PlotCommands {
 
                 List<Plot> plots = RaidCraft.getComponent(RCCitiesPlugin.class).getPlotManager().getPlots(city);
                 if (plots.isEmpty()) {
-                    RaidCraft.LOGGER.info("[RCCities - Unclaim all] Done: Unclaimed all plots of city + '" + city.getName() + "'!");
+                    plugin.getLogger().info("[RCCities - Unclaim all] Done: Unclaimed all plots of city + '" + city.getName() + "'!");
                     sender.sendMessage(ChatColor.GREEN + "Done: Unclaimed all plots of city + '" + city.getName() + "'!");
                     Bukkit.getScheduler().cancelTask(unclaimTask);
                     return;
@@ -440,18 +435,18 @@ public class PlotCommands {
                 // get one plot
                 Plot plot = plots.get(0);
 
-                RaidCraft.LOGGER.info("[RCCities - Unclaim all] Start unclaiming all plots (" + plots.size() + ") of city + '" + city.getName() + "'!");
+                plugin.getLogger().info("[RCCities - Unclaim all] Start unclaiming all plots (" + plots.size() + ") of city + '" + city.getName() + "'!");
                 sender.sendMessage(ChatColor.GREEN + "Start unclaiming all plots (" + plots.size() + ") of city + '" + city.getName() + "'!");
 
                 int totalCount = plots.size();
-                RaidCraft.LOGGER.info("[RCCities - Unclaim all] Der Plot '" + plot.getRegionName() + "' wurde gelöscht! (übrig: " + (totalCount-1) + ")");
+                plugin.getLogger().info("[RCCities - Unclaim all] Der Plot '" + plot.getRegionName() + "' wurde gelöscht! (übrig: " + (totalCount-1) + ")");
                 sender.sendMessage("Der Plot '" + plot.getRegionName() + "' wurde gelöscht! (übrig: " + (totalCount-1) + ")");
 
                 if (restoreSchematics) {
                     try {
                         plugin.getSchematicManager().restorePlot(plot);
                     } catch (RaidCraftException e) {
-                        RaidCraft.LOGGER.info("[RCCities - Unclaim all] Fehler beim wiederherstellen des Plots '" + plot.getRegionName() + "'! (" + e.getMessage() + ")");
+                        plugin.getLogger().info("[RCCities - Unclaim all] Fehler beim wiederherstellen des Plots '" + plot.getRegionName() + "'! (" + e.getMessage() + ")");
                         sender.sendMessage(ChatColor.RED + "Fehler beim wiederherstellen des Plots '" + plot.getRegionName() + "'! (" + e.getMessage() + ")");
                     }
                 }
@@ -464,7 +459,7 @@ public class PlotCommands {
                         entity.remove();
                         i++;
                     }
-                    RaidCraft.LOGGER.info("[RCCities - Unclaim all] Removed " + i + " entities in unclaimed chunk!");
+                    plugin.getLogger().info("[RCCities - Unclaim all] Removed " + i + " entities in unclaimed chunk!");
                 }
             }
         }

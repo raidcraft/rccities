@@ -13,7 +13,6 @@ import java.util.UUID;
  */
 public abstract class AbstractCity implements City {
 
-    protected RCCitiesPlugin plugin;
     protected int id;
     protected String name;
     protected UUID creator;
@@ -26,18 +25,16 @@ public abstract class AbstractCity implements City {
     protected UpgradeHolder upgradeHolder;
 
     protected AbstractCity() {
-
     }
 
     protected AbstractCity(String name, Location spawn, UUID creator) {
 
-        this.plugin = (RCCitiesPlugin) Bukkit.getPluginManager().getPlugin("RCCities");
         this.name = name;
         this.spawn = spawn;
         this.creator = creator;
         this.creationDate = new Timestamp(System.currentTimeMillis());
-        this.plotCredit = plugin.getPluginConfig().getInitialPlotCredit();
-        this.maxRadius = plugin.getPluginConfig().getDefaultTownRadius();
+        this.plotCredit = RCCitiesPlugin.getPlugin().getPluginConfig().getInitialPlotCredit();
+        this.maxRadius = RCCitiesPlugin.getPlugin().getPluginConfig().getDefaultTownRadius();
 
         save();
     }

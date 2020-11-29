@@ -5,8 +5,7 @@ import com.sk89q.worldguard.bukkit.event.block.PlaceBlockEvent;
 import com.sk89q.worldguard.protection.ApplicableRegionSet;
 import com.sk89q.worldguard.protection.managers.storage.StorageException;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
-import de.raidcraft.RaidCraft;
-import de.raidcraft.rccities.RCCitiesPlugin;
+import net.silthus.rccities.RCCitiesPlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -40,7 +39,7 @@ public class WorldGuardManager implements Listener {
             return true;
         }
         for (ProtectedRegion region : regions) {
-            for (String ignoredRegion : plugin.getConfig().ignoredRegions) {
+            for (String ignoredRegion : plugin.getPluginConfig().getIgnoredRegions()) {
                 if (!region.getId().startsWith(ignoredRegion)) {
                     return false;
                 }
@@ -55,7 +54,7 @@ public class WorldGuardManager implements Listener {
             try {
                 worldGuard.getRegionManager(world).save();
             } catch (StorageException e) {
-                RaidCraft.LOGGER.warning(e.getMessage());
+                plugin.getLogger().warning(e.getMessage());
             }
         }
     }

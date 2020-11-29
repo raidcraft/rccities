@@ -79,6 +79,10 @@ public class RCCitiesPlugin extends JavaPlugin {
 
     private boolean testing = false;
 
+    public static RCCitiesPlugin getPlugin() {
+        return (RCCitiesPlugin) Bukkit.getPluginManager().getPlugin("RCCities");
+    }
+
     public RCCitiesPlugin() {
         super();
     }

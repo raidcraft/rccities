@@ -1,12 +1,9 @@
 package net.silthus.rccities.manager;
 
-import de.raidcraft.RaidCraft;
-import de.raidcraft.rccities.DatabaseUpgradeRequest;
-import de.raidcraft.rccities.RCCitiesPlugin;
-import de.raidcraft.rccities.api.city.City;
-import de.raidcraft.rccities.api.request.UpgradeRequest;
-import de.raidcraft.rccities.tables.TUpgradeRequest;
-import de.raidcraft.rcupgrades.api.level.UpgradeLevel;
+import net.silthus.rccities.RCCitiesPlugin;
+import net.silthus.rccities.api.city.City;
+import net.silthus.rccities.api.request.UpgradeRequest;
+import net.silthus.rccities.upgrades.api.level.UpgradeLevel;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;

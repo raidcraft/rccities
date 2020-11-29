@@ -1,6 +1,6 @@
 package net.silthus.rccities.requirement;
 
-import de.raidcraft.util.StringUtils;
+import net.silthus.rccities.util.StringUtils;
 import org.bukkit.configuration.ConfigurationSection;
 
 public abstract class AbstractRequirement<T> implements Requirement<T> {

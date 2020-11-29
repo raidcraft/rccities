@@ -1,6 +1,6 @@
 package net.silthus.rccities.api.resident;
 
-import de.raidcraft.rccities.api.city.City;
+import net.silthus.rccities.api.city.City;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;

@@ -1,9 +1,9 @@
 package net.silthus.rccities.api.plot;
 
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
-import de.raidcraft.api.RaidCraftException;
-import de.raidcraft.rccities.api.city.City;
-import de.raidcraft.rccities.api.resident.Resident;
+import net.silthus.rccities.api.city.City;
+import net.silthus.rccities.api.resident.Resident;
+import net.silthus.rccities.util.RaidCraftException;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
