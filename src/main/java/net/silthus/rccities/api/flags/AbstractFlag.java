@@ -1,7 +1,7 @@
 package net.silthus.rccities.api.flags;
 
-import de.raidcraft.api.RaidCraftException;
-import de.raidcraft.util.StringUtils;
+import net.silthus.rccities.util.RaidCraftException;
+import net.silthus.rccities.util.StringUtils;
 
 /**
  * @author Philip Urban

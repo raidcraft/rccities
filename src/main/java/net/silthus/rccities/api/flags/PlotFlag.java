@@ -1,6 +1,7 @@
 package net.silthus.rccities.api.flags;
 
-import de.raidcraft.rccities.api.plot.Plot;
+
+import net.silthus.rccities.api.plot.Plot;
 
 /**
  * @author Philip Urban

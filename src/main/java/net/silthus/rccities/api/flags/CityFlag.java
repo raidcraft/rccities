@@ -1,6 +1,7 @@
 package net.silthus.rccities.api.flags;
 
-import de.raidcraft.rccities.api.city.City;
+
+import net.silthus.rccities.api.city.City;
 
 /**
  * @author Philip Urban
