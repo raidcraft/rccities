@@ -1,5 +1,7 @@
 package net.silthus.rccities.manager;
 
+import com.sk89q.worldedit.bukkit.BukkitAdapter;
+import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import com.sk89q.worldguard.bukkit.event.block.PlaceBlockEvent;
 import com.sk89q.worldguard.protection.ApplicableRegionSet;
@@ -34,7 +36,9 @@ public class WorldGuardManager implements Listener {
 
     public boolean claimable(Location location) {
 
-        ApplicableRegionSet regions = worldGuard.getRegionManager(location.getWorld()).getApplicableRegions(location);
+        BlockVector3 blockVector3 = BukkitAdapter.asBlockVector(location);
+        ApplicableRegionSet regions = plugin.getRegionContainer()
+                .get(BukkitAdapter.adapt(location.getWorld())).getApplicableRegions(blockVector3);
         if (regions.size() == 0) {
             return true;
         }
@@ -52,7 +56,7 @@ public class WorldGuardManager implements Listener {
 
         for (World world : Bukkit.getServer().getWorlds()) {
             try {
-                worldGuard.getRegionManager(world).save();
+                plugin.getRegionContainer().get(BukkitAdapter.adapt(world)).save();
             } catch (StorageException e) {
                 plugin.getLogger().warning(e.getMessage());
             }

@@ -41,7 +41,7 @@ public class TCity extends BaseEntity {
     private int plotCredit;
     private int maxRadius;
     private int exp;
-    private int upgradeId;
+    private UUID upgradeId;
 
     @OneToMany(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "city_id")

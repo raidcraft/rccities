@@ -1,7 +1,9 @@
 package net.silthus.rccities;
 
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
+import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
+import com.sk89q.worldguard.protection.regions.RegionContainer;
 import kr.entree.spigradle.annotations.PluginMain;
 import lombok.Getter;
 import net.milkbowl.vault.economy.Economy;
@@ -61,6 +63,7 @@ public class RCCitiesPlugin extends JavaPlugin {
     private AssignmentManager assignmentManager;
     private FlagManager flagManager;
     private WorldGuardManager worldGuardManager;
+    private RegionContainer regionContainer;
     private UpgradeRequestManager upgradeRequestManager;
 
     private EntityListener entityListener;
@@ -107,6 +110,7 @@ public class RCCitiesPlugin extends JavaPlugin {
 
         upgrades = new RCUpgrades(this);
         worldGuard = (WorldGuardPlugin) getServer().getPluginManager().getPlugin("WorldGuard");
+        regionContainer = WorldGuard.getInstance().getPlatform().getRegionContainer();
         worldEdit = (WorldEditPlugin) getServer().getPluginManager().getPlugin("WorldEdit");
 
         reload();
@@ -226,12 +230,6 @@ public class RCCitiesPlugin extends JavaPlugin {
     private void setupCommands() {
 
         this.commandManager = new PaperCommandManager(this);
-
-        // TODO?
-        registerRegionPlayerContext(commandManager);
-        registerRegionContext(commandManager);
-        registerRegionsCompletion(commandManager);
-        registerWorldGuardRegionCompletion(commandManager);
 
         commandManager.registerCommand(new PlotCommands(this));
         commandManager.registerCommand(new ResidentCommands(this));

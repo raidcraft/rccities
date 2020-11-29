@@ -1,5 +1,6 @@
 package net.silthus.rccities;
 
+import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import net.silthus.rccities.api.city.City;
 import net.silthus.rccities.api.plot.AbstractPlot;
 import net.silthus.rccities.api.resident.Resident;
@@ -39,7 +40,8 @@ public class DatabasePlot extends AbstractPlot {
         Location location = new Location(city.getSpawn().getWorld(), tPlot.getX(), 0, tPlot.getZ());
         this.location = location;
 
-        this.region = RCCitiesPlugin.getPlugin().getWorldGuard().getRegionManager(location.getWorld()).getRegion(getRegionName());
+        this.region = RCCitiesPlugin.getPlugin().getRegionContainer()
+                .get(BukkitAdapter.adapt(location.getWorld())).getRegion(getRegionName());
         loadAssignments();
     }
 

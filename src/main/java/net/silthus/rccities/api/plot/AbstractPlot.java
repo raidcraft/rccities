@@ -1,8 +1,8 @@
 package net.silthus.rccities.api.plot;
 
-import com.sk89q.worldedit.BlockVector;
+import com.sk89q.worldedit.bukkit.BukkitAdapter;
+import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldguard.domains.DefaultDomain;
-import com.sk89q.worldguard.protection.flags.DefaultFlag;
 import com.sk89q.worldguard.protection.flags.Flags;
 import com.sk89q.worldguard.protection.flags.StateFlag;
 import com.sk89q.worldguard.protection.managers.RegionManager;
@@ -35,7 +35,8 @@ public abstract class AbstractPlot implements Plot {
 
     protected AbstractPlot(Location location, City city) {
 
-        Location simpleLocation = new Location(location.getWorld(), location.getChunk().getX() * 16 + 8, 0, location.getChunk().getZ() * 16 + 8);
+        Location simpleLocation = new Location(location.getWorld(), location.getChunk().getX() * 16 + 8,
+                0, location.getChunk().getZ() * 16 + 8);
         this.location = simpleLocation;
         this.city = city;
 
@@ -54,18 +55,19 @@ public abstract class AbstractPlot implements Plot {
 
         // force create region
         if (create) {
-            RegionManager regionManager = RCCitiesPlugin.getPlugin().getWorldGuard().getRegionManager(location.getWorld());
+            RegionManager regionManager = RCCitiesPlugin.getPlugin().getRegionContainer()
+                    .get(BukkitAdapter.adapt(location.getWorld()));
             if (regionManager.getRegion(getRegionName()) != null) {
                 regionManager.removeRegion(getRegionName());
             }
 
             Chunk chunk = location.getChunk();
-            BlockVector vector1 = new BlockVector(
+            BlockVector3 vector1 = BlockVector3.at(
                     chunk.getX() * 16,
                     0,
                     chunk.getZ() * 16
             );
-            BlockVector vector2 = new BlockVector(
+            BlockVector3 vector2 = BlockVector3.at(
                     (chunk.getX() * 16) + 15,
                     location.getWorld().getMaxHeight(),
                     (chunk.getZ() * 16) + 15
@@ -118,7 +120,7 @@ public abstract class AbstractPlot implements Plot {
 
     @Override
     public void delete() {
-
-        RCCitiesPlugin.getPlugin().getWorldGuard().getRegionManager(location.getWorld()).removeRegion(getRegionName());
+        RCCitiesPlugin.getPlugin().getRegionContainer()
+                .get(BukkitAdapter.adapt(location.getWorld())).removeRegion(getRegionName());
     }
 }
