@@ -1,6 +1,10 @@
 package net.silthus.rccities.rewards;
 
+import net.silthus.rccities.RCCitiesPlugin;
 import net.silthus.rccities.api.city.City;
+import net.silthus.rccities.upgrades.api.reward.AbstractReward;
+import net.silthus.rccities.upgrades.api.reward.RewardInformation;
+import net.silthus.rccities.util.RaidCraftException;
 import org.bukkit.configuration.ConfigurationSection;
 
 /**
@@ -28,7 +32,7 @@ public class CityFlagReward extends AbstractReward<City> {
     public void reward(City city) {
 
         try {
-            RaidCraft.getComponent(RCCitiesPlugin.class).getFlagManager().setCityFlag(city, null, flagName, flagValue);
+            RCCitiesPlugin.getPlugin().getFlagManager().setCityFlag(city, null, flagName, flagValue);
         } catch (RaidCraftException e) {
         }
     }

@@ -1,7 +1,7 @@
 package net.silthus.rccities.upgrades.api.level;
 
-import net.silthus.rccities.requirement.Requirement;
-import net.silthus.rccities.requirementsapi.reward.Reward;
+import net.silthus.rccities.upgrades.api.requirement.Requirement;
+import net.silthus.rccities.upgrades.api.reward.Reward;
 import net.silthus.rccities.upgrades.api.holder.UpgradeHolder;
 import net.silthus.rccities.upgrades.api.unlockresult.UnlockResult;
 import net.silthus.rccities.upgrades.events.UpgradeUnlockEvent;
@@ -31,8 +31,7 @@ public class SimpleUpgradeLevel<T> extends AbstractUpgradeLevel<T> {
         this.requirements = requirements;
 
         for(Requirement<T> req: requirements) {
-            if(!req.getDescription(getUpgradeHolder().getObject()).isPresent()) continue;
-            addRequirementDescription(req.getDescription(getUpgradeHolder().getObject()).get());
+            addRequirementDescription(req.getDescription(getUpgradeHolder().getObject()));
         }
     }
 

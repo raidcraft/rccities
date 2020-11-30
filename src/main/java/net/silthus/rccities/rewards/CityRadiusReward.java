@@ -1,6 +1,9 @@
 package net.silthus.rccities.rewards;
 
+import net.silthus.rccities.RCCitiesPlugin;
 import net.silthus.rccities.api.city.City;
+import net.silthus.rccities.upgrades.api.reward.AbstractReward;
+import net.silthus.rccities.upgrades.api.reward.RewardInformation;
 import org.bukkit.configuration.ConfigurationSection;
 
 /**
@@ -30,7 +33,7 @@ public class CityRadiusReward extends AbstractReward<City> {
         city.setMaxRadius(city.getMaxRadius() + blocks);
 
         if (broadcast) {
-            RaidCraft.getComponent(RCCitiesPlugin.class).getResidentManager().broadcastCityMessage(city, "Die Stadt hat ihren Radius um " + blocks + " Blöcke vergrößert!");
+            RCCitiesPlugin.getPlugin().getResidentManager().broadcastCityMessage(city, "Die Stadt hat ihren Radius um " + blocks + " Blöcke vergrößert!");
         }
     }
 

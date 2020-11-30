@@ -1,10 +1,11 @@
 package net.silthus.rccities.upgrades.api.holder;
 
-import net.silthus.rccities.requirement.Requirement;
-import net.silthus.rccities.requirementsapi.reward.Reward;
-import net.silthus.rccities.requirementsapi.reward.RewardManager;
+import net.silthus.rccities.upgrades.api.reward.Reward;
+import net.silthus.rccities.upgrades.api.reward.RewardManager;
+import net.silthus.rccities.upgrades.RequirementManager;
 import net.silthus.rccities.upgrades.api.level.SimpleUpgradeLevel;
 import net.silthus.rccities.upgrades.api.level.UpgradeLevel;
+import net.silthus.rccities.upgrades.api.requirement.Requirement;
 import net.silthus.rccities.upgrades.api.upgrade.SimpleUpgrade;
 import net.silthus.rccities.upgrades.api.upgrade.Upgrade;
 import org.bukkit.configuration.ConfigurationSection;
@@ -46,7 +47,7 @@ public abstract class ConfigurationUpgradeHolder<T> extends AbstractUpgradeHolde
 
                     // requirements
                     ConfigurationSection requirements = level.getConfigurationSection("requirements");
-                    List<Requirement<T>> requirementList = ActionAPI.createRequirements(upgradeLevel.getId(), requirements, getType());
+                    List<Requirement<T>> requirementList = RequirementManager.createRequirements(requirements);
 //                    RaidCraft.LOGGER.info("[RCUpgrades] Es wurden " + requirementList.size() + " Requirements für das Upgrade-Level " + upgradeLevel.getName() + " geladen!");
                     upgradeLevel.setRequirements(requirementList);
 

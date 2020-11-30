@@ -1,6 +1,9 @@
 package net.silthus.rccities.rewards;
 
+import net.silthus.rccities.RCCitiesPlugin;
 import net.silthus.rccities.api.city.City;
+import net.silthus.rccities.upgrades.api.reward.AbstractReward;
+import net.silthus.rccities.upgrades.api.reward.RewardInformation;
 import org.bukkit.configuration.ConfigurationSection;
 
 /**
@@ -31,9 +34,9 @@ public class CityPlotsReward extends AbstractReward<City> {
 
         if (broadcast) {
             if (plotAmount > 1) {
-                RaidCraft.getComponent(RCCitiesPlugin.class).getResidentManager().broadcastCityMessage(city, "Die Stadt hat " + plotAmount + " neue Plots erhalten!");
+                RCCitiesPlugin.getPlugin().getResidentManager().broadcastCityMessage(city, "Die Stadt hat " + plotAmount + " neue Plots erhalten!");
             } else {
-                RaidCraft.getComponent(RCCitiesPlugin.class).getResidentManager().broadcastCityMessage(city, "Die Stadt hat einen neuen Plot erhalten!");
+                RCCitiesPlugin.getPlugin().getResidentManager().broadcastCityMessage(city, "Die Stadt hat einen neuen Plot erhalten!");
             }
         }
     }

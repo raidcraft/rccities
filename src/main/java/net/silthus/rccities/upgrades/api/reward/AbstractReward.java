@@ -1,4 +1,4 @@
-package net.silthus.rccities.requirementsapi.reward;
+package net.silthus.rccities.upgrades.api.reward;
 
 import net.silthus.rccities.util.StringUtils;
 import org.bukkit.configuration.ConfigurationSection;

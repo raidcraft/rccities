@@ -1,22 +1,24 @@
 package net.silthus.rccities.requirements;
 
 import net.silthus.rccities.api.city.City;
+import net.silthus.rccities.upgrades.api.level.UpgradeLevel;
+import net.silthus.rccities.upgrades.api.requirement.AbstractRequirement;
+import net.silthus.rccities.upgrades.api.requirement.RequirementInformation;
+import net.silthus.rccities.upgrades.api.upgrade.Upgrade;
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.Optional;
 
-/**
- * @author Silthus
- */
-public class CityUpgradeLevelRequirement implements ReasonableRequirement<City> {
+@RequirementInformation(
+        value = "city.unlocked",
+        desc = "Other upgrade must be unlocked."
+)
+public class CityUpgradeLevelRequirement extends AbstractRequirement<City> {
 
-    @Override
-    @Information(
-            value = "city.level",
-            desc = "Checks if city has level unlocked.",
-            conf = {"upgrade-id: <ID of parent update>",
-                    "upgrade-level-id: <ID of affecting update level>"}
-    )
+    protected CityUpgradeLevelRequirement(ConfigurationSection config) {
+        super(config);
+    }
+
     public boolean test(City city, ConfigurationSection config) {
 
         if(city == null) return false;
@@ -32,14 +34,19 @@ public class CityUpgradeLevelRequirement implements ReasonableRequirement<City> 
     }
 
     @Override
-    public Optional<String> getDescription(City city, ConfigurationSection config) {
+    public String getDescription(City city, ConfigurationSection config) {
 
-        return Optional.of("Level '" + config.getString("upgrade-level-id") + "' freigeschaltet");
+        return "Das Upgrade-Level '" + config.getString("upgrade-level-id") + "' muss freigeschaltet sein";
     }
 
     @Override
     public String getReason(City city, ConfigurationSection config) {
 
         return "Es muss das Upgrade-Level '" + config.getString("upgrade-level-id") + "' freigeschaltet sein!";
+    }
+
+    @Override
+    public void load(ConfigurationSection data) {
+
     }
 }

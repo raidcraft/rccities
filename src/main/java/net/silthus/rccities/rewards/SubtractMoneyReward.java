@@ -1,6 +1,10 @@
 package net.silthus.rccities.rewards;
 
+import net.milkbowl.vault.economy.Economy;
+import net.silthus.rccities.RCCitiesPlugin;
 import net.silthus.rccities.api.city.City;
+import net.silthus.rccities.upgrades.api.reward.AbstractReward;
+import net.silthus.rccities.upgrades.api.reward.RewardInformation;
 import org.bukkit.configuration.ConfigurationSection;
 
 /**
@@ -25,6 +29,7 @@ public class SubtractMoneyReward extends AbstractReward<City> {
     @Override
     public void reward(City city) {
 
-        RaidCraft.getEconomy().substract(AccountType.CITY, city.getBankAccountName(), amount);
+        Economy economy = RCCitiesPlugin.getPlugin().getEconomy();
+        economy.bankWithdraw(city.getBankAccountName(), amount);
     }
 }

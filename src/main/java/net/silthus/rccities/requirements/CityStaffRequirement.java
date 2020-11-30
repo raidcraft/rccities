@@ -1,27 +1,31 @@
 package net.silthus.rccities.requirements;
 
+import net.silthus.rccities.DatabaseUpgradeRequest;
+import net.silthus.rccities.RCCitiesPlugin;
 import net.silthus.rccities.api.city.City;
+import net.silthus.rccities.api.request.UpgradeRequest;
+import net.silthus.rccities.upgrades.api.level.UpgradeLevel;
+import net.silthus.rccities.upgrades.api.requirement.AbstractRequirement;
+import net.silthus.rccities.upgrades.api.requirement.RequirementInformation;
+import net.silthus.rccities.upgrades.api.upgrade.Upgrade;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
-/**
- * @author Silthus
- */
-public class CityStaffRequirement implements ReasonableRequirement<City> {
+@RequirementInformation(
+        value = "city.staff",
+        desc = "Staff must approve."
+)
+public class CityStaffRequirement extends AbstractRequirement<City> {
 
-    @Override
-    @Information(
-            value = "city.staff",
-            desc = "Informs staff to accept upgrade request.",
-            conf = {"upgrade-id: <ID of parent update>",
-                    "upgrade-level-id: <ID of affecting update level>",
-                    "info: <Info for players about staff requirement"}
-    )
+    protected CityStaffRequirement(ConfigurationSection config) {
+        super(config);
+    }
+
     public boolean test(City city, ConfigurationSection config) {
 
-        RCCitiesPlugin plugin = RaidCraft.getComponent(RCCitiesPlugin.class);
+        RCCitiesPlugin plugin = RCCitiesPlugin.getPlugin();
         if(city == null) return false;
         Upgrade upgrade = city.getUpgrades().getUpgrade(config.getString("upgrade-id"));
         if (upgrade == null) return false;
@@ -54,8 +58,18 @@ public class CityStaffRequirement implements ReasonableRequirement<City> {
     }
 
     @Override
+    public String getDescription(City entity, ConfigurationSection config) {
+        return "Ein Teammitglied muss das bestätigen";
+    }
+
+    @Override
     public String getReason(City entity, ConfigurationSection config) {
 
         return "Ein Teammitglied wird sich in kürze darum kümmern!";
+    }
+
+    @Override
+    public void load(ConfigurationSection data) {
+
     }
 }

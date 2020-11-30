@@ -1,6 +1,9 @@
 package net.silthus.rccities.requirements;
 
 import net.silthus.rccities.api.city.City;
+import net.silthus.rccities.upgrades.api.requirement.AbstractRequirement;
+import net.silthus.rccities.upgrades.api.requirement.Requirement;
+import net.silthus.rccities.upgrades.api.requirement.RequirementInformation;
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.Optional;
@@ -8,28 +11,34 @@ import java.util.Optional;
 /**
  * @author Silthus
  */
-public class CityExpRequirement implements ReasonableRequirement<City> {
+@RequirementInformation(
+        value = "city.exp",
+        desc = "Checks the exp of the city."
+)
+public class CityExpRequirement extends AbstractRequirement<City> {
 
-    @Override
-    @Information(
-            value = "city.exp",
-            desc = "Checks the exp of the city.",
-            conf = {"exp: <min exp>"}
-    )
-    public boolean test(City city, ConfigurationSection config) {
+    protected CityExpRequirement() {
+        super();
+    }
+
+    public boolean test(City city) {
 
         return city.getExp() >= config.getInt("exp");
     }
 
-    @Override
-    public Optional<String> getDescription(City entity, ConfigurationSection config) {
 
-        return Optional.of(config.getInt("exp") + " EXP");
+    public String getDescription(City entity) {
+
+        return "Die Stadt '" + entity.getName() + "' muss mindestens " + config.getInt("exp") + " EXP besitzen";
+    }
+
+    public String getReason(City entity) {
+
+        return "Es müssen sich mindestens " + config.getInt("exp") + " EXP in der Stadtkasse befinden!";
     }
 
     @Override
-    public String getReason(City entity, ConfigurationSection config) {
+    public void load(ConfigurationSection data) {
 
-        return "Es müssen sich mindestens " + config.getInt("exp") + " EXP in der Stadtkasse befinden!";
     }
 }
