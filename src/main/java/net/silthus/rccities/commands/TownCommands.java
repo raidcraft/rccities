@@ -143,6 +143,13 @@ public class TownCommands extends BaseCommand {
                 // create initial plot
                 Plot plot = new DatabasePlot(player.getLocation(), city);
 
+                // create schematic
+                try {
+                    plugin.getSchematicManager().createSchematic(plot);
+                } catch (RaidCraftException e) {
+                    throw new CommandException(e.getMessage());
+                }
+
                 // set flags at the end because of possible errors
                 plugin.getFlagManager().setCityFlag(city, player, PvpCityFlag.class, false);        // disable pvp
                 plugin.getFlagManager().setCityFlag(city, player, InviteCityFlag.class, false);     // disable invites
@@ -651,7 +658,15 @@ public class TownCommands extends BaseCommand {
          ***********************************************************************************************************************************
          */
 
-        public void deleteCity(CommandSender sender, City city) {
+        public void deleteCity(CommandSender sender, City city, boolean restoreSchematics) {
+
+            if (restoreSchematics) {
+                try {
+                    plugin.getSchematicManager().restoreCity(city);
+                } catch (RaidCraftException e) {
+                    sender.sendMessage(ChatColor.RED + "Es ist ein Fehler beim wiederherstellen der Plots aufgetreten! (" + e.getMessage() + ")");
+                }
+            }
 
             city.delete();
             Bukkit.broadcastMessage(ChatColor.GOLD + "Die Stadt '" + city.getFriendlyName() + "' wurde gelöscht!");

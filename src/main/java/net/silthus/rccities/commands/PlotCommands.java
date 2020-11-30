@@ -80,8 +80,8 @@ public class PlotCommands extends BaseCommand {
 
             Plot plot;
             if (args.argsLength() > 1) {
-                int plotId = args.getInteger(1);
-                plot = plugin.getPlotManager().getPlot(plotId);
+                String plotId = args.getString(1);
+                plot = plugin.getPlotManager().getPlot(UUID.fromString(plotId));
                 if (plot == null) {
                     throw new CommandException("Es gibt kein Plot mit dieser ID!");
                 }
@@ -130,8 +130,8 @@ public class PlotCommands extends BaseCommand {
 
             Plot plot;
             if (args.argsLength() > 1) {
-                int plotId = args.getInteger(1);
-                plot = plugin.getPlotManager().getPlot(plotId);
+                String plotId = args.getString(1);
+                plot = plugin.getPlotManager().getPlot(UUID.fromString(plotId));
                 if (plot == null) {
                     throw new CommandException("Es gibt kein Plot mit dieser ID!");
                 }
@@ -235,6 +235,13 @@ public class PlotCommands extends BaseCommand {
 
             Plot plot = new DatabasePlot(plotCenter, city);
 
+            // create schematic
+            try {
+                plugin.getSchematicManager().createSchematic(plot);
+            } catch (RaidCraftException e) {
+                throw new CommandException(e.getMessage());
+            }
+
             // withdraw plot credit
             city.setPlotCredit(city.getPlotCredit() - 1);
 
@@ -255,8 +262,11 @@ public class PlotCommands extends BaseCommand {
             if (sender instanceof ConsoleCommandSender) throw new CommandException("Player required!");
             Player player = (Player) sender;
 
+            boolean restoreSchematics = false;
             boolean force = false;
-
+            if (args.hasFlag('r')) {
+                restoreSchematics = true;
+            }
             if (args.hasFlag('f')) {
                 force = true;
             }
@@ -272,16 +282,20 @@ public class PlotCommands extends BaseCommand {
 
             try {
 
-                sender.sendMessage(ChatColor.DARK_RED + "Bei der Löschung des Plots wird die Landschaft NICHT zurückgesetzt!");
+                if (restoreSchematics) {
+                    sender.sendMessage(ChatColor.DARK_RED + "Bei der Löschung des Plots wird die Landschaft zurückgesetzt!");
+                } else {
+                    sender.sendMessage(ChatColor.DARK_RED + "Bei der Löschung des Plots wird die Landschaft NICHT zurückgesetzt!");
+                }
                 if(args.hasFlag('a')) {
                     sender.sendMessage(ChatColor.DARK_RED + "Bist du sicher dass ALLE plots wiederhergestellt werden sollen?");
                     new QueuedCaptchaCommand(sender, this, "unclaimAll", sender, plot.getCity());
 
                 } else {
                     if (force) {
-                        unclaimPlot(sender, plot);
+                        unclaimPlot(sender, plot, restoreSchematics);
                     } else {
-                        new QueuedCaptchaCommand(sender, this, "unclaimPlot", sender, plot);
+                        new QueuedCaptchaCommand(sender, this, "unclaimPlot", sender, plot, restoreSchematics);
                     }
                 }
             } catch (NoSuchMethodException e) {
@@ -313,10 +327,10 @@ public class PlotCommands extends BaseCommand {
             String flagName;
             String flagValue;
             if (args.argsLength() > 2) {
-                int plotId = args.getInteger(0);
+                String plotId = args.getString(0);
                 flagName = args.getString(1);
                 flagValue = args.getString(2);
-                plot = plugin.getPlotManager().getPlot(plotId);
+                plot = plugin.getPlotManager().getPlot(UUID.fromString(plotId));
                 if (plot == null) {
                     throw new CommandException("Es gibt kein Plot mit dieser ID!");
                 }
@@ -356,8 +370,8 @@ public class PlotCommands extends BaseCommand {
 
             Plot plot;
             if (args.argsLength() > 0) {
-                int plotId = args.getInteger(0);
-                plot = plugin.getPlotManager().getPlot(plotId);
+                String plotId = args.getString(0);
+                plot = plugin.getPlotManager().getPlot(UUID.fromString(plotId));
                 if (plot == null) {
                     throw new CommandException("Es gibt kein Plot mit dieser ID!");
                 }
@@ -377,9 +391,18 @@ public class PlotCommands extends BaseCommand {
          ***********************************************************************************************************************************
          */
 
-        public void unclaimPlot(CommandSender sender, Plot plot) {
+        public void unclaimPlot(CommandSender sender, Plot plot, boolean restoreSchematics) {
 
             City city = plot.getCity();
+
+            if (restoreSchematics) {
+                try {
+                    plugin.getSchematicManager().restorePlot(plot);
+                } catch (RaidCraftException e) {
+                    sender.sendMessage(ChatColor.RED + "Es ist ein Fehler beim wiederherstellen des Plots aufgetreten! (" + e.getMessage() + ")");
+                }
+            }
+
             plot.delete();
             plugin.getResidentManager().broadcastCityMessage(city, "Der Plot '" + plot.getRegionName() + "' wurde gelöscht!");
         }
@@ -423,7 +446,25 @@ public class PlotCommands extends BaseCommand {
                 plugin.getLogger().info("[RCCities - Unclaim all] Der Plot '" + plot.getRegionName() + "' wurde gelöscht! (übrig: " + (totalCount-1) + ")");
                 sender.sendMessage("Der Plot '" + plot.getRegionName() + "' wurde gelöscht! (übrig: " + (totalCount-1) + ")");
 
+                if (restoreSchematics) {
+                    try {
+                        plugin.getSchematicManager().restorePlot(plot);
+                    } catch (RaidCraftException e) {
+                        plugin.getLogger().info("[RCCities - Unclaim all] Fehler beim wiederherstellen des Plots '" + plot.getRegionName() + "'! (" + e.getMessage() + ")");
+                        sender.sendMessage(ChatColor.RED + "Fehler beim wiederherstellen des Plots '" + plot.getRegionName() + "'! (" + e.getMessage() + ")");
+                    }
+                }
+
                 plot.delete();
+
+                if (restoreSchematics) {
+                    int i = 0;
+                    for (Entity entity : plot.getLocation().getChunk().getEntities()) {
+                        entity.remove();
+                        i++;
+                    }
+                    plugin.getLogger().info("[RCCities - Unclaim all] Removed " + i + " entities in unclaimed chunk!");
+                }
             }
         }
     }

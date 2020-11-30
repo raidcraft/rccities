@@ -7,12 +7,14 @@ import com.sk89q.worldedit.WorldEditException;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.bukkit.BukkitWorld;
 import com.sk89q.worldedit.extent.clipboard.BlockArrayClipboard;
-import com.sk89q.worldedit.extent.clipboard.io.BuiltInClipboardFormat;
-import com.sk89q.worldedit.extent.clipboard.io.ClipboardWriter;
+import com.sk89q.worldedit.extent.clipboard.Clipboard;
+import com.sk89q.worldedit.extent.clipboard.io.*;
 import com.sk89q.worldedit.function.operation.ForwardExtentCopy;
+import com.sk89q.worldedit.function.operation.Operation;
 import com.sk89q.worldedit.function.operation.Operations;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.regions.CuboidRegion;
+import com.sk89q.worldedit.session.ClipboardHolder;
 import com.sk89q.worldedit.world.DataException;
 import net.silthus.rccities.RCCitiesPlugin;
 import net.silthus.rccities.api.city.City;
@@ -22,11 +24,14 @@ import org.bukkit.World;
 import org.bukkit.util.Vector;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
 /**
  * @author Philip Urban
+ *
+ * Based on: https://matthewmiller.dev/blog/how-to-load-and-save-schematics-with-the-worldedit-api/
  */
 public class SchematicManager {
 
@@ -91,15 +96,28 @@ public class SchematicManager {
 
         String schematicName = getSchematicName(plot);
         File file = new File(getSchematicDir(plot.getLocation().getWorld()), schematicName);
+
         try {
-            CuboidClipboard clipboard = MCEditSchematicFormat.MCEDIT.load(file);
-            clipboard.paste(new EditSession(new BukkitWorld(plot.getLocation().getWorld()), Integer.MAX_VALUE), clipboard.getOrigin(), false);
-            //            clipboard.pasteEntities(clipboard.getOrigin());
-        } catch (IOException | DataException e) {
+            ClipboardFormat format = ClipboardFormats.findByFile(file);
+            try (ClipboardReader reader = format.getReader(new FileInputStream(file))) {
+                Clipboard clipboard = reader.read();
+
+                com.sk89q.worldedit.world.World worldEditWorld = BukkitAdapter.adapt(plot.getLocation().getWorld());
+                try (EditSession editSession = WorldEdit.getInstance().getEditSessionFactory().getEditSession(worldEditWorld, -1)) {
+                    Operation operation = new ClipboardHolder(clipboard)
+                            .createPaste(editSession)
+                            .to(clipboard.getOrigin())
+                            .ignoreAirBlocks(false)
+                            .build();
+                    Operations.complete(operation);
+                }
+            }
+        } catch(IOException e) {
             throw new RaidCraftException("Fehler beim laden der Schematic!");
-        } catch (MaxChangedBlocksException e) {
-            throw new RaidCraftException("Fehler beim pasten der Schematic! (Zu viele Blöcke)");
+        } catch(WorldEditException e) {
+            throw new RaidCraftException("Fehler beim pasten der Schematic!");
         }
+
     }
 
     public void deleteSchematic(Plot plot) throws RaidCraftException {
