@@ -30,7 +30,6 @@ public class TCityFlag extends BaseEntity {
 
     public void setCity(City city) {
 
-        TCity tCity = TCity.find.byId(city.getId());
-        this.city = tCity;
+        this.city = TCity.find.byId(city.getId());
     }
 }

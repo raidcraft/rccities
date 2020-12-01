@@ -2,6 +2,7 @@ package net.silthus.rccities.api.resident;
 
 import org.bukkit.ChatColor;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -97,19 +98,17 @@ public enum Role {
             RolePermission.SPAWN_TELEPORT
     );
 
-    private Set<RolePermission> permissions = new HashSet<>();
-    private String friendlyName;
-    private boolean adminOnly;
-    private ChatColor chatColor;
+    private final Set<RolePermission> permissions = new HashSet<>();
+    private final String friendlyName;
+    private final boolean adminOnly;
+    private final ChatColor chatColor;
 
-    private Role(String friendlyName, boolean adminOnly, ChatColor chatColor, RolePermission... permissions) {
+    Role(String friendlyName, boolean adminOnly, ChatColor chatColor, RolePermission... permissions) {
 
         this.friendlyName = friendlyName;
         this.adminOnly = adminOnly;
         this.chatColor = chatColor;
-        for (RolePermission permission : permissions) {
-            this.permissions.add(permission);
-        }
+        this.permissions.addAll(Arrays.asList(permissions));
     }
 
     public boolean hasPermission(RolePermission permission) {

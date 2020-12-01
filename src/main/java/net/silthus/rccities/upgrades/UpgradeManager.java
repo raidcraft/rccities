@@ -20,7 +20,7 @@ import java.util.UUID;
  */
 public class UpgradeManager {
 
-    private Set<String> createdUpgradeInfo = new HashSet<>();
+    private final Set<String> createdUpgradeInfo = new HashSet<>();
 
 
     /**

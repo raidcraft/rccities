@@ -27,8 +27,8 @@ import java.util.UUID;
  */
 public class CityManager {
 
-    private RCCitiesPlugin plugin;
-    private Map<String, City> cachedCities = new CaseInsensitiveMap<>();
+    private final RCCitiesPlugin plugin;
+    private final Map<String, City> cachedCities = new CaseInsensitiveMap<>();
 
     public CityManager(RCCitiesPlugin plugin) {
 

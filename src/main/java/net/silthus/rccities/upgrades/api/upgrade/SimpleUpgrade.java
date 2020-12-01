@@ -12,7 +12,7 @@ import java.util.Map;
  */
 public class SimpleUpgrade extends AbstractUpgrade {
 
-    private Map<String, UpgradeLevel> levels = new CaseInsensitiveMap<>();
+    private final Map<String, UpgradeLevel> levels = new CaseInsensitiveMap<>();
 
     public SimpleUpgrade(String id, String name, String description) {
 

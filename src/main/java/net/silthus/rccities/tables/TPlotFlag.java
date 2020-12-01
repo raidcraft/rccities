@@ -32,7 +32,6 @@ public class TPlotFlag extends BaseEntity {
 
     public void setPlot(Plot plot) {
 
-        TPlot tPlot = TPlot.find.byId(plot.getId());
-        this.plot = tPlot;
+        this.plot = TPlot.find.byId(plot.getId());
     }
 }

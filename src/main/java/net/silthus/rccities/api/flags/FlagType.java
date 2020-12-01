@@ -16,11 +16,11 @@ public enum FlagType {
     BOOLEAN("Es wurde ein Zustand (ja/nein) erwartet!", "Zustand, z.B.: Ja, Nein, On, Off"),
     MONEY("Es wurde ein Geldbetrag erwartet!", "Geldbetrag, Bsp.: 4G, 3S7K");
 
-    private String errorMsg;
-    private String typeInfo;
+    private final String errorMsg;
+    private final String typeInfo;
     private static final Pattern CURRENCY_PATTERN = Pattern.compile("^((\\d+)[gG])?\\s?((\\d+)[sS])?\\s?((\\d+)[cCkK]?)?$");
 
-    private FlagType(String errorMsg, String typeInfo) {
+    FlagType(String errorMsg, String typeInfo) {
 
         this.errorMsg = errorMsg;
         this.typeInfo = typeInfo;
@@ -53,7 +53,7 @@ public enum FlagType {
                 return false;
             }
         } else if (this == BOOLEAN) {
-            if (input.equalsIgnoreCase("true")
+            return input.equalsIgnoreCase("true")
                     || input.equalsIgnoreCase("allow")
                     || input.equalsIgnoreCase("deny")
                     || input.equalsIgnoreCase("false")
@@ -68,11 +68,7 @@ public enum FlagType {
                     || input.equalsIgnoreCase("on")
                     || input.equalsIgnoreCase("off")
                     || input.equalsIgnoreCase("1")
-                    || input.equalsIgnoreCase("0")) {
-                return true;
-            } else {
-                return false;
-            }
+                    || input.equalsIgnoreCase("0");
         } else if (this == MONEY) {
             Matcher matcher = CURRENCY_PATTERN.matcher(input);
             return matcher.matches();
@@ -83,18 +79,14 @@ public enum FlagType {
 
     public boolean convertToBoolean(String value) {
 
-        if (value.equalsIgnoreCase("true")
+        return value.equalsIgnoreCase("true")
                 || value.equalsIgnoreCase("allow")
                 || value.equalsIgnoreCase("wahr")
                 || value.equalsIgnoreCase("ja")
                 || value.equalsIgnoreCase("yes")
                 || value.equalsIgnoreCase("an")
                 || value.equalsIgnoreCase("on")
-                || value.equalsIgnoreCase("1")) {
-            return true;
-        } else {
-            return false;
-        }
+                || value.equalsIgnoreCase("1");
     }
 
     public int convertToInteger(String value) {

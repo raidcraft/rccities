@@ -28,7 +28,7 @@ import java.util.List;
  */
 public class ResidentCommands extends BaseCommand {
 
-    private RCCitiesPlugin plugin;
+    private final RCCitiesPlugin plugin;
 
     public ResidentCommands(RCCitiesPlugin plugin) {
 

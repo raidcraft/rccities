@@ -8,7 +8,7 @@ import net.silthus.rccities.api.city.City;
  */
 public abstract class AbstractCityFlag extends AbstractFlag implements CityFlag {
 
-    private City city;
+    private final City city;
 
     public AbstractCityFlag(City city) {
 

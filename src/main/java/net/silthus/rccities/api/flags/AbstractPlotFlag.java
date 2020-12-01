@@ -8,7 +8,7 @@ import net.silthus.rccities.api.plot.Plot;
  */
 public abstract class AbstractPlotFlag extends AbstractFlag implements PlotFlag {
 
-    private Plot plot;
+    private final Plot plot;
 
     protected AbstractPlotFlag(Plot plot) {
 

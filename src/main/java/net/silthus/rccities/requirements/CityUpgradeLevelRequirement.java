@@ -27,10 +27,7 @@ public class CityUpgradeLevelRequirement extends AbstractRequirement<City> {
         UpgradeLevel upgradeLevel = upgrade.getLevel(config.getString("upgrade-level-id"));
         if (upgradeLevel == null) return false;
 
-        if (upgradeLevel.isUnlocked()) {
-            return true;
-        }
-        return false;
+        return upgradeLevel.isUnlocked();
     }
 
     @Override

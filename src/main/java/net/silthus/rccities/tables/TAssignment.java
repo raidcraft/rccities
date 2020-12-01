@@ -6,10 +6,8 @@ import lombok.Setter;
 import net.silthus.ebean.BaseEntity;
 import net.silthus.rccities.api.plot.Plot;
 import net.silthus.rccities.api.resident.Resident;
-import net.silthus.rccities.upgrades.tables.TLevelInfo;
 
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import java.util.UUID;
@@ -32,13 +30,11 @@ public class TAssignment extends BaseEntity {
 
     public void setPlot(Plot plot) {
 
-        TPlot tPlot = TPlot.find.byId(plot.getId());
-        this.plot = tPlot;
+        this.plot = TPlot.find.byId(plot.getId());
     }
 
     public void setResident(Resident resident) {
 
-        TResident tResident = TResident.find.byId(resident.getId());
-        this.resident = tResident;
+        this.resident = TResident.find.byId(resident.getId());
     }
 }

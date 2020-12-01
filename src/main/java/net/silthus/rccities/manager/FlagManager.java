@@ -21,16 +21,16 @@ import java.util.*;
  */
 public class FlagManager {
 
-    private RCCitiesPlugin plugin;
-    private Map<String, Class<? extends CityFlag>> registeredCityFlags = new CaseInsensitiveMap<>();
-    private Map<String, Class<? extends PlotFlag>> registeredPlotFlags = new CaseInsensitiveMap<>();
+    private final RCCitiesPlugin plugin;
+    private final Map<String, Class<? extends CityFlag>> registeredCityFlags = new CaseInsensitiveMap<>();
+    private final Map<String, Class<? extends PlotFlag>> registeredPlotFlags = new CaseInsensitiveMap<>();
 
     // city name -> map(flag name, flag)
-    private Map<String, Map<String, CityFlag>> cachedCityFlags = new CaseInsensitiveMap<>();
+    private final Map<String, Map<String, CityFlag>> cachedCityFlags = new CaseInsensitiveMap<>();
     // plot id -> map(flag name, flag)
-    private Map<UUID, Map<String, PlotFlag>> cachedPlotFlags = new HashMap<>();
+    private final Map<UUID, Map<String, PlotFlag>> cachedPlotFlags = new HashMap<>();
 
-    private FlagRefreshTask refreshTask;
+    private final FlagRefreshTask refreshTask;
 
     public FlagManager(RCCitiesPlugin plugin) {
 
@@ -382,8 +382,7 @@ public class FlagManager {
 
         Class<? extends Flag> registeredFlagClass = registeredCityFlags.get(flagName);
         if (registeredFlagClass == null) return null;
-        FlagInformation annotation = registeredFlagClass.getAnnotation(FlagInformation.class);
-        return annotation;
+        return registeredFlagClass.getAnnotation(FlagInformation.class);
     }
 
     public void clearCache() {
@@ -394,7 +393,7 @@ public class FlagManager {
 
     public class FlagRefreshTask implements Runnable {
 
-        private List<FlagRefreshInformation> refreshInformation = new ArrayList<>();
+        private final List<FlagRefreshInformation> refreshInformation = new ArrayList<>();
 
         @Override
         public void run() {
@@ -429,8 +428,8 @@ public class FlagManager {
 
         public class FlagRefreshInformation {
 
-            private FlagInformation annotation;
-            private Flag flag;
+            private final FlagInformation annotation;
+            private final Flag flag;
             private int lastRefresh = 0;
 
             public FlagRefreshInformation(FlagInformation annotation, Flag flag) {

@@ -53,9 +53,7 @@ public abstract class AbstractUpgradeLevel<T> implements UpgradeLevel<T> {
 
         AbstractUpgradeLevel that = (AbstractUpgradeLevel) o;
 
-        if (!id.equals(that.id)) return false;
-
-        return true;
+        return id.equals(that.id);
     }
 
     @Override

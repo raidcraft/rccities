@@ -5,9 +5,9 @@ package net.silthus.rccities.upgrades.api.upgrade;
  */
 public abstract class AbstractUpgrade implements Upgrade {
 
-    private String id;
-    private String name;
-    private String description;
+    private final String id;
+    private final String name;
+    private final String description;
 
     protected AbstractUpgrade(String id, String name, String description) {
 

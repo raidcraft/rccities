@@ -137,7 +137,7 @@ public class MarkPlotFlag extends AbstractPlotFlag {
         Material material = block.getType();
 
         // TODO: Extend list with new materials
-        if (material == Material.GRASS
+        return material == Material.GRASS
                 || material == Material.DIRT
                 || material == Material.COBBLESTONE
                 || material == Material.STONE
@@ -159,9 +159,6 @@ public class MarkPlotFlag extends AbstractPlotFlag {
                 || material == Material.EMERALD
                 || material == Material.EMERALD_BLOCK
                 || material == Material.NETHER_BRICK
-                || material == Material.CLAY) {
-            return true;
-        }
-        return false;
+                || material == Material.CLAY;
     }
 }

@@ -18,8 +18,8 @@ import java.util.List;
  */
 public class UpgradeRequestManager {
 
-    private RCCitiesPlugin plugin;
-    private UpgradeRequestInformTask informTask;
+    private final RCCitiesPlugin plugin;
+    private final UpgradeRequestInformTask informTask;
 
     public UpgradeRequestManager(RCCitiesPlugin plugin) {
 

@@ -17,7 +17,7 @@ public class SimpleUpgradeLevel<T> extends AbstractUpgradeLevel<T> {
 
     private Collection<Requirement<T>> requirements;
     private List<Reward<T>> rewards;
-    private UnlockResult unlockResult;
+    private final UnlockResult unlockResult;
 
     public SimpleUpgradeLevel(UpgradeHolder<T> upgradeHolder, String id, int level, String name, boolean stored, List<String> requirementDescription, List<String> rewardDescription) {
 

@@ -19,8 +19,8 @@ import java.util.*;
  */
 public class PlotManager {
 
-    private RCCitiesPlugin plugin;
-    private Map<Location, Plot> cachedPlots = new HashMap<>();
+    private final RCCitiesPlugin plugin;
+    private final Map<Location, Plot> cachedPlots = new HashMap<>();
 
     public PlotManager(RCCitiesPlugin plugin) {
 

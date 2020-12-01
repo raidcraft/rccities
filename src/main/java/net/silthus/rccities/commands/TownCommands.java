@@ -40,7 +40,7 @@ import java.util.Map;
  */
 public class TownCommands extends BaseCommand {
 
-    private RCCitiesPlugin plugin;
+    private final RCCitiesPlugin plugin;
 
     public TownCommands(RCCitiesPlugin plugin) {
 
@@ -71,7 +71,7 @@ public class TownCommands extends BaseCommand {
     public static class NestedCommands {
 
         private final RCCitiesPlugin plugin;
-        private Map<String, City> invites = new CaseInsensitiveMap<>();
+        private final Map<String, City> invites = new CaseInsensitiveMap<>();
 
         public NestedCommands(RCCitiesPlugin plugin) {
 

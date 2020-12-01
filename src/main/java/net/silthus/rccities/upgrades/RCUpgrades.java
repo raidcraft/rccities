@@ -16,7 +16,7 @@ import java.util.List;
 @Getter
 public class RCUpgrades {
 
-    private UpgradeManager upgradeManager;
+    private final UpgradeManager upgradeManager;
     private final RCCitiesPlugin plugin;
     private Database database;
 

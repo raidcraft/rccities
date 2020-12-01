@@ -109,9 +109,7 @@ public abstract class AbstractCity implements City {
 
         AbstractCity that = (AbstractCity) o;
 
-        if (!name.equals(that.name)) return false;
-
-        return true;
+        return name.equals(that.name);
     }
 
     @Override

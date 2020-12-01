@@ -15,7 +15,7 @@ public class QueuedCommand {
     private final CommandSender sender;
     private final Object object;
     private final Object[] args;
-    private Method method;
+    private final Method method;
 
     public QueuedCommand(final CommandSender sender, Object object, String methodName, Object... args) throws NoSuchMethodException {
 

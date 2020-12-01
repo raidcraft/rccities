@@ -11,7 +11,6 @@ import net.silthus.rccities.upgrades.api.level.UpgradeLevel;
 import net.silthus.rccities.upgrades.api.upgrade.Upgrade;
 
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import java.sql.Timestamp;
@@ -44,8 +43,7 @@ public class TUpgradeRequest extends BaseEntity {
 
     public void setCity(City city) {
 
-        TCity tCity = TCity.find.byId(city.getId());
-        this.city = tCity;
+        this.city = TCity.find.byId(city.getId());
     }
 
     public UpgradeLevel<City> getUpgradeLevel() {

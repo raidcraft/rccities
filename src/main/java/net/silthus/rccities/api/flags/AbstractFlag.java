@@ -8,10 +8,10 @@ import net.silthus.rccities.util.StringUtils;
  */
 public abstract class AbstractFlag implements Flag {
 
-    private String name;
-    private String friendlyName;
+    private final String name;
+    private final String friendlyName;
     private String value;
-    private FlagType type;
+    private final FlagType type;
     private long lastChange;
 
     protected AbstractFlag() {

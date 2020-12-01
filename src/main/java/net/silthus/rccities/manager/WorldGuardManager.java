@@ -25,8 +25,8 @@ import java.util.*;
  */
 public class WorldGuardManager implements Listener {
 
-    private RCCitiesPlugin plugin;
-    private WorldGuardPlugin worldGuard;
+    private final RCCitiesPlugin plugin;
+    private final WorldGuardPlugin worldGuard;
 
     public WorldGuardManager(RCCitiesPlugin plugin, WorldGuardPlugin worldGuard) {
 

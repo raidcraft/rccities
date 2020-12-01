@@ -37,7 +37,7 @@ public class SchematicManager {
 
     private final static String SCHEMATIC_PREFIX = "plot_";
 
-    private RCCitiesPlugin plugin;
+    private final RCCitiesPlugin plugin;
 
     public SchematicManager(RCCitiesPlugin plugin) {
 

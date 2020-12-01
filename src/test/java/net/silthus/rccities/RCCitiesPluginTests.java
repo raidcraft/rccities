@@ -11,14 +11,14 @@ import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
-public class TemplatePluginTests {
+public class RCCitiesPluginTests {
 
   private ServerMock server;
 
   @Before
   public void setUp() {
     server = MockBukkit.mock();
-    MockBukkit.loadWith(RCCitiesPlugin.class, new File("build/tmp/spigotPluginYaml/plugin.yml"));
+    MockBukkit.loadWith(RCCitiesPlugin.class, new File("build/tmp/generateSpigotDescription/plugin.yml"));
   }
 
   @Test

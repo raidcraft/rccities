@@ -69,9 +69,7 @@ public abstract class AbstractResident implements Resident {
         AbstractResident that = (AbstractResident) o;
 
         if (!city.equals(that.getCity())) return false;
-        if (!playerId.equals(that.getPlayerId())) return false;
-
-        return true;
+        return playerId.equals(that.getPlayerId());
     }
 
     @Override

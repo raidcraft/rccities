@@ -31,7 +31,7 @@ import java.util.UUID;
  */
 public class PlotCommands extends BaseCommand {
 
-    private RCCitiesPlugin plugin;
+    private final RCCitiesPlugin plugin;
 
     public PlotCommands(RCCitiesPlugin plugin) {
 
@@ -415,9 +415,9 @@ public class PlotCommands extends BaseCommand {
 
         private class UnclaimAllTask implements Runnable {
 
-            private CommandSender sender;
-            private City city;
-            private boolean restoreSchematics;
+            private final CommandSender sender;
+            private final City city;
+            private final boolean restoreSchematics;
 
             public UnclaimAllTask(CommandSender sender, City city, boolean restoreSchematics) {
                 this.sender = sender;

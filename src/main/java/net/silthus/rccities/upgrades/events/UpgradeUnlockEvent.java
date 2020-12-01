@@ -11,9 +11,9 @@ import org.bukkit.event.HandlerList;
  */
 public class UpgradeUnlockEvent extends Event implements Cancellable {
 
-    private UpgradeLevel upgradeLevel;
-    private UnlockResult unlockResult;
-    private Object object;
+    private final UpgradeLevel upgradeLevel;
+    private final UnlockResult unlockResult;
+    private final Object object;
     private boolean cancelled;
 
     public UpgradeUnlockEvent(UpgradeLevel upgradeLevel, UnlockResult unlockResult, Object object) {

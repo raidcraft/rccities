@@ -35,9 +35,8 @@ public abstract class AbstractPlot implements Plot {
 
     protected AbstractPlot(Location location, City city) {
 
-        Location simpleLocation = new Location(location.getWorld(), location.getChunk().getX() * 16 + 8,
+        this.location = new Location(location.getWorld(), location.getChunk().getX() * 16 + 8,
                 0, location.getChunk().getZ() * 16 + 8);
-        this.location = simpleLocation;
         this.city = city;
 
         save();

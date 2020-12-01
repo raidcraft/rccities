@@ -28,12 +28,11 @@ public abstract class ConfigurationUpgradeHolder<T> extends AbstractUpgradeHolde
 
         for(String key : upgradesSection.getKeys(false)) {
             ConfigurationSection upgradeSection = upgradesSection.getConfigurationSection(key);
-            String id = key;
             String name = upgradeSection.getString("name");
             String description = upgradeSection.getString("description");
 
             ConfigurationSection levels = upgradeSection.getConfigurationSection("level");
-            Upgrade upgrade = new SimpleUpgrade(id, name, description);
+            Upgrade upgrade = new SimpleUpgrade(key, name, description);
             if(levels != null) {
                 for(String levelIdentifier : levels.getKeys(false)) {
                     ConfigurationSection level = levels.getConfigurationSection(levelIdentifier);
@@ -43,12 +42,14 @@ public abstract class ConfigurationUpgradeHolder<T> extends AbstractUpgradeHolde
                     List<String> requirementDescription = level.getStringList("requirement-desc");
                     List<String> rewardDescription = level.getStringList("reward-desc");
 
-                    UpgradeLevel<T> upgradeLevel = new SimpleUpgradeLevel(this, levelIdentifier, levelNumber, levelName, stored, requirementDescription, rewardDescription);
+                    UpgradeLevel<T> upgradeLevel = new SimpleUpgradeLevel(this, levelIdentifier,
+                            levelNumber, levelName, stored, requirementDescription, rewardDescription);
 
                     // requirements
                     ConfigurationSection requirements = level.getConfigurationSection("requirements");
                     List<Requirement<T>> requirementList = RequirementManager.createRequirements(requirements);
-//                    RaidCraft.LOGGER.info("[RCUpgrades] Es wurden " + requirementList.size() + " Requirements für das Upgrade-Level " + upgradeLevel.getName() + " geladen!");
+//                    RaidCraft.LOGGER.info("[RCUpgrades] Es wurden " + requirementList.size() +
+//                    " Requirements für das Upgrade-Level " + upgradeLevel.getName() + " geladen!");
                     upgradeLevel.setRequirements(requirementList);
 
                     // rewards

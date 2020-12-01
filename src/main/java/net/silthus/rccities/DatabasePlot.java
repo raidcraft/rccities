@@ -21,7 +21,7 @@ import java.util.UUID;
  */
 public class DatabasePlot extends AbstractPlot {
 
-    private Map<UUID, Resident> assignedResidents = new HashMap<>();
+    private final Map<UUID, Resident> assignedResidents = new HashMap<>();
 
     public DatabasePlot(Location location, City city) {
 

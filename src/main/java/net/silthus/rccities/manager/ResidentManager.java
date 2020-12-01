@@ -26,8 +26,8 @@ import java.util.UUID;
  */
 public class ResidentManager {
 
-    private RCCitiesPlugin plugin;
-    private Map<UUID, List<Resident>> cachedResidents = new HashMap<>();
+    private final RCCitiesPlugin plugin;
+    private final Map<UUID, List<Resident>> cachedResidents = new HashMap<>();
 
     public ResidentManager(RCCitiesPlugin plugin) {
 

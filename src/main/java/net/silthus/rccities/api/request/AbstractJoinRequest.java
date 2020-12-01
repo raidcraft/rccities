@@ -10,8 +10,8 @@ import java.util.UUID;
  */
 public abstract class AbstractJoinRequest extends AbstractRequest implements JoinRequest {
 
-    private UUID playerId;
-    private City city;
+    private final UUID playerId;
+    private final City city;
 
     protected AbstractJoinRequest(UUID playerId, City city, boolean rejected, String rejectReason) {
 

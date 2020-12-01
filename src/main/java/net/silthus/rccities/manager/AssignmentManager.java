@@ -8,7 +8,7 @@ import net.silthus.rccities.RCCitiesPlugin;
  */
 public class AssignmentManager {
 
-    private RCCitiesPlugin plugin;
+    private final RCCitiesPlugin plugin;
 
     public AssignmentManager(RCCitiesPlugin plugin) {
 
