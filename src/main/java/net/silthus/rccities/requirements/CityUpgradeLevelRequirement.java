@@ -15,11 +15,11 @@ import java.util.Optional;
 )
 public class CityUpgradeLevelRequirement extends AbstractRequirement<City> {
 
-    protected CityUpgradeLevelRequirement(ConfigurationSection config) {
-        super(config);
+    protected CityUpgradeLevelRequirement() {
+        super();
     }
 
-    public boolean test(City city, ConfigurationSection config) {
+    public boolean test(City city) {
 
         if(city == null) return false;
         Upgrade upgrade = city.getUpgrades().getUpgrade(config.getString("upgrade-id"));
@@ -34,19 +34,14 @@ public class CityUpgradeLevelRequirement extends AbstractRequirement<City> {
     }
 
     @Override
-    public String getDescription(City city, ConfigurationSection config) {
+    public String getDescription(City city) {
 
         return "Das Upgrade-Level '" + config.getString("upgrade-level-id") + "' muss freigeschaltet sein";
     }
 
     @Override
-    public String getReason(City city, ConfigurationSection config) {
+    public String getReason(City city) {
 
         return "Es muss das Upgrade-Level '" + config.getString("upgrade-level-id") + "' freigeschaltet sein!";
-    }
-
-    @Override
-    public void load(ConfigurationSection data) {
-
     }
 }

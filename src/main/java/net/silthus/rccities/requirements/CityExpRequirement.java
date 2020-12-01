@@ -36,9 +36,4 @@ public class CityExpRequirement extends AbstractRequirement<City> {
 
         return "Es müssen sich mindestens " + config.getInt("exp") + " EXP in der Stadtkasse befinden!";
     }
-
-    @Override
-    public void load(ConfigurationSection data) {
-
-    }
 }

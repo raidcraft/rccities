@@ -54,8 +54,7 @@ public class SimpleUpgradeLevel<T> extends AbstractUpgradeLevel<T> {
 
             if(!requirement.test(object)) {
                 unlockResult.setSuccessful(false);
-                if(requirement instanceof ReasonableRequirement)
-                    unlockResult.setLongReason(((ReasonableRequirement) requirement).getReason(object));
+                unlockResult.setLongReason(requirement.getReason(object));
                 return false;
             }
         }

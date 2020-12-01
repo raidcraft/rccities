@@ -11,7 +11,7 @@ public abstract class AbstractRequirement<T> implements Requirement<T> {
 
     }
 
-    public void load(ConfigurationSection config) {
+    public final void load(ConfigurationSection config) {
         this.config = config;
     }
 }

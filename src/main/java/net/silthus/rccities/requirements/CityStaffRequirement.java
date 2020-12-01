@@ -19,11 +19,11 @@ import org.bukkit.entity.Player;
 )
 public class CityStaffRequirement extends AbstractRequirement<City> {
 
-    protected CityStaffRequirement(ConfigurationSection config) {
-        super(config);
+    protected CityStaffRequirement() {
+        super();
     }
 
-    public boolean test(City city, ConfigurationSection config) {
+    public boolean test(City city) {
 
         RCCitiesPlugin plugin = RCCitiesPlugin.getPlugin();
         if(city == null) return false;
@@ -58,18 +58,13 @@ public class CityStaffRequirement extends AbstractRequirement<City> {
     }
 
     @Override
-    public String getDescription(City entity, ConfigurationSection config) {
+    public String getDescription(City entity) {
         return "Ein Teammitglied muss das bestätigen";
     }
 
     @Override
-    public String getReason(City entity, ConfigurationSection config) {
+    public String getReason(City entity) {
 
         return "Ein Teammitglied wird sich in kürze darum kümmern!";
-    }
-
-    @Override
-    public void load(ConfigurationSection data) {
-
     }
 }

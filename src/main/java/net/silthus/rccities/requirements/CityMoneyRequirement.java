@@ -22,30 +22,25 @@ public class CityMoneyRequirement extends AbstractRequirement<City> {
 
     private Economy economy;
 
-    protected CityMoneyRequirement(ConfigurationSection config) {
-        super(config);
+    protected CityMoneyRequirement() {
+        super();
         Economy economy = RCCitiesPlugin.getPlugin().getEconomy();
     }
 
-    public boolean test(City city, ConfigurationSection config) {
+    public boolean test(City city) {
 
         return economy.bankHas(city.getBankAccountName(), config.getDouble("money")).type == EconomyResponse.ResponseType.SUCCESS;
     }
 
     @Override
-    public String getDescription(City entity, ConfigurationSection config) {
+    public String getDescription(City entity) {
 
         return "Die Stadt '" + entity.getName() + "' muss mindestens " + economy.format(config.getDouble("money")) + " Geld besitzen";
     }
 
     @Override
-    public String getReason(City entity, ConfigurationSection config) {
+    public String getReason(City entity) {
 
         return "Es ist zu wenig Geld in der Stadtkasse. Benötigt werden " + economy.format(config.getDouble("money")) + "!";
-    }
-
-    @Override
-    public void load(ConfigurationSection data) {
-
     }
 }
