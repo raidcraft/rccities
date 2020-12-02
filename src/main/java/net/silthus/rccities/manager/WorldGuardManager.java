@@ -26,18 +26,16 @@ import java.util.*;
 public class WorldGuardManager implements Listener {
 
     private final RCCitiesPlugin plugin;
-    private final WorldGuardPlugin worldGuard;
 
-    public WorldGuardManager(RCCitiesPlugin plugin, WorldGuardPlugin worldGuard) {
+    public WorldGuardManager(RCCitiesPlugin plugin) {
 
         this.plugin = plugin;
-        this.worldGuard = worldGuard;
     }
 
     public boolean claimable(Location location) {
 
         BlockVector3 blockVector3 = BukkitAdapter.asBlockVector(location);
-        ApplicableRegionSet regions = plugin.getRegionContainer()
+        ApplicableRegionSet regions = plugin.getWorldGuard().getPlatform().getRegionContainer()
                 .get(BukkitAdapter.adapt(location.getWorld())).getApplicableRegions(blockVector3);
         if (regions.size() == 0) {
             return true;
@@ -56,7 +54,7 @@ public class WorldGuardManager implements Listener {
 
         for (World world : Bukkit.getServer().getWorlds()) {
             try {
-                plugin.getRegionContainer().get(BukkitAdapter.adapt(world)).save();
+                plugin.getWorldGuard().getPlatform().getRegionContainer().get(BukkitAdapter.adapt(world)).save();
             } catch (StorageException e) {
                 plugin.getLogger().warning(e.getMessage());
             }

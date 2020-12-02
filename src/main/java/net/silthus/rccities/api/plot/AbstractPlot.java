@@ -54,7 +54,7 @@ public abstract class AbstractPlot implements Plot {
 
         // force create region
         if (create) {
-            RegionManager regionManager = RCCitiesPlugin.getPlugin().getRegionContainer()
+            RegionManager regionManager = RCCitiesPlugin.getPlugin().getWorldGuard().getPlatform().getRegionContainer()
                     .get(BukkitAdapter.adapt(location.getWorld()));
             if (regionManager.getRegion(getRegionName()) != null) {
                 regionManager.removeRegion(getRegionName());
@@ -119,7 +119,7 @@ public abstract class AbstractPlot implements Plot {
 
     @Override
     public void delete() {
-        RCCitiesPlugin.getPlugin().getRegionContainer()
+        RCCitiesPlugin.getPlugin().getWorldGuard().getPlatform().getRegionContainer()
                 .get(BukkitAdapter.adapt(location.getWorld())).removeRegion(getRegionName());
     }
 }

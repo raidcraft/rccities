@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<migration xmlns="http://ebean-orm.github.io/xml/ns/dbmigration">
+    <changeSet type="apply">
+        <createTable name="rccities_assignments" identityType="external" pkName="pk_rccities_assignments">
+            <column name="id" type="uuid" primaryKey="true" identity="true"/>
+            <column name="plot_id" type="uuid" references="rccities_plots.id" foreignKeyName="fk_rccities_assignments_plot_id" foreignKeyIndex="ix_rccities_assignments_plot_id"/>
+            <column name="resident_id" type="uuid" references="rccities_residents.id" foreignKeyName="fk_rccities_assignments_resident_id" foreignKeyIndex="ix_rccities_assignments_resident_id"/>
+            <column name="version" type="bigint" notnull="true"/>
+            <column name="when_created" type="timestamp" notnull="true"/>
+            <column name="when_modified" type="timestamp" notnull="true"/>
+        </createTable>
+        <createTable name="rccities_cities" identityType="external" pkName="pk_rccities_cities">
+            <column name="id" type="uuid" primaryKey="true" identity="true"/>
+            <column name="name" type="varchar"/>
+            <column name="creator_id" type="uuid"/>
+            <column name="creation_date" type="timestamp"/>
+            <column name="description" type="clob"/>
+            <column name="world" type="varchar"/>
+            <column name="x" type="integer" notnull="true"/>
+            <column name="y" type="integer" notnull="true"/>
+            <column name="z" type="integer" notnull="true"/>
+            <column name="pitch" type="integer" notnull="true"/>
+            <column name="yaw" type="integer" notnull="true"/>
+            <column name="plot_credit" type="integer" notnull="true"/>
+            <column name="max_radius" type="integer" notnull="true"/>
+            <column name="exp" type="integer" notnull="true"/>
+            <column name="upgrade_id" type="uuid"/>
+            <column name="version" type="bigint" notnull="true"/>
+            <column name="when_created" type="timestamp" notnull="true"/>
+            <column name="when_modified" type="timestamp" notnull="true"/>
+        </createTable>
+        <createTable name="rccities_city_flags" identityType="external" pkName="pk_rccities_city_flags">
+            <column name="id" type="uuid" primaryKey="true" identity="true"/>
+            <column name="city_id" type="uuid" references="rccities_cities.id" foreignKeyName="fk_rccities_city_flags_city_id" foreignKeyIndex="ix_rccities_city_flags_city_id"/>
+            <column name="name" type="varchar"/>
+            <column name="value" type="varchar"/>
+            <column name="version" type="bigint" notnull="true"/>
+            <column name="when_created" type="timestamp" notnull="true"/>
+            <column name="when_modified" type="timestamp" notnull="true"/>
+        </createTable>
+        <createTable name="rccities_join_requests" identityType="external" pkName="pk_rccities_join_requests">
+            <column name="id" type="uuid" primaryKey="true" identity="true"/>
+            <column name="city_id" type="uuid" references="rccities_cities.id" foreignKeyName="fk_rccities_join_requests_city_id" foreignKeyIndex="ix_rccities_join_requests_city_id"/>
+            <column name="player" type="varchar"/>
+            <column name="player_id" type="uuid"/>
+            <column name="rejected" type="boolean" defaultValue="false" notnull="true"/>
+            <column name="reject_reason" type="varchar"/>
+            <column name="version" type="bigint" notnull="true"/>
+            <column name="when_created" type="timestamp" notnull="true"/>
+            <column name="when_modified" type="timestamp" notnull="true"/>
+        </createTable>
+        <createTable name="rccities_upgrade_level_info" identityType="external" pkName="pk_rccities_upgrade_level_info">
+            <column name="id" type="uuid" primaryKey="true" identity="true"/>
+            <column name="identifier" type="varchar"/>
+            <column name="name" type="varchar"/>
+            <column name="level_number" type="integer" notnull="true"/>
+            <column name="requirement_description" type="varchar"/>
+            <column name="reward_description" type="varchar"/>
+            <column name="upgrade_info_id" type="uuid" references="rccities_upgrade_info.id" foreignKeyName="fk_rccities_upgrade_level_info_upgrade_info_id" foreignKeyIndex="ix_rccities_upgrade_level_info_upgrade_info_id"/>
+            <column name="version" type="bigint" notnull="true"/>
+            <column name="when_created" type="timestamp" notnull="true"/>
+            <column name="when_modified" type="timestamp" notnull="true"/>
+        </createTable>
+        <createTable name="rccities_plots" identityType="external" pkName="pk_rccities_plots">
+            <column name="id" type="uuid" primaryKey="true" identity="true"/>
+            <column name="city_id" type="uuid" references="rccities_cities.id" foreignKeyName="fk_rccities_plots_city_id" foreignKeyIndex="ix_rccities_plots_city_id"/>
+            <column name="x" type="integer" notnull="true"/>
+            <column name="z" type="integer" notnull="true"/>
+            <column name="version" type="bigint" notnull="true"/>
+            <column name="when_created" type="timestamp" notnull="true"/>
+            <column name="when_modified" type="timestamp" notnull="true"/>
+        </createTable>
+        <createTable name="rccities_plot_flags" identityType="external" pkName="pk_rccities_plot_flags">
+            <column name="id" type="uuid" primaryKey="true" identity="true"/>
+            <column name="plot_id" type="uuid" references="rccities_plots.id" foreignKeyName="fk_rccities_plot_flags_plot_id" foreignKeyIndex="ix_rccities_plot_flags_plot_id"/>
+            <column name="name" type="varchar"/>
+            <column name="value" type="varchar"/>
+            <column name="version" type="bigint" notnull="true"/>
+            <column name="when_created" type="timestamp" notnull="true"/>
+            <column name="when_modified" type="timestamp" notnull="true"/>
+        </createTable>
+        <createTable name="rccities_residents" identityType="external" pkName="pk_rccities_residents">
+            <column name="id" type="uuid" primaryKey="true" identity="true"/>
+            <column name="city_id" type="uuid" references="rccities_cities.id" foreignKeyName="fk_rccities_residents_city_id" foreignKeyIndex="ix_rccities_residents_city_id"/>
+            <column name="player_id" type="uuid"/>
+            <column name="profession" type="varchar"/>
+            <column name="version" type="bigint" notnull="true"/>
+            <column name="when_created" type="timestamp" notnull="true"/>
+            <column name="when_modified" type="timestamp" notnull="true"/>
+        </createTable>
+        <createTable name="rccities_upgrades" identityType="external" pkName="pk_rccities_upgrades">
+            <column name="id" type="uuid" primaryKey="true" identity="true"/>
+            <column name="name" type="varchar"/>
+            <column name="holder_id" type="uuid" references="rccities_upgrade_holders.id" foreignKeyName="fk_rccities_upgrades_holder_id" foreignKeyIndex="ix_rccities_upgrades_holder_id"/>
+            <column name="version" type="bigint" notnull="true"/>
+            <column name="when_created" type="timestamp" notnull="true"/>
+            <column name="when_modified" type="timestamp" notnull="true"/>
+        </createTable>
+        <createTable name="rccities_upgrade_holders" identityType="external" pkName="pk_rccities_upgrade_holders">
+            <column name="id" type="uuid" primaryKey="true" identity="true"/>
+            <column name="name" type="varchar"/>
+            <column name="version" type="bigint" notnull="true"/>
+            <column name="when_created" type="timestamp" notnull="true"/>
+            <column name="when_modified" type="timestamp" notnull="true"/>
+        </createTable>
+        <createTable name="rccities_upgrade_info" identityType="external" pkName="pk_rccities_upgrade_info">
+            <column name="id" type="uuid" primaryKey="true" identity="true"/>
+            <column name="holder_id" type="varchar"/>
+            <column name="holder_name" type="varchar"/>
+            <column name="name" type="varchar"/>
+            <column name="description" type="varchar"/>
+            <column name="version" type="bigint" notnull="true"/>
+            <column name="when_created" type="timestamp" notnull="true"/>
+            <column name="when_modified" type="timestamp" notnull="true"/>
+        </createTable>
+        <createTable name="rccities_upgrade_levels" identityType="external" pkName="pk_rccities_upgrade_levels">
+            <column name="id" type="uuid" primaryKey="true" identity="true"/>
+            <column name="identifier" type="varchar"/>
+            <column name="unlocked" type="boolean" defaultValue="false" notnull="true"/>
+            <column name="upgrade_id" type="uuid" references="rccities_upgrades.id" foreignKeyName="fk_rccities_upgrade_levels_upgrade_id" foreignKeyIndex="ix_rccities_upgrade_levels_upgrade_id"/>
+            <column name="version" type="bigint" notnull="true"/>
+            <column name="when_created" type="timestamp" notnull="true"/>
+            <column name="when_modified" type="timestamp" notnull="true"/>
+        </createTable>
+        <createTable name="rccities_upgrade_requests" identityType="external" pkName="pk_rccities_upgrade_requests">
+            <column name="id" type="uuid" primaryKey="true" identity="true"/>
+            <column name="city_id" type="uuid" references="rccities_cities.id" foreignKeyName="fk_rccities_upgrade_requests_city_id" foreignKeyIndex="ix_rccities_upgrade_requests_city_id"/>
+            <column name="level_identifier" type="varchar"/>
+            <column name="info" type="varchar"/>
+            <column name="rejected" type="boolean" defaultValue="false" notnull="true"/>
+            <column name="accepted" type="boolean" defaultValue="false" notnull="true"/>
+            <column name="reject_reason" type="varchar"/>
+            <column name="reject_date" type="timestamp"/>
+            <column name="version" type="bigint" notnull="true"/>
+            <column name="when_created" type="timestamp" notnull="true"/>
+            <column name="when_modified" type="timestamp" notnull="true"/>
+        </createTable>
+    </changeSet>
+</migration>

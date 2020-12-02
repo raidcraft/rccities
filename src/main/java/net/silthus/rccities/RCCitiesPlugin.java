@@ -55,8 +55,7 @@ public class RCCitiesPlugin extends JavaPlugin {
     private PaperCommandManager commandManager;
     private LanguageManager languageManager;
 
-    private WorldGuardPlugin worldGuard;
-    private WorldEditPlugin worldEdit;
+    private WorldGuard worldGuard;
 
     private CityManager cityManager;
     private PlotManager plotManager;
@@ -64,7 +63,6 @@ public class RCCitiesPlugin extends JavaPlugin {
     private AssignmentManager assignmentManager;
     private FlagManager flagManager;
     private WorldGuardManager worldGuardManager;
-    private RegionContainer regionContainer;
     private UpgradeRequestManager upgradeRequestManager;
     private SchematicManager schematicManager;
 
@@ -111,9 +109,7 @@ public class RCCitiesPlugin extends JavaPlugin {
         }
 
         upgrades = new RCUpgrades(this);
-        worldGuard = (WorldGuardPlugin) getServer().getPluginManager().getPlugin("WorldGuard");
-        regionContainer = WorldGuard.getInstance().getPlatform().getRegionContainer();
-        worldEdit = (WorldEditPlugin) getServer().getPluginManager().getPlugin("WorldEdit");
+        worldGuard = WorldGuard.getInstance();
 
         reload();
 
@@ -122,7 +118,7 @@ public class RCCitiesPlugin extends JavaPlugin {
         residentManager = new ResidentManager(this);
         assignmentManager = new AssignmentManager(this);
         flagManager = new FlagManager(this);
-        worldGuardManager = new WorldGuardManager(this, worldGuard);
+        worldGuardManager = new WorldGuardManager(this);
         upgradeRequestManager = new UpgradeRequestManager(this);
         schematicManager = new SchematicManager(this);
 

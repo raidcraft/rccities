@@ -40,7 +40,7 @@ public class DatabasePlot extends AbstractPlot {
         Location location = new Location(city.getSpawn().getWorld(), tPlot.getX(), 0, tPlot.getZ());
         this.location = location;
 
-        this.region = RCCitiesPlugin.getPlugin().getRegionContainer()
+        this.region = RCCitiesPlugin.getPlugin().getWorldGuard().getPlatform().getRegionContainer()
                 .get(BukkitAdapter.adapt(location.getWorld())).getRegion(getRegionName());
         loadAssignments();
     }
