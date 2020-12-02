@@ -58,7 +58,7 @@ public class RequirementManager {
                             RCCitiesPlugin.getPlugin().getLogger().warning("No arguments for '" + reqName + "' found");
                             continue;
                         }
-                        final Requirement<O> requirement = (Requirement<O>) constructors.get(rClass).newInstance(args);
+                        final Requirement<O> requirement = (Requirement<O>) constructors.get(rClass).newInstance();
                         if (requirement instanceof AbstractRequirement) {
                             // load the config one tick later to allow all processing to take place
                             // this helps to avoid stack overflow errors when a skill requires itself
@@ -86,15 +86,13 @@ public class RequirementManager {
             return;
         }
         for (Constructor<?> constructor : rClass.getDeclaredConstructors()) {
-            if (constructor.getParameterTypes()[1].isAssignableFrom(ConfigurationSection.class)) {
-                constructor.setAccessible(true);
-                constructors.put(rClass, (Constructor<T>) constructor);
-                // get the displayName for aliasing
-                String name = StringUtils.formatName(rClass.getAnnotation(RequirementInformation.class).value());
-                requirementClasses.put(name, rClass);
-                RCCitiesPlugin.getPlugin().getLogger().info("Registered Requirement Type: " + name);
-                break;
-            }
+            constructor.setAccessible(true);
+            constructors.put(rClass, (Constructor<T>) constructor);
+            // get the displayName for aliasing
+            String name = StringUtils.formatName(rClass.getAnnotation(RequirementInformation.class).value());
+            requirementClasses.put(name, rClass);
+            RCCitiesPlugin.getPlugin().getLogger().info("Registered Requirement Type: " + name);
+            break;
         }
     }
 }

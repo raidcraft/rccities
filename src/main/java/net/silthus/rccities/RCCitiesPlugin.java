@@ -1,5 +1,6 @@
 package net.silthus.rccities;
 
+import com.google.common.base.Strings;
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
@@ -11,6 +12,7 @@ import net.silthus.ebean.Config;
 import net.silthus.ebean.EbeanWrapper;
 import net.silthus.rccities.api.city.City;
 import net.silthus.rccities.api.plot.Plot;
+import net.silthus.rccities.api.resident.Resident;
 import net.silthus.rccities.commands.PlotCommands;
 import net.silthus.rccities.commands.ResidentCommands;
 import net.silthus.rccities.commands.TownCommands;
@@ -21,10 +23,24 @@ import net.silthus.rccities.listener.EntityListener;
 import net.silthus.rccities.listener.ResidentListener;
 import net.silthus.rccities.listener.UpgradeListener;
 import net.silthus.rccities.manager.*;
+import net.silthus.rccities.requirements.CityExpRequirement;
+import net.silthus.rccities.requirements.CityMoneyRequirement;
+import net.silthus.rccities.requirements.CityStaffRequirement;
+import net.silthus.rccities.requirements.CityUpgradeLevelRequirement;
+import net.silthus.rccities.rewards.CityFlagReward;
+import net.silthus.rccities.rewards.CityPlotsReward;
+import net.silthus.rccities.rewards.CityRadiusReward;
+import net.silthus.rccities.rewards.SubtractMoneyReward;
 import net.silthus.rccities.tables.*;
 import net.silthus.rccities.upgrades.RCUpgrades;
+import net.silthus.rccities.upgrades.RequirementManager;
+import net.silthus.rccities.upgrades.api.reward.Reward;
+import net.silthus.rccities.upgrades.api.reward.RewardManager;
 import net.silthus.rccities.util.QueuedCommand;
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
+import org.bukkit.command.CommandException;
+import org.bukkit.command.CommandExecutor;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.PluginDescriptionFile;
@@ -40,6 +56,8 @@ import net.milkbowl.vault.permission.Permission;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
+import java.util.UUID;
 
 /**
  * @author Philip Urban
@@ -93,6 +111,10 @@ public class RCCitiesPlugin extends JavaPlugin {
     @Override
     public void onEnable() {
 
+        if(isTesting()) {
+            getLogger().info("RCCities is running in test mode!");
+        }
+
         if (!isTesting() && !setupVault()) {
             getLogger().severe(String.format("[%s] - No Vault dependency found!", getDescription().getName()));
             getLogger().severe("*** This plugin will be disabled. ***");
@@ -103,12 +125,19 @@ public class RCCitiesPlugin extends JavaPlugin {
         loadConfig();
         setupLanguageManager();
         setupDatabase();
-        if (!isTesting()) {
-            setupListeners();
-            setupCommands();
-        }
 
         upgrades = new RCUpgrades(this);
+
+        RequirementManager.registerRequirementType(CityExpRequirement.class);
+        RequirementManager.registerRequirementType(CityMoneyRequirement.class);
+        RequirementManager.registerRequirementType(CityStaffRequirement.class);
+        RequirementManager.registerRequirementType(CityUpgradeLevelRequirement.class);
+
+        RewardManager.registerRewardType(CityFlagReward.class);
+        RewardManager.registerRewardType(CityPlotsReward.class);
+        RewardManager.registerRewardType(CityRadiusReward.class);
+        RewardManager.registerRewardType(SubtractMoneyReward.class);
+
         worldGuard = WorldGuard.getInstance();
 
         reload();
@@ -148,6 +177,11 @@ public class RCCitiesPlugin extends JavaPlugin {
                     plot.updateRegion(true);
                 }
             }
+        }
+
+        if (!isTesting()) {
+            setupListeners();
+            setupCommands();
         }
     }
 
@@ -230,9 +264,77 @@ public class RCCitiesPlugin extends JavaPlugin {
 
         this.commandManager = new PaperCommandManager(this);
 
+        registerPlotContext(commandManager);
+        registerOfflinePlayerContext(commandManager);
+        registerCityContext(commandManager);
+
         commandManager.registerCommand(new PlotCommands(this));
         commandManager.registerCommand(new ResidentCommands(this));
         commandManager.registerCommand(new TownCommands(this));
+    }
+
+    private void registerOfflinePlayerContext(PaperCommandManager commandManager) {
+
+        commandManager.getCommandContexts().registerIssuerOnlyContext(OfflinePlayer.class, c -> {
+            String playerName = c.popFirstArg();
+
+            OfflinePlayer offlinePlayer;
+            if (Strings.isNullOrEmpty(playerName)) {
+                offlinePlayer = c.getPlayer();
+            } else {
+                offlinePlayer = Bukkit.getOfflinePlayer(playerName);
+            }
+
+            return offlinePlayer;
+        });
+    }
+
+    private void registerCityContext(PaperCommandManager commandManager) {
+
+        commandManager.getCommandContexts().registerContext(City.class, c -> {
+            String cityName = c.popFirstArg();
+
+            City city;
+            if (Strings.isNullOrEmpty(cityName)) {
+                Plot plot = getPlotManager().getPlot(c.getPlayer().getLocation().getChunk());
+                if (plot == null) {
+                    throw new CommandException("Hier befindet sich kein Plot!");
+                }
+                city = plot.getCity();
+                if (city == null) {
+                    throw new CommandException("Es ist ein Fehler aufgetreten. Gebe den Stadtnamen direkt an!");
+                }
+            } else {
+                city = getCityManager().getCity(cityName);
+                if (city == null) {
+                    throw new CommandException("Es gibt keine Stadt mit diesem Namen!");
+                }
+            }
+
+            return city;
+        });
+    }
+
+    private void registerPlotContext(PaperCommandManager commandManager) {
+
+        commandManager.getCommandContexts().registerContext(Plot.class, c -> {
+            String plotId = c.popFirstArg();
+
+            Plot plot;
+            if (Strings.isNullOrEmpty(plotId)) {
+                plot = getPlotManager().getPlot(c.getPlayer().getLocation().getChunk());
+                if (plot == null) {
+                    throw new CommandException("Hier befindet sich kein Plot!");
+                }
+            } else {
+                plot = getPlotManager().getPlot(UUID.fromString(plotId)); //TODO fix UUID stuff
+                if (plot == null) {
+                    throw new CommandException("Es gibt kein Plot mit dieser ID!");
+                }
+            }
+
+            return plot;
+        });
     }
 
     public final void queueCommand(final QueuedCommand command) {

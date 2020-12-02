@@ -1,5 +1,6 @@
 package net.silthus.rccities.manager;
 
+import co.aikar.commands.CommandIssuer;
 import net.silthus.rccities.DatabasePlot;
 import net.silthus.rccities.RCCitiesPlugin;
 import net.silthus.rccities.api.city.City;
@@ -27,7 +28,7 @@ public class PlotManager {
         this.plugin = plugin;
     }
 
-    public void printPlotInfo(Plot plot, CommandSender sender) {
+    public void printPlotInfo(Plot plot, CommandIssuer sender) {
 
         String assignmentsList = "";
         int assignmentCount = 0;
