@@ -1,11 +1,8 @@
 package net.silthus.rccities.commands;
 
 import co.aikar.commands.BaseCommand;
-import com.sk89q.minecraft.util.commands.Command;
-import com.sk89q.minecraft.util.commands.CommandContext;
-import com.sk89q.minecraft.util.commands.CommandException;
-import com.sk89q.minecraft.util.commands.CommandPermissions;
-import com.sk89q.minecraft.util.commands.NestedCommand;
+import co.aikar.commands.InvalidCommandArgument;
+import co.aikar.commands.annotation.*;
 import net.silthus.rccities.RCCitiesPlugin;
 import net.silthus.rccities.api.city.City;
 import net.silthus.rccities.api.plot.Plot;
@@ -26,6 +23,7 @@ import java.util.List;
 /**
  * @author Philip Urban
  */
+@CommandAlias("resident")
 public class ResidentCommands extends BaseCommand {
 
     private final RCCitiesPlugin plugin;
@@ -35,130 +33,72 @@ public class ResidentCommands extends BaseCommand {
         this.plugin = plugin;
     }
 
-    @Command(
-            aliases = {"resident", "einwohner"},
-            desc = "Resident commands"
-    )
-    @NestedCommand(value = NestedCommands.class, executeBody = true)
-    public void resident(CommandContext args, CommandSender sender) throws CommandException {
+    @Default
+    @Subcommand("info")
+    @CommandPermission("rccities.resident.info")
+    public void resident(Player player, OfflinePlayer offlinePlayer) {
 
-        if (sender instanceof ConsoleCommandSender) throw new CommandException("Player required!");
-        Player player = (Player) sender;
-
-        plugin.getResidentManager().printResidentInfo(player.getUniqueId(), sender);
+        plugin.getResidentManager().printResidentInfo(offlinePlayer.getUniqueId(), player);
     }
 
-    public static class NestedCommands {
+    @Subcommand("setrole|promote")
+    @CommandPermission("rccities.resident.promote")
+    public void setRole(Player player, OfflinePlayer residentPlayer, City city, String roleName, @Optional String flags) {
 
-        private final RCCitiesPlugin plugin;
+        Role newRole;
+        Role oldRole;
 
-        public NestedCommands(RCCitiesPlugin plugin) {
 
-            this.plugin = plugin;
+        Resident resident = plugin.getResidentManager().getResident(player.getUniqueId(), city);
+        if (!player.hasPermission("rccities.resident.promote.all")) {
+            if (resident == null || !resident.getRole().hasPermission(RolePermission.KICK)) {
+                throw new InvalidCommandArgument("Du darfst keine Berufe in der Stadt '" + city.getFriendlyName()
+                        + "' zuweisen!");
+            }
         }
 
-        @Command(
-                aliases = {"info"},
-                desc = "Shows info about a resident",
-                min = 1,
-                usage = "<Resident Name>"
-        )
-        @CommandPermissions("rccities.resident.info")
-        public void info(CommandContext args, CommandSender sender) throws CommandException {
-
-            OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(args.getString(0));
-            plugin.getResidentManager().printResidentInfo(offlinePlayer.getUniqueId(), sender);
+        try {
+            newRole = Role.valueOf(roleName.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            throw new InvalidCommandArgument("Es gibt keinen Beruf mit diesem Namen. Verfügbare Berufe: "
+                    + Arrays.toString(Role.values()));
+        }
+        if (newRole.isAdminOnly() && !player.hasPermission("rccities.resident.promote.all")) {
+            throw new InvalidCommandArgument("Dieser Beruf kann nur von Administratoren vergeben werden!");
         }
 
-        @Command(
-                aliases = {"setrole", "promote"},
-                desc = "Shows info about a resident",
-                min = 2,
-                flags = "f",
-                usage = "[Stadt] <Spieler> <Beruf>"
-        )
-        @CommandPermissions("rccities.resident.promote")
-        public void setRole(CommandContext args, CommandSender sender) throws CommandException {
-
-            if (sender instanceof ConsoleCommandSender) throw new CommandException("Player required!");
-            Player player = (Player) sender;
-
-            City city;
-            Role newRole;
-            Role oldRole;
-            String target;
-            String roleName;
-
-            if (args.argsLength() > 2) {
-                target = args.getString(1);
-                roleName = args.getString(2);
-                city = plugin.getCityManager().getCity(args.getString(0));
-                if (city == null) {
-                    throw new CommandException("Es gibt keine Stadt mit dem Namen '" + args.getString(0) + "'!");
-                }
-                if (!player.hasPermission("rccities.resident.promote.all")) {
-                    Resident resident = plugin.getResidentManager().getResident(player.getUniqueId(), city);
-                    if (resident == null || !resident.getRole().hasPermission(RolePermission.KICK)) {
-                        throw new CommandException("Du darfst keine Berufe in der Stadt '" + city.getFriendlyName() + "' zuweisen!");
-                    }
+        Resident targetResident = plugin.getResidentManager().getResident(residentPlayer.getUniqueId(), city);
+        if (targetResident == null) {
+            if (player.hasPermission("rccities.resident.promote.all") && flags.contains("f")) {
+                try {
+                    targetResident = plugin.getResidentManager().addResident(city, residentPlayer);
+                    targetResident.setRole(Role.RESIDENT);
+                } catch (RaidCraftException e) {
+                    throw new InvalidCommandArgument(e.getMessage());
                 }
             } else {
-                target = args.getString(0);
-                roleName = args.getString(1);
-                List<Resident> citizenships = plugin.getResidentManager().getCitizenships(player.getUniqueId(), RolePermission.PROMOTE);
-                if (citizenships == null) {
-                    throw new CommandException("Du besitzt in keiner Stadt das Recht Spielern Berufe zuzuteilen!");
-                }
-                if (citizenships.size() > 1) {
-                    throw new CommandException("Du besitzt in mehreren Städten das Recht Spielern Berufe zuzuteilen! Gebe die gewünschte Stadt als Parameter an.");
-                }
-                city = citizenships.get(0).getCity();
+                throw new InvalidCommandArgument("In dieser Stadt gibt es kein Mitglied mit dem Namen '" + residentPlayer.getName() + "'");
             }
-
-            try {
-                newRole = Role.valueOf(roleName.toUpperCase());
-            } catch (IllegalArgumentException e) {
-                throw new CommandException("Es gibt keinen Beruf mit diesem Namen. Verfügbare Berufe: " + Arrays.toString(Role.values()));
-            }
-            if (newRole.isAdminOnly() && !player.hasPermission("rccities.resident.promote.all")) {
-                throw new CommandException("Dieser Beruf kann nur von Administratoren vergeben werden!");
-            }
-
-            OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(args.getString(0));
-            Resident targetResident = plugin.getResidentManager().getResident(offlinePlayer.getUniqueId(), city);
-            if (targetResident == null) {
-                if (player.hasPermission("rccities.resident.promote.all") && args.hasFlag('f')) {
-                    OfflinePlayer targetPlayer = Bukkit.getOfflinePlayer(target);
-                    try {
-                        targetResident = plugin.getResidentManager().addResident(city, targetPlayer);
-                        targetResident.setRole(Role.RESIDENT);
-                    } catch (RaidCraftException e) {
-                        throw new CommandException(e.getMessage());
-                    }
-                } else {
-                    throw new CommandException("In dieser Stadt gibt es kein Mitglied mit dem Namen '" + target + "'");
-                }
-            }
-            oldRole = targetResident.getRole();
-
-            if (oldRole.isAdminOnly() && !player.hasPermission("rccities.resident.promote.all")) {
-                throw new CommandException("Der jetzige Beruf des Spielers kann nur von Administratoren geändert werden!");
-            }
-
-            targetResident.setRole(newRole);
-            // set owner on all city plots
-            if (!oldRole.hasPermission(RolePermission.BUILD_EVERYWHERE) && newRole.hasPermission(RolePermission.BUILD_EVERYWHERE)) {
-                for (Plot plot : plugin.getPlotManager().getPlots(city)) {
-                    plot.updateRegion(false);
-                }
-            }
-            // remove owner from all city plots
-            if (oldRole.hasPermission(RolePermission.BUILD_EVERYWHERE) && !newRole.hasPermission(RolePermission.BUILD_EVERYWHERE)) {
-                for (Plot plot : plugin.getPlotManager().getPlots(city)) {
-                    plot.updateRegion(false);
-                }
-            }
-            Bukkit.broadcastMessage(ChatColor.GOLD + targetResident.getName() + " ist nun " + newRole.getFriendlyName() + " der Stadt '" + city.getFriendlyName() + "'!");
         }
+        oldRole = targetResident.getRole();
+
+        if (oldRole.isAdminOnly() && !player.hasPermission("rccities.resident.promote.all")) {
+            throw new InvalidCommandArgument("Der jetzige Beruf des Spielers kann nur von Administratoren geändert werden!");
+        }
+
+        targetResident.setRole(newRole);
+        // set owner on all city plots
+        if (!oldRole.hasPermission(RolePermission.BUILD_EVERYWHERE) && newRole.hasPermission(RolePermission.BUILD_EVERYWHERE)) {
+            for (Plot plot : plugin.getPlotManager().getPlots(city)) {
+                plot.updateRegion(false);
+            }
+        }
+        // remove owner from all city plots
+        if (oldRole.hasPermission(RolePermission.BUILD_EVERYWHERE) && !newRole.hasPermission(RolePermission.BUILD_EVERYWHERE)) {
+            for (Plot plot : plugin.getPlotManager().getPlots(city)) {
+                plot.updateRegion(false);
+            }
+        }
+        Bukkit.broadcastMessage(ChatColor.GOLD + targetResident.getName() + " ist nun " + newRole.getFriendlyName() + " der Stadt '" + city.getFriendlyName() + "'!");
     }
 }

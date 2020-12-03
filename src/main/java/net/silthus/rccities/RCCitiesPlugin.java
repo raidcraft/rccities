@@ -54,10 +54,7 @@ import me.wiefferink.interactivemessenger.source.LanguageManager;
 import net.milkbowl.vault.permission.Permission;
 
 import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * @author Philip Urban
@@ -298,9 +295,15 @@ public class RCCitiesPlugin extends JavaPlugin {
             if (Strings.isNullOrEmpty(cityName)) {
                 Plot plot = getPlotManager().getPlot(c.getPlayer().getLocation().getChunk());
                 if (plot == null) {
-                    throw new CommandException("Hier befindet sich kein Plot!");
+
+                    List<Resident> citizenships = getResidentManager().getCitizenships(c.getPlayer().getUniqueId());
+                    if(1 != citizenships.size()) {
+                        throw new CommandException("Hier befindet sich kein Plot oder du bist Einwohner in mehr als einer Stadt!");
+                    }
+                    city = citizenships.get(0).getCity();
+                } else {
+                    city = plot.getCity();
                 }
-                city = plot.getCity();
                 if (city == null) {
                     throw new CommandException("Es ist ein Fehler aufgetreten. Gebe den Stadtnamen direkt an!");
                 }

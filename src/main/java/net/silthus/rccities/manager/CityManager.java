@@ -57,12 +57,7 @@ public class CityManager {
         cachedCities.remove(city.getName());
     }
 
-    public void printCityInfo(String cityName, CommandSender sender) throws RaidCraftException {
-
-        City city = getCity(cityName);
-        if (city == null) {
-            throw new RaidCraftException("Es wurde keine Stadt mit diesem namen gefunden!");
-        }
+    public void printCityInfo(City city, CommandSender sender) {
 
         String mayorList = "";
         int mayorCount = 0;
