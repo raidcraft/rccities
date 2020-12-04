@@ -42,8 +42,7 @@ public class TCity extends BaseEntity {
     private int maxRadius;
     private int exp;
     private UUID upgradeId;
-    @DbDefault("0")
-    private double money;
+    private Double money;
 
     @OneToMany(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "city_id")

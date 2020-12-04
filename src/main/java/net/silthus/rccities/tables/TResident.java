@@ -1,6 +1,7 @@
 package net.silthus.rccities.tables;
 
 import io.ebean.Finder;
+import io.ebean.annotation.DbDefault;
 import lombok.Getter;
 import lombok.Setter;
 import net.silthus.ebean.BaseEntity;
@@ -30,6 +31,8 @@ public class TResident extends BaseEntity {
     private TCity city;
     private UUID playerId;
     private String profession;
+    private Double depositAmount;
+    private Double withdrawAmount;
 
     @OneToMany(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "resident_id")

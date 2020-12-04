@@ -1,5 +1,6 @@
 package net.silthus.rccities.manager;
 
+import io.ebean.Model;
 import net.silthus.rccities.DatabaseResident;
 import net.silthus.rccities.RCCitiesPlugin;
 import net.silthus.rccities.api.city.City;
@@ -78,7 +79,7 @@ public class ResidentManager {
         resident = new DatabaseResident(playerId, Role.RESIDENT, city);
         List<Resident> residentList = cachedResidents.get(playerId);
         if (residentList == null) {
-            cachedResidents.put(playerId, new ArrayList<Resident>());
+            cachedResidents.put(playerId, new ArrayList<>());
             residentList = cachedResidents.get(playerId);
         }
         residentList.add(resident);
@@ -118,8 +119,8 @@ public class ResidentManager {
 
         List<TJoinRequest> tJoinRequests = TJoinRequest.find.query()
                 .where().ieq("player_id", playerId.toString()).ne("city_id", exceptedCity.getId()).findList();
-        if (tJoinRequests == null || tJoinRequests.size() == 0) return;
-        tJoinRequests.forEach(tJoinRequest -> tJoinRequest.delete());
+        if (tJoinRequests.size() == 0) return;
+        tJoinRequests.forEach(Model::delete);
     }
 
     public void addPrefixSkill(Resident resident) {
@@ -155,8 +156,8 @@ public class ResidentManager {
         if (residents == null || residents.size() == 0) {
             List<TResident> tResidents = TResident.find.query()
                     .where().ieq("player_id", playerId.toString()).findList();
-            if (tResidents != null && tResidents.size() > 0) {
-                cachedResidents.put(playerId, new ArrayList<Resident>());
+            if (tResidents.size() > 0) {
+                cachedResidents.put(playerId, new ArrayList<>());
                 for (TResident tResident : tResidents) {
                     Resident resident = new DatabaseResident(tResident);
                     if (resident.getCity() != null) {
@@ -223,7 +224,7 @@ public class ResidentManager {
                 .where().eq("city_id", city.getId()).findList();
         for (TResident tResident : tResidents) {
             if (!cachedResidents.containsKey(tResident.getPlayerId())) {
-                cachedResidents.put(tResident.getPlayerId(), new ArrayList<Resident>());
+                cachedResidents.put(tResident.getPlayerId(), new ArrayList<>());
             }
             boolean exist = false;
             for (Resident resident : cachedResidents.get(tResident.getPlayerId())) {

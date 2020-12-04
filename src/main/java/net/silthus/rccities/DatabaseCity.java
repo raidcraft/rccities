@@ -127,7 +127,7 @@ public class DatabaseCity extends AbstractCity {
             upgradeHolder = RCCitiesPlugin.getPlugin().getUpgrades().getUpgradeManager()
                     .createDatabaseUpgradeHolder(this, RCCitiesPlugin.getPlugin().getUpgradeConfiguration(), City.class);
             tCity.setUpgradeId(upgradeHolder.getId());
-            tCity.setMoney(0);
+            tCity.setMoney(getMoney());
             tCity.save();
             id = tCity.id();
         }

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<migration xmlns="http://ebean-orm.github.io/xml/ns/dbmigration">
+    <changeSet type="apply">
+        <alterColumn columnName="money" tableName="rccities_cities" currentType="double" defaultValue="DROP DEFAULT" notnull="false" currentNotnull="true"/>
+        <alterColumn columnName="deposit_amount" tableName="rccities_residents" currentType="double" defaultValue="DROP DEFAULT" notnull="false" currentNotnull="true"/>
+        <alterColumn columnName="withdraw_amount" tableName="rccities_residents" currentType="double" defaultValue="DROP DEFAULT" notnull="false" currentNotnull="true"/>
+    </changeSet>
+</migration>

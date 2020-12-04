@@ -30,6 +30,8 @@ public class DatabaseResident extends AbstractResident {
         assert city != null : "City of resident is null!";
         this.city = city;
         this.playerId = tResident.getPlayerId();
+        this.depositAmount = tResident.getDepositAmount();
+        this.withdrawAmount = tResident.getWithdrawAmount();
         setRole(Role.valueOf(tResident.getProfession()));
     }
 
@@ -42,6 +44,8 @@ public class DatabaseResident extends AbstractResident {
             tResident.setCity(getCity());
             tResident.setPlayerId(getPlayerId());
             tResident.setProfession(getRole().name());
+            tResident.setDepositAmount(getDepositAmount());
+            tResident.setWithdrawAmount(getWithdrawAmount());
             tResident.save();
             this.id = tResident.id();
         }
@@ -49,6 +53,8 @@ public class DatabaseResident extends AbstractResident {
         else {
             TResident tResident = TResident.find.byId(getId());
             tResident.setProfession(getRole().name());
+            tResident.setDepositAmount(getDepositAmount());
+            tResident.setWithdrawAmount(getWithdrawAmount());
             tResident.update();
         }
     }

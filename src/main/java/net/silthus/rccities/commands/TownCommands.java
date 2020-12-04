@@ -7,6 +7,7 @@ import co.aikar.commands.InvalidCommandArgument;
 import co.aikar.commands.annotation.*;
 import com.google.common.base.Strings;
 import com.sk89q.minecraft.util.commands.CommandException;
+import net.milkbowl.vault.economy.Economy;
 import net.silthus.rccities.DatabasePlot;
 import net.silthus.rccities.RCCitiesPlugin;
 import net.silthus.rccities.api.city.City;
@@ -468,6 +469,60 @@ public class TownCommands extends BaseCommand {
         }
         command.run();
         plugin.getQueuedCommands().remove(player.getName());
+    }
+
+    @Subcommand("deposit")
+    @CommandPermission("rccities.town.deposit")
+    public void deposit(Player player, City city, double amount) {
+
+        Economy economy = plugin.getEconomy();
+
+        if(!economy.has(player, amount)) {
+            throw new ConditionFailedException("Du hast nicht genügend Geld auf dem Konto");
+        }
+
+        Resident resident = plugin.getResidentManager().getResident(player.getUniqueId(), city);
+        if(resident == null) {
+            throw new InvalidCommandArgument("Nur Einwohner können Geld in die Stadtkasse einzahlen!");
+        }
+
+        if(!player.hasPermission("rccities.admin") &&
+                !resident.getRole().hasPermission(RolePermission.DEPOSIT)) {
+            throw new InvalidCommandArgument("Du hast keine Rechte um Geld in die Stadtkasse einzuzahlen!");
+        }
+
+        resident.depositCity(amount);
+
+        plugin.getResidentManager().broadcastCityMessage(city, ChatColor.GOLD
+                + player.getName() + " hat " + ChatColor.DARK_GREEN + economy.format(amount)
+                + ChatColor.GOLD + " in die Stadtkasse eingezahlt!");
+    }
+
+    @Subcommand("withdraw")
+    @CommandPermission("rccities.town.withdraw")
+    public void withdraw(Player player, City city, double amount) {
+
+        Economy economy = plugin.getEconomy();
+
+        if(!city.hasMoney(amount)) {
+            throw new ConditionFailedException("Es ist nicht genug Geld in der Stadtkasse!");
+        }
+
+        Resident resident = plugin.getResidentManager().getResident(player.getUniqueId(), city);
+        if(resident == null) {
+            throw new InvalidCommandArgument("Nur Einwohner können Geld aus der Stadtkasse nehmen!");
+        }
+
+        if(!player.hasPermission("rccities.admin") &&
+                !resident.getRole().hasPermission(RolePermission.WITHDRAW)) {
+            throw new InvalidCommandArgument("Du hast keine Rechte um Geld aus der Stadtkasse zu nehmen!");
+        }
+
+        resident.withdrawCity(amount);
+
+        plugin.getResidentManager().broadcastCityMessage(city, ChatColor.GOLD
+                + player.getName() + " hat " + ChatColor.RED + economy.format(amount)
+                + ChatColor.GOLD + " aus der Stadtkasse genommen!");
     }
 
     /*

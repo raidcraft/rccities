@@ -24,6 +24,10 @@ public interface Resident {
 
     Player getPlayer();
 
+    boolean depositCity(double amount);
+
+    boolean withdrawCity(double amount);
+
     void save();
 
     void delete();

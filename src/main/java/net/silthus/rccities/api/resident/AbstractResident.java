@@ -1,7 +1,9 @@
 package net.silthus.rccities.api.resident;
 
+import co.aikar.commands.ConditionFailedException;
 import lombok.Getter;
 import lombok.Setter;
+import net.milkbowl.vault.economy.Economy;
 import net.silthus.rccities.RCCitiesPlugin;
 import net.silthus.rccities.api.city.City;
 import org.bukkit.Bukkit;
@@ -20,6 +22,8 @@ public abstract class AbstractResident implements Resident {
     protected UUID playerId;
     protected Role profession;
     protected City city;
+    protected double depositAmount;
+    protected double withdrawAmount;
 
     protected AbstractResident() {
 
@@ -45,6 +49,37 @@ public abstract class AbstractResident implements Resident {
     public Role getRole() {
 
         return profession;
+    }
+
+    @Override
+    public boolean depositCity(double amount) {
+
+        Economy economy = RCCitiesPlugin.getPlugin().getEconomy();
+
+        if(!economy.has(getPlayer(), amount)) {
+            return false;
+        }
+
+        economy.withdrawPlayer(getPlayer(), amount);
+        city.depositMoney(amount);
+        depositAmount += amount;
+        save();
+        return true;
+    }
+
+    @Override
+    public boolean withdrawCity(double amount) {
+        Economy economy = RCCitiesPlugin.getPlugin().getEconomy();
+
+        if(!city.hasMoney(amount)) {
+            return false;
+        }
+
+        city.withdrawMoney(amount);
+        economy.depositPlayer(getPlayer(), amount);
+        withdrawAmount += amount;
+        save();
+        return true;
     }
 
     @Override
