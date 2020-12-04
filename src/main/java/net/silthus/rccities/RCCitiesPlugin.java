@@ -1,5 +1,6 @@
 package net.silthus.rccities;
 
+import co.aikar.commands.InvalidCommandArgument;
 import com.google.common.base.Strings;
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 import com.sk89q.worldguard.WorldGuard;
@@ -298,19 +299,19 @@ public class RCCitiesPlugin extends JavaPlugin {
 
                     List<Resident> citizenships = getResidentManager().getCitizenships(c.getPlayer().getUniqueId());
                     if(1 != citizenships.size()) {
-                        throw new CommandException("Hier befindet sich kein Plot oder du bist Einwohner in mehr als einer Stadt!");
+                        throw new InvalidCommandArgument("Hier befindet sich kein Plot oder du bist Einwohner in mehr als einer Stadt!");
                     }
                     city = citizenships.get(0).getCity();
                 } else {
                     city = plot.getCity();
                 }
                 if (city == null) {
-                    throw new CommandException("Es ist ein Fehler aufgetreten. Gebe den Stadtnamen direkt an!");
+                    throw new InvalidCommandArgument("Es ist ein Fehler aufgetreten. Gebe den Stadtnamen direkt an!");
                 }
             } else {
                 city = getCityManager().getCity(cityName);
                 if (city == null) {
-                    throw new CommandException("Es gibt keine Stadt mit diesem Namen!");
+                    throw new InvalidCommandArgument("Es gibt keine Stadt mit diesem Namen!");
                 }
             }
 
@@ -327,12 +328,16 @@ public class RCCitiesPlugin extends JavaPlugin {
             if (Strings.isNullOrEmpty(plotId)) {
                 plot = getPlotManager().getPlot(c.getPlayer().getLocation().getChunk());
                 if (plot == null) {
-                    throw new CommandException("Hier befindet sich kein Plot!");
+                    throw new InvalidCommandArgument("Hier befindet sich kein Plot!");
                 }
             } else {
-                plot = getPlotManager().getPlot(UUID.fromString(plotId)); //TODO fix UUID stuff
+                try {
+                    plot = getPlotManager().getPlot(UUID.fromString(plotId)); //TODO fix UUID stuff
+                } catch(IllegalArgumentException e) {
+                    plot = null;
+                }
                 if (plot == null) {
-                    throw new CommandException("Es gibt kein Plot mit dieser ID!");
+                    throw new InvalidCommandArgument("Es gibt kein Plot mit dieser ID!");
                 }
             }
 

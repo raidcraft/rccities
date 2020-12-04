@@ -27,7 +27,7 @@ public class UpgradeListener implements Listener {
 
         City city = (City) event.getObject();
         Upgrade mainUpgrade = plugin.getCityManager().getMainUpgrade(city);
-        if (mainUpgrade.getLevel(event.getUpgradeLevel().getId()) == null) return;
+        if (mainUpgrade == null || mainUpgrade.getLevel(event.getUpgradeLevel().getId()) == null) return;
         int maxLevel = event.getUpgradeLevel().getLevel();
         Bukkit.broadcastMessage(ChatColor.GOLD + "Die Stadt '" + city.getFriendlyName() + "' ist auf Level " + ChatColor.RED + maxLevel + ChatColor.GOLD + " aufgestiegen!");
     }

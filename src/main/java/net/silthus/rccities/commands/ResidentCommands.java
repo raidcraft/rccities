@@ -3,6 +3,7 @@ package net.silthus.rccities.commands;
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.InvalidCommandArgument;
 import co.aikar.commands.annotation.*;
+import com.google.common.base.Strings;
 import net.silthus.rccities.RCCitiesPlugin;
 import net.silthus.rccities.api.city.City;
 import net.silthus.rccities.api.plot.Plot;
@@ -69,7 +70,7 @@ public class ResidentCommands extends BaseCommand {
 
         Resident targetResident = plugin.getResidentManager().getResident(residentPlayer.getUniqueId(), city);
         if (targetResident == null) {
-            if (player.hasPermission("rccities.resident.promote.all") && flags.contains("f")) {
+            if (!Strings.isNullOrEmpty(flags) && flags.contains("f") && player.hasPermission("rccities.resident.promote.all")) {
                 try {
                     targetResident = plugin.getResidentManager().addResident(city, residentPlayer);
                     targetResident.setRole(Role.RESIDENT);

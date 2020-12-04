@@ -82,7 +82,7 @@ public class CityManager {
         }
 
         Economy economy = plugin.getEconomy();
-        double balance = economy.bankBalance(city.getBankAccountName()).balance;
+        double balance = economy.getBalance(city.getBankAccountName());
 
         sender.sendMessage("*********************************");
         sender.sendMessage(ChatColor.GOLD + "Informationen zur Stadt '" + ChatColor.YELLOW + city.getFriendlyName() + ChatColor.GOLD + "'");
@@ -107,7 +107,11 @@ public class CityManager {
 
     public String getCityLevel(City city) {
 
-        UpgradeLevel upgradeLevel = getMainUpgrade(city).getHighestUnlockedLevel();
+        UpgradeLevel upgradeLevel = null;
+        Upgrade mainUpgrade = getMainUpgrade(city);
+        if(mainUpgrade != null) {
+            upgradeLevel = mainUpgrade.getHighestUnlockedLevel();
+        }
         if (upgradeLevel == null) {
             return "0";
         }
@@ -117,8 +121,11 @@ public class CityManager {
     public double getServerJoinCosts(City city) {
 
         int multiplier = 0;
-        for (UpgradeLevel level : getMainUpgrade(city).getLevels()) {
-            if (level.isUnlocked()) multiplier++;
+        Upgrade mainUpgrade = getMainUpgrade(city);
+        if(mainUpgrade != null) {
+            for (UpgradeLevel level : mainUpgrade.getLevels()) {
+                if (level.isUnlocked()) multiplier++;
+            }
         }
 
         double baseJoinCosts = plugin.getPluginConfig().getJoinCosts();

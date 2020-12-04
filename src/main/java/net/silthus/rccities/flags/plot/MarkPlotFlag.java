@@ -45,12 +45,12 @@ public class MarkPlotFlag extends AbstractPlotFlag {
         if (currentValue) {
 
             Economy economy = RCCitiesPlugin.getPlugin().getEconomy();
-            if (economy.bankHas(bankAccount, markCost).type == EconomyResponse.ResponseType.SUCCESS) {
+            if (economy.has(bankAccount, markCost)) {
                 throw new RaidCraftException("Es ist nicht genug Geld in der Stadtkasse! " + economy.format(markCost) + " benötigt!");
             }
 
             // withdraw
-            economy.bankWithdraw(bankAccount, markCost);
+            economy.withdrawPlayer(bankAccount, markCost);
             RCCitiesPlugin.getPlugin().getResidentManager()
                     .broadcastCityMessage(getPlot().getCity(), "Plot Markierung: " + economy.format(markCost) + ChatColor.GOLD + " abgezogen!");
 

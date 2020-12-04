@@ -54,22 +54,26 @@ public class PlotCommands extends BaseCommand {
         // check if resident has permission
         Resident resident = plugin.getResidentManager().getResident(player.getUniqueId(), city);
         if (resident == null || !resident.getRole().hasPermission(RolePermission.PLOT_DISTRIBUTION)) {
-            throw new InvalidCommandArgument("Du hast in der Stadt '" + city.getFriendlyName() + "' nicht die Berechtigung Plots zu entziehen!");
+            throw new InvalidCommandArgument("Du hast in der Stadt '" + city.getFriendlyName()
+                    + "' nicht die Berechtigung Plots zu entziehen!");
         }
 
         OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(targetResidentName);
         Resident targetResident = plugin.getResidentManager().getResident(offlinePlayer.getUniqueId(), city);
         if (targetResident == null) {
-            throw new InvalidCommandArgument("Der angegebene Spieler ist kein Mitglied deiner Stadt '" + city.getFriendlyName() + "'!");
+            throw new InvalidCommandArgument("Der angegebene Spieler ist kein Mitglied deiner Stadt '"
+                    + city.getFriendlyName() + "'!");
         }
 
         plot.removeResident(resident);
         plot.getCity().refreshFlags();
         plot.refreshFlags();
-        player.sendMessage(ChatColor.GREEN + "Du hast den Plot '" + plot.getRegionName() + "' erfolgreich " + targetResident.getName() + " entzogen!");
+        player.sendMessage(ChatColor.GREEN + "Du hast den Plot '" + plot.getRegionName() + "' erfolgreich "
+                + targetResident.getName() + " entzogen!");
         if (targetResident.getPlayer() != null) {
             targetResident.getPlayer()
-                    .sendMessage(ChatColor.GREEN + "Dir wurde in der Stadt '" + city.getFriendlyName() + "' der Plot '" + plot.getRegionName() + "' entzogen!");
+                    .sendMessage(ChatColor.GREEN + "Dir wurde in der Stadt '" + city.getFriendlyName()
+                            + "' der Plot '" + plot.getRegionName() + "' entzogen!");
         }
     }
 
@@ -82,22 +86,26 @@ public class PlotCommands extends BaseCommand {
         // check if resident has permission
         Resident resident = plugin.getResidentManager().getResident(player.getUniqueId(), city);
         if (resident == null || !resident.getRole().hasPermission(RolePermission.PLOT_DISTRIBUTION)) {
-            throw new InvalidCommandArgument("Du hast in der Stadt '" + city.getFriendlyName() + "' nicht die Berechtigung Plots zu vergeben!");
+            throw new InvalidCommandArgument("Du hast in der Stadt '" + city.getFriendlyName()
+                    + "' nicht die Berechtigung Plots zu vergeben!");
         }
 
         OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(targetResidentName);
         Resident targetResident = plugin.getResidentManager().getResident(offlinePlayer.getUniqueId(), city);
         if (targetResident == null) {
-            throw new InvalidCommandArgument("Der angegebene Spieler ist kein Mitglied deiner Stadt '" + city.getFriendlyName() + "'!");
+            throw new InvalidCommandArgument("Der angegebene Spieler ist kein Mitglied deiner Stadt '"
+                    + city.getFriendlyName() + "'!");
         }
 
         plot.assignResident(targetResident);
         plot.getCity().refreshFlags();
         plot.refreshFlags();
-        player.sendMessage(ChatColor.GREEN + "Du hast den Plot '" + plot.getRegionName() + "' erfolgreich an " + targetResident.getName() + " vergeben!");
+        player.sendMessage(ChatColor.GREEN + "Du hast den Plot '" + plot.getRegionName() + "' erfolgreich an "
+                + targetResident.getName() + " vergeben!");
         if (targetResident.getPlayer() != null) {
             targetResident.getPlayer()
-                    .sendMessage(ChatColor.GREEN + "Dir wurde in der Stadt '" + city.getFriendlyName() + "' der Plot '" + plot.getRegionName() + "' zugewiesen!");
+                    .sendMessage(ChatColor.GREEN + "Dir wurde in der Stadt '"
+                            + city.getFriendlyName() + "' der Plot '" + plot.getRegionName() + "' zugewiesen!");
         }
     }
 
@@ -113,14 +121,22 @@ public class PlotCommands extends BaseCommand {
         // get neighbor plot and city
         Chunk chunk = player.getLocation().getChunk();
         Plot[] neighborPlots = new Plot[8];
-        neighborPlots[0] = plugin.getPlotManager().getPlot(player.getWorld().getChunkAt(chunk.getX(), chunk.getZ() + 1));
-        neighborPlots[1] = plugin.getPlotManager().getPlot(player.getWorld().getChunkAt(chunk.getX() - 1, chunk.getZ() + 1));
-        neighborPlots[2] = plugin.getPlotManager().getPlot(player.getWorld().getChunkAt(chunk.getX() + 1, chunk.getZ() + 1));
-        neighborPlots[3] = plugin.getPlotManager().getPlot(player.getWorld().getChunkAt(chunk.getX(), chunk.getZ() - 1));
-        neighborPlots[4] = plugin.getPlotManager().getPlot(player.getWorld().getChunkAt(chunk.getX() - 1, chunk.getZ() - 1));
-        neighborPlots[5] = plugin.getPlotManager().getPlot(player.getWorld().getChunkAt(chunk.getX() + 1, chunk.getZ() - 1));
-        neighborPlots[6] = plugin.getPlotManager().getPlot(player.getWorld().getChunkAt(chunk.getX() - 1, chunk.getZ()));
-        neighborPlots[7] = plugin.getPlotManager().getPlot(player.getWorld().getChunkAt(chunk.getX() + 1, chunk.getZ()));
+        neighborPlots[0] = plugin.getPlotManager().getPlot(player.getWorld()
+                .getChunkAt(chunk.getX(), chunk.getZ() + 1));
+        neighborPlots[1] = plugin.getPlotManager().getPlot(player.getWorld()
+                .getChunkAt(chunk.getX() - 1, chunk.getZ() + 1));
+        neighborPlots[2] = plugin.getPlotManager().getPlot(player.getWorld()
+                .getChunkAt(chunk.getX() + 1, chunk.getZ() + 1));
+        neighborPlots[3] = plugin.getPlotManager().getPlot(player.getWorld()
+                .getChunkAt(chunk.getX(), chunk.getZ() - 1));
+        neighborPlots[4] = plugin.getPlotManager().getPlot(player.getWorld()
+                .getChunkAt(chunk.getX() - 1, chunk.getZ() - 1));
+        neighborPlots[5] = plugin.getPlotManager().getPlot(player.getWorld()
+                .getChunkAt(chunk.getX() + 1, chunk.getZ() - 1));
+        neighborPlots[6] = plugin.getPlotManager().getPlot(player.getWorld()
+                .getChunkAt(chunk.getX() - 1, chunk.getZ()));
+        neighborPlots[7] = plugin.getPlotManager().getPlot(player.getWorld()
+                .getChunkAt(chunk.getX() + 1, chunk.getZ()));
 
         City city = null;
         for (Plot plot : neighborPlots) {
@@ -131,7 +147,7 @@ public class PlotCommands extends BaseCommand {
             city = plot.getCity();
         }
         // admins can claim wild chunks
-        if(flags.contains("f") && player.hasPermission("rccities.admin")) {
+        if(!Strings.isNullOrEmpty(flags) && flags.contains("f") && player.hasPermission("rccities.admin")) {
             if(city == null) {
                 if(Strings.isNullOrEmpty(cityName)) {
                     throw new InvalidCommandArgument("Gebe eine Stadt als ersten Parameter an!");
@@ -145,7 +161,8 @@ public class PlotCommands extends BaseCommand {
         // check if resident has permission
         Resident resident = plugin.getResidentManager().getResident(player.getUniqueId(), city);
         if (resident == null || !resident.getRole().hasPermission(RolePermission.PLOT_CLAIM)) {
-            throw new InvalidCommandArgument("Du hast in der Stadt '" + city.getFriendlyName() + "' nicht die Berechtigung Plots zu claimen!");
+            throw new InvalidCommandArgument("Du hast in der Stadt '"
+                    + city.getFriendlyName() + "' nicht die Berechtigung Plots zu claimen!");
         }
 
         // check plot credit
@@ -158,7 +175,8 @@ public class PlotCommands extends BaseCommand {
         Location fixedSpawn = city.getSpawn().clone();
         fixedSpawn.setY(0);
         if (fixedSpawn.distance(plotCenter) > city.getMaxRadius()) {
-            throw new InvalidCommandArgument("Deine Stadt darf nur im Umkreis von " + city.getMaxRadius() + " Blöcken um den Stadtmittelpunkt claimen!");
+            throw new InvalidCommandArgument("Deine Stadt darf nur im Umkreis von "
+                    + city.getMaxRadius() + " Blöcken um den Stadtmittelpunkt claimen!");
         }
 
         Plot plot = new DatabasePlot(plotCenter, city);
@@ -176,7 +194,8 @@ public class PlotCommands extends BaseCommand {
         // reload city flags
         city.refreshFlags();
 
-        player.sendMessage(ChatColor.GREEN + "Der Plot wurde erfolgreich geclaimt! (Restliches Guthaben: " + city.getPlotCredit() + " Plots)");
+        player.sendMessage(ChatColor.GREEN + "Der Plot wurde erfolgreich geclaimt! (Restliches Guthaben: "
+                + city.getPlotCredit() + " Plots)");
     }
 
     @Subcommand("unclaim")
@@ -185,10 +204,10 @@ public class PlotCommands extends BaseCommand {
 
         boolean restoreSchematics = false;
         boolean force = false;
-        if (flags.contains("r")) {
+        if (!Strings.isNullOrEmpty(flags) && flags.contains("r")) {
             restoreSchematics = true;
         }
-        if (flags.contains("f")) {
+        if (!Strings.isNullOrEmpty(flags) && flags.contains("f")) {
             force = true;
         }
 
@@ -198,19 +217,23 @@ public class PlotCommands extends BaseCommand {
 
         try {
             if (restoreSchematics) {
-                player.sendMessage(ChatColor.DARK_RED + "Bei der Löschung des Plots wird die Landschaft zurückgesetzt!");
+                player.sendMessage(ChatColor.DARK_RED
+                        + "Bei der Löschung des Plots wird die Landschaft zurückgesetzt!");
             } else {
-                player.sendMessage(ChatColor.DARK_RED + "Bei der Löschung des Plots wird die Landschaft NICHT zurückgesetzt!");
+                player.sendMessage(ChatColor.DARK_RED
+                        + "Bei der Löschung des Plots wird die Landschaft NICHT zurückgesetzt!");
             }
             if(flags.contains("a")) {
-                player.sendMessage(ChatColor.DARK_RED + "Bist du sicher dass ALLE plots wiederhergestellt werden sollen?");
+                player.sendMessage(ChatColor.DARK_RED
+                        + "Bist du sicher dass ALLE plots wiederhergestellt werden sollen?");
                 new QueuedCaptchaCommand(player, this, "unclaimAll", player, plot.getCity());
 
             } else {
                 if (force) {
                     unclaimPlot(player, plot, restoreSchematics);
                 } else {
-                    new QueuedCaptchaCommand(player, this, "unclaimPlot", player, plot, restoreSchematics);
+                    new QueuedCaptchaCommand(player, this, "unclaimPlot",
+                            player, plot, restoreSchematics);
                 }
             }
         } catch (NoSuchMethodException e) {
@@ -235,7 +258,8 @@ public class PlotCommands extends BaseCommand {
         // check if resident has permission
         Resident resident = plugin.getResidentManager().getResident(player.getUniqueId(), city);
         if (resident == null || !resident.getRole().hasPermission(RolePermission.PLOT_FLAG_MODIFICATION)) {
-            throw new InvalidCommandArgument("Du hast in der Stadt '" + city.getFriendlyName() + "' nicht die Berechtigung Plots zu konfigurieren!");
+            throw new InvalidCommandArgument("Du hast in der Stadt '" + city.getFriendlyName()
+                    + "' nicht die Berechtigung Plots zu konfigurieren!");
         }
 
         try {
@@ -243,12 +267,14 @@ public class PlotCommands extends BaseCommand {
         } catch (RaidCraftException e) {
             throw new InvalidCommandArgument(e.getMessage());
         }
-        player.sendMessage(ChatColor.GREEN + "Du hast erfolgreich die Flag '" + ChatColor.YELLOW + flagName.toUpperCase()
-                + ChatColor.GREEN + "' auf den Wert '" + ChatColor.YELLOW + flagValue.toUpperCase() + "' gesetzt!");
+        player.sendMessage(ChatColor.GREEN + "Du hast erfolgreich die Flag '"
+                + ChatColor.YELLOW + flagName.toUpperCase()
+                + ChatColor.GREEN + "' auf den Wert '" + ChatColor.YELLOW
+                + flagValue.toUpperCase() + "' gesetzt!");
     }
 
     /*
-     ***********************************************************************************************************************************
+     *******************************************************************************************************************
      */
 
     public void unclaimPlot(CommandSender sender, Plot plot, boolean restoreSchematics) {
@@ -259,18 +285,21 @@ public class PlotCommands extends BaseCommand {
             try {
                 plugin.getSchematicManager().restorePlot(plot);
             } catch (RaidCraftException e) {
-                sender.sendMessage(ChatColor.RED + "Es ist ein Fehler beim wiederherstellen des Plots aufgetreten! (" + e.getMessage() + ")");
+                sender.sendMessage(ChatColor.RED
+                        + "Es ist ein Fehler beim wiederherstellen des Plots aufgetreten! (" + e.getMessage() + ")");
             }
         }
 
         plot.delete();
-        plugin.getResidentManager().broadcastCityMessage(city, "Der Plot '" + plot.getRegionName() + "' wurde gelöscht!");
+        plugin.getResidentManager().broadcastCityMessage(city, "Der Plot '"
+                + plot.getRegionName() + "' wurde gelöscht!");
     }
 
     public void unclaimAll(CommandSender sender, City city, boolean restoreSchematics) {
 
         UnclaimAllTask unclaimAllTask = new UnclaimAllTask(sender, city, restoreSchematics);
-        unclaimTask = Bukkit.getScheduler().runTaskTimer(RCCitiesPlugin.getPlugin(), unclaimAllTask, 0, 5 * 20).getTaskId();
+        unclaimTask = Bukkit.getScheduler()
+                .runTaskTimer(RCCitiesPlugin.getPlugin(), unclaimAllTask, 0, 5 * 20).getTaskId();
     }
 
     private class UnclaimAllTask implements Runnable {
@@ -290,7 +319,8 @@ public class PlotCommands extends BaseCommand {
 
             List<Plot> plots = RCCitiesPlugin.getPlugin().getPlotManager().getPlots(city);
             if (plots.isEmpty()) {
-                plugin.getLogger().info("[RCCities - Unclaim all] Done: Unclaimed all plots of city + '" + city.getName() + "'!");
+                plugin.getLogger().info("[RCCities - Unclaim all] Done: Unclaimed all plots of city + '"
+                        + city.getName() + "'!");
                 sender.sendMessage(ChatColor.GREEN + "Done: Unclaimed all plots of city + '" + city.getName() + "'!");
                 Bukkit.getScheduler().cancelTask(unclaimTask);
                 return;
@@ -299,19 +329,25 @@ public class PlotCommands extends BaseCommand {
             // get one plot
             Plot plot = plots.get(0);
 
-            plugin.getLogger().info("[RCCities - Unclaim all] Start unclaiming all plots (" + plots.size() + ") of city + '" + city.getName() + "'!");
-            sender.sendMessage(ChatColor.GREEN + "Start unclaiming all plots (" + plots.size() + ") of city + '" + city.getName() + "'!");
+            plugin.getLogger().info("[RCCities - Unclaim all] Start unclaiming all plots ("
+                    + plots.size() + ") of city + '" + city.getName() + "'!");
+            sender.sendMessage(ChatColor.GREEN + "Start unclaiming all plots (" + plots.size() + ") of city + '"
+                    + city.getName() + "'!");
 
             int totalCount = plots.size();
-            plugin.getLogger().info("[RCCities - Unclaim all] Der Plot '" + plot.getRegionName() + "' wurde gelöscht! (übrig: " + (totalCount-1) + ")");
-            sender.sendMessage("Der Plot '" + plot.getRegionName() + "' wurde gelöscht! (übrig: " + (totalCount-1) + ")");
+            plugin.getLogger().info("[RCCities - Unclaim all] Der Plot '" + plot.getRegionName()
+                    + "' wurde gelöscht! (übrig: " + (totalCount-1) + ")");
+            sender.sendMessage("Der Plot '" + plot.getRegionName() + "' wurde gelöscht! (übrig: "
+                    + (totalCount-1) + ")");
 
             if (restoreSchematics) {
                 try {
                     plugin.getSchematicManager().restorePlot(plot);
                 } catch (RaidCraftException e) {
-                    plugin.getLogger().info("[RCCities - Unclaim all] Fehler beim wiederherstellen des Plots '" + plot.getRegionName() + "'! (" + e.getMessage() + ")");
-                    sender.sendMessage(ChatColor.RED + "Fehler beim wiederherstellen des Plots '" + plot.getRegionName() + "'! (" + e.getMessage() + ")");
+                    plugin.getLogger().info("[RCCities - Unclaim all] Fehler beim wiederherstellen des Plots '"
+                            + plot.getRegionName() + "'! (" + e.getMessage() + ")");
+                    sender.sendMessage(ChatColor.RED + "Fehler beim wiederherstellen des Plots '"
+                            + plot.getRegionName() + "'! (" + e.getMessage() + ")");
                 }
             }
 

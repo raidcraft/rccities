@@ -1,5 +1,6 @@
 package net.silthus.rccities;
 
+import net.milkbowl.vault.economy.Economy;
 import net.silthus.rccities.api.city.AbstractCity;
 import net.silthus.rccities.api.city.City;
 import net.silthus.rccities.api.plot.Plot;
@@ -127,8 +128,7 @@ public class DatabaseCity extends AbstractCity {
             tCity.setUpgradeId(upgradeHolder.getId());
             tCity.save();
             id = tCity.id();
-            // TODO: Check if this works. We get a dummy offline player with UUID "".
-            RCCitiesPlugin.getPlugin().getEconomy().createBank(getBankAccountName(), Bukkit.getOfflinePlayer(UUID.fromString("")));
+            RCCitiesPlugin.getPlugin().getEconomy().createPlayerAccount(getBankAccountName());
         }
         // update existing city
         else {
@@ -158,7 +158,9 @@ public class DatabaseCity extends AbstractCity {
             resident.delete();
         }
 
-        plugin.getEconomy().deleteBank(getBankAccountName());
+        Economy economy;
+        economy = plugin.getEconomy();
+        economy.withdrawPlayer(getBankAccountName(), economy.getBalance(getBankAccountName()));
         RCCitiesPlugin.getPlugin().getUpgrades().getUpgradeManager().deleteUpgradeHolder(getUpgrades().getId());
 
         plugin.getCityManager().removeFromCache(this);

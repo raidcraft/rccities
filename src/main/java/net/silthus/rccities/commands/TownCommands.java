@@ -5,6 +5,7 @@ import co.aikar.commands.CommandIssuer;
 import co.aikar.commands.InvalidCommandArgument;
 import co.aikar.commands.annotation.*;
 import com.google.common.base.Strings;
+import com.sk89q.minecraft.util.commands.CommandException;
 import net.silthus.rccities.DatabasePlot;
 import net.silthus.rccities.RCCitiesPlugin;
 import net.silthus.rccities.api.city.City;
@@ -20,8 +21,10 @@ import net.silthus.rccities.flags.city.PvpCityFlag;
 import net.silthus.rccities.flags.city.admin.InviteCityFlag;
 import net.silthus.rccities.upgrades.api.level.UpgradeLevel;
 import net.silthus.rccities.upgrades.api.unlockresult.UnlockResult;
+import net.silthus.rccities.upgrades.api.upgrade.Upgrade;
 import net.silthus.rccities.util.CaseInsensitiveMap;
 import net.silthus.rccities.util.QueuedCaptchaCommand;
+import net.silthus.rccities.util.QueuedCommand;
 import net.silthus.rccities.util.RaidCraftException;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -84,7 +87,8 @@ public class TownCommands extends BaseCommand {
         for (Plot plot : plugin.getPlotManager().getPlots(city)) {
             plot.updateRegion(false);
         }
-    getCurrentCommandIssuer().sendMessage(ChatColor.GREEN + "Die Plots der Stadt '" + city.getFriendlyName() + "' wurden aktualisiert!");
+    getCurrentCommandIssuer().sendMessage(ChatColor.GREEN + "Die Plots der Stadt '"
+            + city.getFriendlyName() + "' wurden aktualisiert!");
     }
 
     @Subcommand("create")
@@ -108,10 +112,11 @@ public class TownCommands extends BaseCommand {
             }
 
             // set flags at the end because of possible errors
-            plugin.getFlagManager().setCityFlag(city, player, PvpCityFlag.class, false);        // disable pvp
-            plugin.getFlagManager().setCityFlag(city, player, InviteCityFlag.class, false);     // disable invites
-            plugin.getFlagManager().setCityFlag(city, player, GreetingsCityFlag.class, true);   // enable greetings
-            plugin.getFlagManager().setCityFlag(city, player, JoinCostsCityFlag.class, plugin.getPluginConfig().getJoinCosts());   // default join costs
+            plugin.getFlagManager().setCityFlag(city, player, PvpCityFlag.class, false);       // disable pvp
+            plugin.getFlagManager().setCityFlag(city, player, InviteCityFlag.class, false);    // disable invites
+            plugin.getFlagManager().setCityFlag(city, player, GreetingsCityFlag.class, true);  // enable greetings
+            plugin.getFlagManager().setCityFlag(city, player, JoinCostsCityFlag.class,
+                    plugin.getPluginConfig().getJoinCosts());   // default join costs
 
         } catch (RaidCraftException e) {
             throw new InvalidCommandArgument(e.getMessage());
@@ -123,16 +128,18 @@ public class TownCommands extends BaseCommand {
     @CommandPermission("rccities.town.delete")
     public void delete(Player player, City city, @Optional String flags) {
 
-        boolean restoreSchematics = true;
-        if (flags.contains("r")) {
-            restoreSchematics = false;
+        boolean restoreSchematics = false;
+        if (!Strings.isNullOrEmpty(flags) && flags.contains("r")) {
+            restoreSchematics = true;
         }
 
         try {
             if (restoreSchematics) {
-                player.sendMessage(ChatColor.YELLOW + "Bei der Löschung der Stadt werden vorhandene Plots " + ChatColor.DARK_RED + "zurückgesetzt" + ChatColor.YELLOW + "!");
+                player.sendMessage(ChatColor.YELLOW + "Bei der Löschung der Stadt werden vorhandene Plots "
+                        + ChatColor.DARK_RED + "zurückgesetzt" + ChatColor.YELLOW + "!");
             } else {
-                player.sendMessage(ChatColor.YELLOW + "Bei der Löschung der Stadt werden vorhandene Plots " + ChatColor.DARK_RED + "NICHT zurückgesetzt" + ChatColor.YELLOW + "!");
+                player.sendMessage(ChatColor.YELLOW + "Bei der Löschung der Stadt werden vorhandene Plots "
+                        + ChatColor.DARK_RED + "NICHT zurückgesetzt" + ChatColor.YELLOW + "!");
             }
             new QueuedCaptchaCommand(player, this, "deleteCity", player, city, restoreSchematics);
         } catch (NoSuchMethodException e) {
@@ -156,24 +163,28 @@ public class TownCommands extends BaseCommand {
                 upgradeRequest.accept();
                 UnlockResult unlockResult = upgradeRequest.getUpgradeLevel().tryToUnlock(city);
                 if (unlockResult.isSuccessful()) {
-                    player.sendMessage(ChatColor.GREEN + " Du hast den Upgrade-Antrag von '" + city.getFriendlyName() + "' angenommen!");
+                    player.sendMessage(ChatColor.GREEN + " Du hast den Upgrade-Antrag von '"
+                            + city.getFriendlyName() + "' angenommen!");
                     upgradeRequest.getUpgradeLevel().setUnlocked(true);
                 } else {
-                    player.sendMessage(ChatColor.GREEN + " Das Upgrade ist fehlgeschlagen da andere Bedingungen nicht mehr erfüllt sind!");
+                    player.sendMessage(ChatColor.GREEN
+                            + " Das Upgrade ist fehlgeschlagen da andere Bedingungen nicht mehr erfüllt sind!");
                 }
                 return;
             }
             if (action.startsWith("reject")) {
                 String reason = action.substring("reject".length()).trim();
                 if (Strings.isNullOrEmpty(reason)) {
-                    throw new InvalidCommandArgument("Gib bitte noch einen Grund als weiteren Parameter an! Z.B.: '/town upgrade reject Bedingungen nicht erfüllt'");
+                    throw new InvalidCommandArgument("Gib bitte noch einen Grund als weiteren Parameter an!");
                 }
                 upgradeRequest.reject(reason);
-                player.sendMessage(ChatColor.GREEN + " Du hast den Upgrade-Antrag von '" + city.getFriendlyName() + "' " + ChatColor.RED + "abgelehnt" + ChatColor.GREEN + "!");
-                plugin.getResidentManager().broadcastCityMessage(city, "Der Upgrade-Antrag wurde abgelehnt, Grund: " + reason);
+                player.sendMessage(ChatColor.GREEN + " Du hast den Upgrade-Antrag von '" + city.getFriendlyName()
+                        + "' " + ChatColor.RED + "abgelehnt" + ChatColor.GREEN + "!");
+                plugin.getResidentManager()
+                        .broadcastCityMessage(city, "Der Upgrade-Antrag wurde abgelehnt, Grund: " + reason);
                 return;
             }
-            throw new InvalidCommandArgument("Parameter nicht erkannt. Nutze <accept> oder <reject> umd Anträge zu bearbeiten!");
+            throw new InvalidCommandArgument("Nutze <accept> oder <reject> umd Anträge zu bearbeiten!");
         }
 
         // show info
@@ -184,7 +195,8 @@ public class TownCommands extends BaseCommand {
             player.sendMessage(ChatColor.RED + "Achtung: Der letzte Antrag wurde abgelehnt.");
             player.sendMessage(ChatColor.GREEN + "Grund: " + ChatColor.GRAY + upgradeRequest.getRejectReason());
         }
-        player.sendMessage(ChatColor.GREEN + "-->" + ChatColor.YELLOW + "/town upgrades " + city.getName() + " <accept/reject>");
+        player.sendMessage(ChatColor.GREEN + "-->" + ChatColor.YELLOW + "/town upgrades "
+                + city.getName() + " <accept/reject>");
     }
 
     @Subcommand("spawn|tp|warp")
@@ -194,7 +206,8 @@ public class TownCommands extends BaseCommand {
         if (!player.hasPermission("rccities.town.spawn.all")) {
             Resident resident = plugin.getResidentManager().getResident(player.getUniqueId(), city);
             if (resident == null || !resident.getRole().hasPermission(RolePermission.SPAWN_TELEPORT)) {
-                throw new InvalidCommandArgument("Du darfst dich nicht zum Spawn der Stadt '" + city.getFriendlyName() + "' porten!");
+                throw new InvalidCommandArgument("Du darfst dich nicht zum Spawn der Stadt '"
+                        + city.getFriendlyName() + "' porten!");
             }
         }
 
@@ -203,7 +216,8 @@ public class TownCommands extends BaseCommand {
         }
 
         player.teleport(city.getSpawn());
-        player.sendMessage(ChatColor.YELLOW + "Du wurdest zum Spawn von '" + city.getFriendlyName() + "' teleportiert!");
+        player.sendMessage(ChatColor.YELLOW + "Du wurdest zum Spawn von '"
+                + city.getFriendlyName() + "' teleportiert!");
     }
 
     @Subcommand("setspwan")
@@ -213,7 +227,8 @@ public class TownCommands extends BaseCommand {
         if (!player.hasPermission("rccities.setspawn.all")) {
             Resident resident = plugin.getResidentManager().getResident(player.getUniqueId(), city);
             if (resident == null || !resident.getRole().hasPermission(RolePermission.SET_SPAWN)) {
-                throw new InvalidCommandArgument("Du darfst von der Stadt '" + city.getFriendlyName() + "' den Spawn nicht versetzen!");
+                throw new InvalidCommandArgument("Du darfst von der Stadt '"
+                        + city.getFriendlyName() + "' den Spawn nicht versetzen!");
             }
         }
 
@@ -232,12 +247,14 @@ public class TownCommands extends BaseCommand {
         if (!player.hasPermission("rccities.setspawn.all")) {
             Resident resident = plugin.getResidentManager().getResident(player.getUniqueId(), city);
             if (resident == null || !resident.getRole().hasPermission(RolePermission.SET_DESCRIPTION)) {
-                throw new InvalidCommandArgument("Du darfst von der Stadt '" + city.getFriendlyName() + "' die Beschreibung nicht ändern!");
+                throw new InvalidCommandArgument("Du darfst von der Stadt '"
+                        + city.getFriendlyName() + "' die Beschreibung nicht ändern!");
             }
         }
 
         city.setDescription(description);
-        player.sendMessage(ChatColor.GREEN + "Du hast die Beschreibung der Stadt '" + city.getFriendlyName() + "' geändert!");
+        player.sendMessage(ChatColor.GREEN + "Du hast die Beschreibung der Stadt '"
+                + city.getFriendlyName() + "' geändert!");
         plugin.getResidentManager().broadcastCityMessage(city, "Die Beschreibung der Stadt wurde geändert!");
     }
 
@@ -247,14 +264,18 @@ public class TownCommands extends BaseCommand {
     public void list() {
 
         Collection<City> cities = plugin.getCityManager().getCities();
-        getCurrentCommandIssuer().sendMessage(ChatColor.GOLD + "Es gibt derzeit " + ChatColor.YELLOW + cities.size() + ChatColor.GOLD + " Städte auf dem Server:");
+        getCurrentCommandIssuer().sendMessage(ChatColor.GOLD + "Es gibt derzeit "
+                + ChatColor.YELLOW + cities.size() + ChatColor.GOLD + " Städte auf dem Server:");
         String cityList = "";
         for (City city : cities) {
             if (!cityList.isEmpty()) cityList += ChatColor.GOLD + ", ";
-            UpgradeLevel upgradeLevel = plugin.getCityManager().getMainUpgrade(city).getHighestUnlockedLevel();
+            Upgrade mainUpgrade = plugin.getCityManager().getMainUpgrade(city);
             int level = 0;
-            if (upgradeLevel != null) {
-                level = upgradeLevel.getLevel();
+            if(mainUpgrade != null) {
+                UpgradeLevel upgradeLevel = mainUpgrade.getHighestUnlockedLevel();
+                if (upgradeLevel != null) {
+                    level = upgradeLevel.getLevel();
+                }
             }
             cityList += ChatColor.YELLOW + city.getFriendlyName() + " (" + level + ")";
         }
@@ -276,7 +297,8 @@ public class TownCommands extends BaseCommand {
         if (!player.hasPermission("rccities.town.flag.all")) {
             Resident resident = plugin.getResidentManager().getResident(player.getUniqueId(), city);
             if (resident == null || !resident.getRole().hasPermission(RolePermission.CITY_FLAG_MODIFICATION)) {
-                throw new InvalidCommandArgument("Du darfst von der Stadt '" + city.getFriendlyName() + "' keine Flags ändern!");
+                throw new InvalidCommandArgument("Du darfst von der Stadt '"
+                        + city.getFriendlyName() + "' keine Flags ändern!");
             }
         }
 
@@ -285,8 +307,10 @@ public class TownCommands extends BaseCommand {
         } catch (RaidCraftException e) {
             throw new InvalidCommandArgument(e.getMessage());
         }
-        player.sendMessage(ChatColor.GREEN + "Du hast erfolgreich die Flag '" + ChatColor.YELLOW + flagName.toUpperCase()
-                + ChatColor.GREEN + "' auf den Wert '" + ChatColor.YELLOW + flagValue.toUpperCase() + ChatColor.GREEN + "' gesetzt!");
+        player.sendMessage(ChatColor.GREEN + "Du hast erfolgreich die Flag '"
+                + ChatColor.YELLOW + flagName.toUpperCase()
+                + ChatColor.GREEN + "' auf den Wert '" + ChatColor.YELLOW
+                + flagValue.toUpperCase() + ChatColor.GREEN + "' gesetzt!");
     }
 
     @Subcommand("invite")
@@ -300,7 +324,8 @@ public class TownCommands extends BaseCommand {
         if (!player.hasPermission("rccities.town.invite.all")) {
             Resident resident = plugin.getResidentManager().getResident(player.getUniqueId(), city);
             if (resident == null || !resident.getRole().hasPermission(RolePermission.INVITE)) {
-                throw new InvalidCommandArgument("Du darfst in die Stadt '" + city.getFriendlyName() + "' keine Bürger einladen!");
+                throw new InvalidCommandArgument("Du darfst in die Stadt '"
+                        + city.getFriendlyName() + "' keine Bürger einladen!");
             }
         }
 
@@ -315,9 +340,11 @@ public class TownCommands extends BaseCommand {
         }
 
         invites.put(targetPlayer.getName(), city);
-        targetPlayer.getPlayer().sendMessage(ChatColor.GOLD + "Du wurdest in die Stadt '" + city.getFriendlyName() + "' eingeladen!");
+        targetPlayer.getPlayer().sendMessage(ChatColor.GOLD + "Du wurdest in die Stadt '"
+                + city.getFriendlyName() + "' eingeladen!");
         targetPlayer.getPlayer().sendMessage(ChatColor.GOLD + "Bestätige die Einladung mit '/town accept'");
-        player.sendMessage(ChatColor.GREEN + "Du hast " + targetPlayer.getName() + " in die Stadt '" + city.getFriendlyName() + "' eingeladen!");
+        player.sendMessage(ChatColor.GREEN + "Du hast " + targetPlayer.getName() + " in die Stadt '"
+                + city.getFriendlyName() + "' eingeladen!");
     }
 
     @Subcommand("accept")
@@ -334,7 +361,8 @@ public class TownCommands extends BaseCommand {
         } catch (RaidCraftException e) {
             throw new InvalidCommandArgument(e.getMessage());
         }
-        Bukkit.broadcastMessage(ChatColor.GOLD + player.getName() + " ist nun Einwohner von '" + city.getFriendlyName() + "'!");
+        Bukkit.broadcastMessage(ChatColor.GOLD + player.getName() + " ist nun Einwohner von '"
+                + city.getFriendlyName() + "'!");
     }
 
     @Subcommand("leave")
@@ -344,9 +372,11 @@ public class TownCommands extends BaseCommand {
         if (!player.hasPermission("rccities.town.leave.all")) {
             Resident resident = plugin.getResidentManager().getResident(player.getUniqueId(), city);
             if (resident == null) {
-                throw new InvalidCommandArgument("Du bist kein Einwohner der Stadt '" + city.getFriendlyName() + "'!");
+                throw new InvalidCommandArgument("Du bist kein Einwohner der Stadt '"
+                        + city.getFriendlyName() + "'!");
             } else if (!resident.getRole().hasPermission(RolePermission.LEAVE)) {
-                throw new InvalidCommandArgument("Du darfst die Stadt '" + city.getFriendlyName() + "' nicht verlassen!");
+                throw new InvalidCommandArgument("Du darfst die Stadt '"
+                        + city.getFriendlyName() + "' nicht verlassen!");
             }
         }
 
@@ -355,7 +385,7 @@ public class TownCommands extends BaseCommand {
             throw new InvalidCommandArgument("Du bist kein Mitglied der Stadt '" + city.getFriendlyName() + "'!");
         }
 
-        if (flags.contains("f")) {
+        if (!Strings.isNullOrEmpty(flags) && flags.contains("f")) {
             leaveCity(resident);
         } else {
             try {
@@ -373,29 +403,53 @@ public class TownCommands extends BaseCommand {
         if (!player.hasPermission("rccities.town.kick.all")) {
             Resident resident = plugin.getResidentManager().getResident(player.getUniqueId(), city);
             if (resident == null || !resident.getRole().hasPermission(RolePermission.KICK)) {
-                throw new InvalidCommandArgument("Du darfst keine Bürger aus der Stadt '" + city.getFriendlyName() + "' werfen!");
+                throw new InvalidCommandArgument("Du darfst keine Bürger aus der Stadt '"
+                        + city.getFriendlyName() + "' werfen!");
             }
         }
 
-        if (!flags.contains("f") && player.getName().equalsIgnoreCase(targetPlayer.getName())) {
+        if ((Strings.isNullOrEmpty(flags) || !flags.contains("f"))
+                && player.getName().equalsIgnoreCase(targetPlayer.getName())) {
             throw new InvalidCommandArgument("Du kannst dich nicht selbst aus der Stadt werfen!");
         }
 
         Resident resident = plugin.getResidentManager().getResident(targetPlayer.getUniqueId(), city);
         if (resident == null) {
-            throw new InvalidCommandArgument(targetPlayer.getName() + " ist kein Mitglied von '" + city.getFriendlyName() + "'!");
+            throw new InvalidCommandArgument(targetPlayer.getName() + " ist kein Mitglied von '"
+                    + city.getFriendlyName() + "'!");
         }
 
-        if (!resident.getRole().hasPermission(RolePermission.GET_KICKED) && !player.hasMetadata("rccities.town.kick.all")) {
+        if (!resident.getRole().hasPermission(RolePermission.GET_KICKED)
+                && !player.hasMetadata("rccities.town.kick.all")) {
             throw new InvalidCommandArgument("Du kannst diesen Einwohner nicht aus der Stadt werfen!");
         }
 
         resident.delete();
-        Bukkit.broadcastMessage(ChatColor.GOLD + targetPlayer.getName() + " wurde aus der Stadt '" + city.getFriendlyName() + "' geworfen!");
+        Bukkit.broadcastMessage(ChatColor.GOLD + targetPlayer.getName() + " wurde aus der Stadt '"
+                + city.getFriendlyName() + "' geworfen!");
+    }
+
+    @Subcommand("confirm")
+    @CommandPermission("rccities.town.confirm")
+    public void confirm(Player player, @Optional String captcha) {
+        if (!plugin.getQueuedCommands().containsKey(player.getName())) {
+            throw new InvalidCommandArgument("Es gibt nichts was du aktuell bestätigen kannst!");
+        }
+        QueuedCommand command = plugin.getQueuedCommands().get(player.getName());
+        if (command instanceof QueuedCaptchaCommand) {
+            if (Strings.isNullOrEmpty(captcha)) {
+                throw new InvalidCommandArgument("Captcha vergessen! /rcconfirm <Captcha>");
+            }
+            if (!((QueuedCaptchaCommand) command).getCaptcha().equals(captcha)) {
+                throw new InvalidCommandArgument("Falscher Captcha Code! Bitte versuche es erneut.");
+            }
+        }
+        command.run();
+        plugin.getQueuedCommands().remove(player.getName());
     }
 
     /*
-     ***********************************************************************************************************************************
+     *******************************************************************************************************************
      */
 
     public void deleteCity(CommandSender sender, City city, boolean restoreSchematics) {
@@ -404,7 +458,8 @@ public class TownCommands extends BaseCommand {
             try {
                 plugin.getSchematicManager().restoreCity(city);
             } catch (RaidCraftException e) {
-                sender.sendMessage(ChatColor.RED + "Es ist ein Fehler beim wiederherstellen der Plots aufgetreten! (" + e.getMessage() + ")");
+                sender.sendMessage(ChatColor.RED + "Es ist ein Fehler beim wiederherstellen der Plots aufgetreten! ("
+                        + e.getMessage() + ")");
             }
         }
 
@@ -415,6 +470,7 @@ public class TownCommands extends BaseCommand {
     public void leaveCity(Resident resident) {
 
         resident.delete();
-        Bukkit.broadcastMessage(ChatColor.GOLD + resident.getName() + " hat die Stadt '" + resident.getCity().getFriendlyName() + "' verlassen!");
+        Bukkit.broadcastMessage(ChatColor.GOLD + resident.getName() + " hat die Stadt '"
+                + resident.getCity().getFriendlyName() + "' verlassen!");
     }
 }

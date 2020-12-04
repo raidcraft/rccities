@@ -14,7 +14,7 @@ public class QueuedCaptchaCommand extends QueuedCommand {
 
         super(sender, object, method, args);
         this.captcha = generateCaptchaString();
-        sender.sendMessage(ChatColor.RED + "Bitte bestätige den Befehl mit: " + ChatColor.GREEN + "/rcconfirm " + ChatColor.AQUA + captcha);
+        sender.sendMessage(ChatColor.RED + "Bitte bestätige den Befehl mit: " + ChatColor.GREEN + "/town confirm " + ChatColor.AQUA + captcha);
     }
 
     public String getCaptcha() {
