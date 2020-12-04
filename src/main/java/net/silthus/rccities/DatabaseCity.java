@@ -31,6 +31,7 @@ public class DatabaseCity extends AbstractCity {
     public DatabaseCity(TCity tCity) {
 
         id = tCity.id();
+        money = tCity.getMoney();
         name = tCity.getName();
         creator = tCity.getCreatorId();
         creationDate = tCity.getCreationDate();
@@ -126,9 +127,9 @@ public class DatabaseCity extends AbstractCity {
             upgradeHolder = RCCitiesPlugin.getPlugin().getUpgrades().getUpgradeManager()
                     .createDatabaseUpgradeHolder(this, RCCitiesPlugin.getPlugin().getUpgradeConfiguration(), City.class);
             tCity.setUpgradeId(upgradeHolder.getId());
+            tCity.setMoney(0);
             tCity.save();
             id = tCity.id();
-            RCCitiesPlugin.getPlugin().getEconomy().createPlayerAccount(getBankAccountName());
         }
         // update existing city
         else {
@@ -143,6 +144,7 @@ public class DatabaseCity extends AbstractCity {
             tCity.setPlotCredit(getPlotCredit());
             tCity.setMaxRadius(getMaxRadius());
             tCity.setExp(getExp());
+            tCity.setMoney(getMoney());
             tCity.update();
         }
     }

@@ -82,7 +82,7 @@ public class CityManager {
         }
 
         Economy economy = plugin.getEconomy();
-        double balance = economy.getBalance(city.getBankAccountName());
+        double balance = city.getMoney();
 
         sender.sendMessage("*********************************");
         sender.sendMessage(ChatColor.GOLD + "Informationen zur Stadt '" + ChatColor.YELLOW + city.getFriendlyName() + ChatColor.GOLD + "'");

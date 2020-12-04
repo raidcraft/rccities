@@ -39,13 +39,12 @@ public class MarkPlotFlag extends AbstractPlotFlag {
         if (getPlot() == null) return;
 
         boolean currentValue = getType().convertToBoolean(getValue());
-        String bankAccount = getPlot().getCity().getBankAccountName();
         double markCost = RCCitiesPlugin.getPlugin().getPluginConfig().getFlagPlotMarkCost();
 
         if (currentValue) {
 
             Economy economy = RCCitiesPlugin.getPlugin().getEconomy();
-            if (getPlot().getCity().hasEnoughMoney(markCost)) {
+            if (getPlot().getCity().hasMoney(markCost)) {
                 throw new RaidCraftException("Es ist nicht genug Geld in der Stadtkasse! "
                         + economy.format(markCost) + " benötigt!");
             }

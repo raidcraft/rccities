@@ -26,6 +26,7 @@ public abstract class AbstractCity implements City {
     protected int maxRadius;
     protected int exp;
     protected UpgradeHolder upgradeHolder;
+    protected double money;
 
     protected AbstractCity() {
     }
@@ -48,27 +49,28 @@ public abstract class AbstractCity implements City {
         return name.replace('_', ' ');
     }
 
-    @Override
-    public String getBankAccountName() {
 
-        return "city_" + name.toLowerCase();
-    }
 
     @Override
-    public boolean hasEnoughMoney(double amount) {
-        return RCCitiesPlugin.getPlugin().getEconomy().has(Bukkit.getOfflinePlayer(getBankAccountName()), amount);
+    public boolean hasMoney(double amount) {
+        return money >= amount;
     }
 
     @Override
     public boolean withdrawMoney(double amount) {
-        return RCCitiesPlugin.getPlugin().getEconomy().withdrawPlayer(
-                Bukkit.getOfflinePlayer(getBankAccountName()), amount).type == EconomyResponse.ResponseType.SUCCESS;
+        if(!hasMoney(amount)) return false;
+
+        money -= amount;
+        save();
+        return true;
     }
 
     @Override
     public boolean depositMoney(double amount) {
-        return RCCitiesPlugin.getPlugin().getEconomy().depositPlayer(
-                Bukkit.getOfflinePlayer(getBankAccountName()), amount).type == EconomyResponse.ResponseType.SUCCESS;
+
+        money += amount;
+        save();
+        return false;
     }
 
     @Override

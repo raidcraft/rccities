@@ -22,9 +22,9 @@ public interface City {
 
     String getFriendlyName();
 
-    String getBankAccountName();
+    double getMoney();
 
-    boolean hasEnoughMoney(double amount);
+    boolean hasMoney(double amount);
 
     boolean withdrawMoney(double amount);
 

@@ -1,6 +1,7 @@
 package net.silthus.rccities.tables;
 
 import io.ebean.Finder;
+import io.ebean.annotation.DbDefault;
 import lombok.Getter;
 import lombok.Setter;
 import net.silthus.ebean.BaseEntity;
@@ -41,6 +42,8 @@ public class TCity extends BaseEntity {
     private int maxRadius;
     private int exp;
     private UUID upgradeId;
+    @DbDefault("0")
+    private double money;
 
     @OneToMany(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "city_id")
