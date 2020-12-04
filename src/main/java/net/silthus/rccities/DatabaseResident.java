@@ -52,6 +52,7 @@ public class DatabaseResident extends AbstractResident {
         // update existing resident
         else {
             TResident tResident = TResident.find.byId(getId());
+            assert tResident != null;
             tResident.setProfession(getRole().name());
             tResident.setDepositAmount(getDepositAmount());
             tResident.setWithdrawAmount(getWithdrawAmount());
@@ -70,6 +71,7 @@ public class DatabaseResident extends AbstractResident {
         plugin.getResidentManager().removeFromCache(this);
 
         TResident tResident = TResident.find.byId(getId());
+        assert tResident != null;
         tResident.delete();
 
         for (Plot plot : plugin.getPlotManager().getPlots(city)) {
