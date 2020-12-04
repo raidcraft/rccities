@@ -1,3 +1,11 @@
+# [1.2.0](https://github.com/raidcraft/rccities/compare/v1.1.0...v1.2.0) (2020-12-02)
+
+
+### Features
+
+* Add dbmigration resources, fix npe while startup ([0e3aa57](https://github.com/raidcraft/rccities/commit/0e3aa57858ff673efde5fb98722c9856107c8969))
+* Start fixing command implementation ([2a9b87a](https://github.com/raidcraft/rccities/commit/2a9b87a3d81cea0273d396ea4df77e9aeea77969))
+
 # [1.1.0](https://github.com/raidcraft/rccities/compare/v1.0.0...v1.1.0) (2020-12-01)
 
 
