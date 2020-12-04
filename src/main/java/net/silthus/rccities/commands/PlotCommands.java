@@ -110,6 +110,7 @@ public class PlotCommands extends BaseCommand {
     }
 
     @Subcommand("claim")
+    @CommandCompletion("@cities")
     @CommandPermission("rccities.plot.claim")
     public void claim(Player player, @Optional String cityName, @Optional String flags) {
 
@@ -160,7 +161,8 @@ public class PlotCommands extends BaseCommand {
 
         // check if resident has permission
         Resident resident = plugin.getResidentManager().getResident(player.getUniqueId(), city);
-        if (resident == null || !resident.getRole().hasPermission(RolePermission.PLOT_CLAIM)) {
+        if (!player.hasPermission("rccities.admin") &&
+                (resident == null || !resident.getRole().hasPermission(RolePermission.PLOT_CLAIM))) {
             throw new InvalidCommandArgument("Du hast in der Stadt '"
                     + city.getFriendlyName() + "' nicht die Berechtigung Plots zu claimen!");
         }
@@ -281,7 +283,8 @@ public class PlotCommands extends BaseCommand {
 
         // check if resident has permission
         Resident resident = plugin.getResidentManager().getResident(player.getUniqueId(), city);
-        if (resident == null || !resident.getRole().hasPermission(RolePermission.PLOT_FLAG_MODIFICATION)) {
+        if (!player.hasPermission("rccities.admin") &&
+                (resident == null || !resident.getRole().hasPermission(RolePermission.PLOT_FLAG_MODIFICATION))) {
             throw new InvalidCommandArgument("Du hast in der Stadt '" + city.getFriendlyName()
                     + "' nicht die Berechtigung Plots zu konfigurieren!");
         }
@@ -302,7 +305,8 @@ public class PlotCommands extends BaseCommand {
 
         // check if resident has permission
         Resident resident = plugin.getResidentManager().getResident(player.getUniqueId(), city);
-        if (resident == null || !resident.getRole().hasPermission(RolePermission.PLOT_FLAG_MODIFICATION)) {
+        if (!player.hasPermission("rccities.admin") &&
+                (resident == null || !resident.getRole().hasPermission(RolePermission.PLOT_FLAG_MODIFICATION))) {
             throw new InvalidCommandArgument("Du hast in der Stadt '" + city.getFriendlyName()
                     + "' nicht die Berechtigung Plots zu konfigurieren!");
         }

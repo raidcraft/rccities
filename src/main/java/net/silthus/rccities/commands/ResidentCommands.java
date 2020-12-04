@@ -37,12 +37,16 @@ public class ResidentCommands extends BaseCommand {
     @Default
     @Subcommand("info")
     @CommandPermission("rccities.resident.info")
-    public void resident(Player player, OfflinePlayer offlinePlayer) {
+    public void resident(Player player, @Optional OfflinePlayer resident) {
 
-        plugin.getResidentManager().printResidentInfo(offlinePlayer.getUniqueId(), player);
+        if(resident == null) {
+            resident = player;
+        }
+        plugin.getResidentManager().printResidentInfo(resident.getUniqueId(), player);
     }
 
     @Subcommand("setrole|promote")
+    @CommandCompletion("@cities")
     @CommandPermission("rccities.resident.promote")
     public void setRole(Player player, OfflinePlayer residentPlayer, City city, String roleName, @Optional String flags) {
 

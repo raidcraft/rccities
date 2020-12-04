@@ -136,29 +136,6 @@ public class MarkPlotFlag extends AbstractPlotFlag {
 
         Material material = block.getType();
 
-        // TODO: Extend list with new materials
-        return material == Material.GRASS
-                || material == Material.DIRT
-                || material == Material.COBBLESTONE
-                || material == Material.STONE
-                || material == Material.SAND
-                || material == Material.GRAVEL
-                || material == Material.OBSIDIAN
-                || material == Material.WHITE_WOOL
-                || material == Material.BRICK
-                || material == Material.QUARTZ_BLOCK
-                || material == Material.QUARTZ
-                || material == Material.DIAMOND_ORE
-                || material == Material.IRON_ORE
-                || material == Material.COAL_ORE
-                || material == Material.COAL_BLOCK
-                || material == Material.GOLD_ORE
-                || material == Material.GOLD_BLOCK
-                || material == Material.IRON_BLOCK
-                || material == Material.DIAMOND_BLOCK
-                || material == Material.EMERALD
-                || material == Material.EMERALD_BLOCK
-                || material == Material.NETHER_BRICK
-                || material == Material.CLAY;
+        return material.isSolid() && material.isBlock();
     }
 }
