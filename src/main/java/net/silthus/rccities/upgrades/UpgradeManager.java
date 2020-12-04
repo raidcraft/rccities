@@ -47,6 +47,7 @@ public class UpgradeManager {
 
     public void deleteUpgradeHolder(UUID id) {
 
+        if(id == null) return;
         TUpgradeHolder tUpgradeHolder = TUpgradeHolder.find.byId(id);
         tUpgradeHolder.delete();
     }

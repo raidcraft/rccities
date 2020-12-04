@@ -2,6 +2,8 @@ package net.silthus.rccities;
 
 import co.aikar.commands.InvalidCommandArgument;
 import com.google.common.base.Strings;
+import com.sk89q.worldedit.bukkit.BukkitPlayer;
+import com.sk89q.worldedit.bukkit.BukkitWorld;
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
@@ -56,6 +58,7 @@ import net.milkbowl.vault.permission.Permission;
 
 import java.io.File;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author Philip Urban
@@ -266,14 +269,22 @@ public class RCCitiesPlugin extends JavaPlugin {
         registerOfflinePlayerContext(commandManager);
         registerCityContext(commandManager);
 
+        registerCityCompletion(commandManager);
+
         commandManager.registerCommand(new PlotCommands(this));
         commandManager.registerCommand(new ResidentCommands(this));
         commandManager.registerCommand(new TownCommands(this));
     }
 
+    private void registerCityCompletion(PaperCommandManager commandManager) {
+
+        commandManager.getCommandCompletions().registerAsyncCompletion("cities", context ->
+                getCityManager().getCities().stream().map(City::getName).collect(Collectors.toSet()));
+    }
+
     private void registerOfflinePlayerContext(PaperCommandManager commandManager) {
 
-        commandManager.getCommandContexts().registerIssuerOnlyContext(OfflinePlayer.class, c -> {
+        commandManager.getCommandContexts().registerContext(OfflinePlayer.class, c -> {
             String playerName = c.popFirstArg();
 
             OfflinePlayer offlinePlayer;

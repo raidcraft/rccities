@@ -273,6 +273,48 @@ public class PlotCommands extends BaseCommand {
                 + flagValue.toUpperCase() + "' gesetzt!");
     }
 
+    @Subcommand("mark")
+    @CommandPermission("rccities.plot.flag")
+    public void mark(Player player, Plot plot) {
+
+        City city = plot.getCity();
+
+        // check if resident has permission
+        Resident resident = plugin.getResidentManager().getResident(player.getUniqueId(), city);
+        if (resident == null || !resident.getRole().hasPermission(RolePermission.PLOT_FLAG_MODIFICATION)) {
+            throw new InvalidCommandArgument("Du hast in der Stadt '" + city.getFriendlyName()
+                    + "' nicht die Berechtigung Plots zu konfigurieren!");
+        }
+
+        try {
+            plot.setFlag(player, "MARK", "ON");
+        } catch (RaidCraftException e) {
+            throw new InvalidCommandArgument(e.getMessage());
+        }
+        player.sendMessage(ChatColor.GREEN + "Du hast erfolgreich den Plot markiert!");
+    }
+
+    @Subcommand("unmark")
+    @CommandPermission("rccities.plot.flag")
+    public void unmark(Player player, Plot plot) {
+
+        City city = plot.getCity();
+
+        // check if resident has permission
+        Resident resident = plugin.getResidentManager().getResident(player.getUniqueId(), city);
+        if (resident == null || !resident.getRole().hasPermission(RolePermission.PLOT_FLAG_MODIFICATION)) {
+            throw new InvalidCommandArgument("Du hast in der Stadt '" + city.getFriendlyName()
+                    + "' nicht die Berechtigung Plots zu konfigurieren!");
+        }
+
+        try {
+            plot.setFlag(player, "MARK", "OFF");
+        } catch (RaidCraftException e) {
+            throw new InvalidCommandArgument(e.getMessage());
+        }
+        player.sendMessage(ChatColor.GREEN + "Du hast erfolgreich die Plot Markierung entfernt!");
+    }
+
     /*
      *******************************************************************************************************************
      */

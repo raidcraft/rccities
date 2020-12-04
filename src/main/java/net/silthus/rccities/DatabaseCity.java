@@ -157,10 +157,7 @@ public class DatabaseCity extends AbstractCity {
         for (Resident resident : plugin.getResidentManager().getResidents(this)) {
             resident.delete();
         }
-
-        Economy economy;
-        economy = plugin.getEconomy();
-        economy.withdrawPlayer(getBankAccountName(), economy.getBalance(getBankAccountName()));
+        
         RCCitiesPlugin.getPlugin().getUpgrades().getUpgradeManager().deleteUpgradeHolder(getUpgrades().getId());
 
         plugin.getCityManager().removeFromCache(this);

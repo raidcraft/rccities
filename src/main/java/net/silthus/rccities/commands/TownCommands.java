@@ -53,6 +53,7 @@ public class TownCommands extends BaseCommand {
 
     @Default
     @Subcommand("info")
+    @CommandCompletion("@cities")
     @CommandPermission("rccities.town.info")
     public void town(Player player, City city) {
 
@@ -81,6 +82,7 @@ public class TownCommands extends BaseCommand {
     }
 
     @Subcommand("update")
+    @CommandCompletion("@cities")
     @CommandPermission("rccities.town.update")
     public void update(City city) {
 
@@ -125,6 +127,7 @@ public class TownCommands extends BaseCommand {
     }
 
     @Subcommand("delete")
+    @CommandCompletion("@cities")
     @CommandPermission("rccities.town.delete")
     public void delete(Player player, City city, @Optional String flags) {
 
@@ -148,6 +151,7 @@ public class TownCommands extends BaseCommand {
     }
 
     @Subcommand("upgrade|levelup")
+    @CommandCompletion("@cities")
     @CommandPermission("rccities.upgrades.process")
     public void upgrades(Player player, City city, @Optional String action) {
 
@@ -200,6 +204,7 @@ public class TownCommands extends BaseCommand {
     }
 
     @Subcommand("spawn|tp|warp")
+    @CommandCompletion("@cities")
     @CommandPermission("rccities.town.spwan")
     public void spawn(Player player, City city) {
 
@@ -221,6 +226,7 @@ public class TownCommands extends BaseCommand {
     }
 
     @Subcommand("setspwan")
+    @CommandCompletion("@cities")
     @CommandPermission("rccities.town.setspawn")
     public void setSpawn(Player player, City city) {
 
@@ -241,6 +247,7 @@ public class TownCommands extends BaseCommand {
     }
 
     @Subcommand("setdescription|setdesc")
+    @CommandCompletion("@cities")
     @CommandPermission("rccities.town.setdescription")
     public void setDescription(Player player, City city, String description) {
 
@@ -283,6 +290,7 @@ public class TownCommands extends BaseCommand {
     }
 
     @Subcommand("flag")
+    @CommandCompletion("@cities")
     @CommandPermission("rccities.town.flag")
     public void flag(Player player, City city, @Optional String flagName, @Optional String flagValue) {
 
@@ -315,6 +323,7 @@ public class TownCommands extends BaseCommand {
 
     @Subcommand("invite")
     @CommandPermission("rccities.town.invite")
+    @CommandCompletion("@cities")
     public void invite(Player player, City city, OfflinePlayer targetPlayer) {
 
         if(!targetPlayer.isOnline()) {
@@ -366,6 +375,7 @@ public class TownCommands extends BaseCommand {
     }
 
     @Subcommand("leave")
+    @CommandCompletion("@cities")
     @CommandPermission("rccities.town.leave")
     public void leave(Player player, City city, @Optional String flags) {
 
@@ -397,6 +407,7 @@ public class TownCommands extends BaseCommand {
     }
 
     @Subcommand("kick")
+    @CommandCompletion("@cities")
     @CommandPermission("rccities.town.kick")
     public void kick(Player player, City city, OfflinePlayer targetPlayer, @Optional String flags) {
 
