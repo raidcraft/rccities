@@ -91,25 +91,29 @@ public enum FlagType {
 
     public int convertToInteger(String value) {
 
-        int result = 0;
+        int result;
         try {
-            result = Integer.valueOf(value);
+            result = Integer.parseInt(value);
         } catch (NumberFormatException e) {
+            return 0;
         }
         return result;
     }
 
     public double convertToDouble(String value) {
 
-        double result = 0;
+        double result;
         try {
-            result = Double.valueOf(value);
+            result = Double.parseDouble(value);
         } catch (NumberFormatException e) {
+            return 0;
         }
         return result;
     }
 
     public double convertToMoney(String input) {
+
+        if(input == null) return 0;
 
         // lets parse the string for the different money values
         input = ChatColor.stripColor(input).replace("●", "");

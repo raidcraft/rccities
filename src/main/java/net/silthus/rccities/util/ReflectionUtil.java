@@ -117,7 +117,7 @@ public class ReflectionUtil {
     }
 
     /**
-     * {@link Type#toString()} value is the fully qualified class displayName prefixed
+     * Type value is the fully qualified class displayName prefixed
      * with {@link ReflectionUtil#TYPE_CLASS_NAME_PREFIX}. This method will substring it, for it to be eligible
      * for {@link Class#forName(String)}.
      *
@@ -226,8 +226,8 @@ public class ReflectionUtil {
      *                           following conditions is met:
      *                           <ul>
      *                           <li> invocation of
-     *                           {@link SecurityManager#checkMemberAccess
-     *                           s.checkMemberAccess(this, Member.PUBLIC)} denies
+     *                           SecurityManager#checkMemberAccess
+     *                           s.checkMemberAccess(this, Member.PUBLIC) denies
      *                           access to the constructor
      *                           <p>
      *                           <li> the caller's class loader is not the same as or an

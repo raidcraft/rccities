@@ -1,13 +1,10 @@
 package net.silthus.rccities;
 
+import co.aikar.commands.BukkitCommandExecutionContext;
+import co.aikar.commands.ConditionFailedException;
 import co.aikar.commands.InvalidCommandArgument;
 import com.google.common.base.Strings;
-import com.sk89q.worldedit.bukkit.BukkitPlayer;
-import com.sk89q.worldedit.bukkit.BukkitWorld;
-import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 import com.sk89q.worldguard.WorldGuard;
-import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
-import com.sk89q.worldguard.protection.regions.RegionContainer;
 import kr.entree.spigradle.annotations.PluginMain;
 import lombok.Getter;
 import net.milkbowl.vault.economy.Economy;
@@ -37,14 +34,10 @@ import net.silthus.rccities.rewards.SubtractMoneyReward;
 import net.silthus.rccities.tables.*;
 import net.silthus.rccities.upgrades.RCUpgrades;
 import net.silthus.rccities.upgrades.RequirementManager;
-import net.silthus.rccities.upgrades.api.reward.Reward;
 import net.silthus.rccities.upgrades.api.reward.RewardManager;
 import net.silthus.rccities.util.QueuedCommand;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.command.CommandException;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -112,7 +105,7 @@ public class RCCitiesPlugin extends JavaPlugin {
     @Override
     public void onEnable() {
 
-        if(isTesting()) {
+        if (isTesting()) {
             getLogger().info("RCCities is running in test mode!");
         }
 
@@ -203,7 +196,8 @@ public class RCCitiesPlugin extends JavaPlugin {
         }
         economy = rsp.getProvider();
 
-        RegisteredServiceProvider<Permission> registration = getServer().getServicesManager().getRegistration(Permission.class);
+        RegisteredServiceProvider<Permission> registration = getServer().getServicesManager()
+                .getRegistration(Permission.class);
         if (registration == null) {
             return false;
         }
@@ -214,11 +208,14 @@ public class RCCitiesPlugin extends JavaPlugin {
 
     private void loadConfig() {
 
+        //noinspection ResultOfMethodCallIgnored
         getDataFolder().mkdirs();
-        this.pluginConfig = new RCCitiesPluginConfig(new File(getDataFolder(), "config.yml").toPath());
+        this.pluginConfig = new RCCitiesPluginConfig(
+                new File(getDataFolder(), "config.yml").toPath());
         this.pluginConfig.loadAndSave();
 
-        this.upgradeConfiguration = YamlConfiguration.loadConfiguration(new File(getDataFolder(), "upgrades.yml"));
+        this.upgradeConfiguration = YamlConfiguration.loadConfiguration(
+                new File(getDataFolder(), "upgrades.yml"));
     }
 
     private void setupDatabase() {
@@ -284,40 +281,39 @@ public class RCCitiesPlugin extends JavaPlugin {
 
     private void registerOfflinePlayerContext(PaperCommandManager commandManager) {
 
-        commandManager.getCommandContexts().registerContext(OfflinePlayer.class, c -> {
+        commandManager.getCommandContexts().registerIssuerAwareContext(OfflinePlayer.class, c -> {
             String playerName = c.popFirstArg();
 
-            OfflinePlayer offlinePlayer;
-            if (Strings.isNullOrEmpty(playerName)) {
-                offlinePlayer = c.getPlayer();
+            if(Strings.isNullOrEmpty(playerName)) {
+                return c.getPlayer();
             } else {
-                offlinePlayer = Bukkit.getOfflinePlayer(playerName);
+                return Bukkit.getOfflinePlayer(playerName);
             }
-
-            return offlinePlayer;
         });
     }
 
     private void registerCityContext(PaperCommandManager commandManager) {
 
-        commandManager.getCommandContexts().registerContext(City.class, c -> {
+        commandManager.getCommandContexts().registerIssuerAwareContext(City.class, c -> {
             String cityName = c.popFirstArg();
 
             City city;
-            if (Strings.isNullOrEmpty(cityName)) {
+            if(Strings.isNullOrEmpty(cityName)) {
                 Plot plot = getPlotManager().getPlot(c.getPlayer().getLocation().getChunk());
                 if (plot == null) {
 
                     List<Resident> citizenships = getResidentManager().getCitizenships(c.getPlayer().getUniqueId());
-                    if(1 != citizenships.size()) {
-                        throw new InvalidCommandArgument("Hier befindet sich kein Plot oder du bist Einwohner in mehr als einer Stadt!");
+                    if (1 != citizenships.size()) {
+                        throw new InvalidCommandArgument(
+                                "Hier befindet sich keine Stadt oder du bist Einwohner in mehr als einer Stadt!");
                     }
                     city = citizenships.get(0).getCity();
                 } else {
                     city = plot.getCity();
                 }
                 if (city == null) {
-                    throw new InvalidCommandArgument("Es ist ein Fehler aufgetreten. Gebe den Stadtnamen direkt an!");
+                    throw new InvalidCommandArgument(
+                            "Es ist ein Fehler aufgetreten. Gebe den Stadtnamen direkt an!");
                 }
             } else {
                 city = getCityManager().getCity(cityName);
@@ -332,23 +328,23 @@ public class RCCitiesPlugin extends JavaPlugin {
 
     private void registerPlotContext(PaperCommandManager commandManager) {
 
-        commandManager.getCommandContexts().registerContext(Plot.class, c -> {
-            String plotId = c.popFirstArg();
+        commandManager.getCommandContexts().registerIssuerAwareContext(Plot.class, c -> {
+            String plotRegionName = c.popFirstArg();
 
             Plot plot;
-            if (Strings.isNullOrEmpty(plotId)) {
+            if(Strings.isNullOrEmpty(plotRegionName)) {
                 plot = getPlotManager().getPlot(c.getPlayer().getLocation().getChunk());
                 if (plot == null) {
-                    throw new InvalidCommandArgument("Hier befindet sich kein Plot!");
+                    throw new ConditionFailedException("Hier befindet sich kein Plot!");
                 }
             } else {
                 try {
-                    plot = getPlotManager().getPlot(UUID.fromString(plotId)); //TODO fix UUID stuff
-                } catch(IllegalArgumentException e) {
+                    plot = getPlotManager().getPlot(plotRegionName);
+                } catch (IllegalArgumentException e) {
                     plot = null;
                 }
                 if (plot == null) {
-                    throw new InvalidCommandArgument("Es gibt kein Plot mit dieser ID!");
+                    throw new InvalidCommandArgument("Es gibt kein Plot mit diesem Namen!");
                 }
             }
 
@@ -359,38 +355,13 @@ public class RCCitiesPlugin extends JavaPlugin {
     public final void queueCommand(final QueuedCommand command) {
 
         queuedCommands.put(command.getSender().getName(), command);
-        Bukkit.getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
-            @Override
-            public void run() {
-
-                queuedCommands.remove(command.getSender().getName());
-            }
-        }, 600L);
+        Bukkit.getScheduler().scheduleSyncDelayedTask(this, () ->
+                queuedCommands.remove(command.getSender().getName()), 600L);
         // 30 second remove delay
     }
 
     public final Map<String, QueuedCommand> getQueuedCommands() {
 
         return queuedCommands;
-    }
-
-    /**
-     * Send a message to a target without a prefix.
-     * @param target       The target to send the message to
-     * @param key          The key of the language string
-     * @param replacements The replacements to insert in the message
-     */
-    public void messageNoPrefix(Object target, String key, Object... replacements) {
-        Message.fromKey(key).replacements(replacements).send(target);
-    }
-
-    /**
-     * Send a message to a target, prefixed by the default chat prefix.
-     * @param target       The target to send the message to
-     * @param key          The key of the language string
-     * @param replacements The replacements to insert in the message
-     */
-    public void message(Object target, String key, Object... replacements) {
-        Message.fromKey(key).prefix().replacements(replacements).send(target);
     }
 }

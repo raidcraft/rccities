@@ -49,7 +49,9 @@ public class UpgradeManager {
 
         if(id == null) return;
         TUpgradeHolder tUpgradeHolder = TUpgradeHolder.find.byId(id);
-        tUpgradeHolder.delete();
+        if(tUpgradeHolder != null) {
+            tUpgradeHolder.delete();
+        }
     }
 
     private <O> void createDatabaseUpgradeInfo(UpgradeHolder<O> upgradeHolder) {

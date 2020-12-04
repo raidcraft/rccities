@@ -12,7 +12,7 @@ import net.silthus.rccities.util.RaidCraftException;
 @FlagInformation(
         name = "JOIN_COSTS",
         friendlyName = "Beitrittskosten",
-        type = FlagType.MONEY,
+        type = FlagType.DOUBLE,
         cooldown = 0
 )
 public class JoinCostsCityFlag extends AbstractCityFlag {

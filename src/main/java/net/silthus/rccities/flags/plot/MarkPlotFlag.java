@@ -45,14 +45,16 @@ public class MarkPlotFlag extends AbstractPlotFlag {
         if (currentValue) {
 
             Economy economy = RCCitiesPlugin.getPlugin().getEconomy();
-            if (economy.has(bankAccount, markCost)) {
-                throw new RaidCraftException("Es ist nicht genug Geld in der Stadtkasse! " + economy.format(markCost) + " benötigt!");
+            if (getPlot().getCity().hasEnoughMoney(markCost)) {
+                throw new RaidCraftException("Es ist nicht genug Geld in der Stadtkasse! "
+                        + economy.format(markCost) + " benötigt!");
             }
 
             // withdraw
-            economy.withdrawPlayer(bankAccount, markCost);
+            getPlot().getCity().withdrawMoney(markCost);
             RCCitiesPlugin.getPlugin().getResidentManager()
-                    .broadcastCityMessage(getPlot().getCity(), "Plot Markierung: " + economy.format(markCost) + ChatColor.GOLD + " abgezogen!");
+                    .broadcastCityMessage(getPlot().getCity(), "Plot Markierung: "
+                            + economy.format(markCost) + ChatColor.GOLD + " abgezogen!");
 
             //set torches
             Chunk chunk = getPlot().getLocation().getChunk();

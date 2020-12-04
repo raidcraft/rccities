@@ -1,6 +1,7 @@
 package net.silthus.rccities.api.city;
 
 import lombok.Getter;
+import net.milkbowl.vault.economy.EconomyResponse;
 import net.silthus.rccities.RCCitiesPlugin;
 import net.silthus.rccities.upgrades.api.holder.UpgradeHolder;
 import org.bukkit.Bukkit;
@@ -50,7 +51,24 @@ public abstract class AbstractCity implements City {
     @Override
     public String getBankAccountName() {
 
-        return "bank_account_city_" + name;
+        return "city_" + name.toLowerCase();
+    }
+
+    @Override
+    public boolean hasEnoughMoney(double amount) {
+        return RCCitiesPlugin.getPlugin().getEconomy().has(Bukkit.getOfflinePlayer(getBankAccountName()), amount);
+    }
+
+    @Override
+    public boolean withdrawMoney(double amount) {
+        return RCCitiesPlugin.getPlugin().getEconomy().withdrawPlayer(
+                Bukkit.getOfflinePlayer(getBankAccountName()), amount).type == EconomyResponse.ResponseType.SUCCESS;
+    }
+
+    @Override
+    public boolean depositMoney(double amount) {
+        return RCCitiesPlugin.getPlugin().getEconomy().depositPlayer(
+                Bukkit.getOfflinePlayer(getBankAccountName()), amount).type == EconomyResponse.ResponseType.SUCCESS;
     }
 
     @Override

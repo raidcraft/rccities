@@ -88,6 +88,7 @@ public class DatabasePlot extends AbstractPlot {
     @Override
     public void removeResident(Resident resident) {
 
+        if(resident == null) return;
         Resident removedResident = assignedResidents.remove(resident.getPlayerId());
         if (removedResident != null) {
             // delete assignment

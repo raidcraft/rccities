@@ -12,6 +12,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import java.util.*;
 
@@ -28,7 +29,7 @@ public class PlotManager {
         this.plugin = plugin;
     }
 
-    public void printPlotInfo(Plot plot, CommandIssuer sender) {
+    public void printPlotInfo(Plot plot, Player player) {
 
         String assignmentsList = "";
         int assignmentCount = 0;
@@ -38,11 +39,11 @@ public class PlotManager {
             assignmentCount++;
         }
 
-        sender.sendMessage("*********************************");
-        sender.sendMessage(ChatColor.GOLD + "Informationen zum Plot '" + ChatColor.YELLOW + plot.getRegionName() + ChatColor.GOLD + "'");
-        sender.sendMessage(ChatColor.GOLD + "Stadt: " + ChatColor.YELLOW + plot.getCity().getFriendlyName());
-        sender.sendMessage(ChatColor.GOLD + "Besitzer (" + assignmentCount + "): " + ChatColor.YELLOW + assignmentsList);
-        sender.sendMessage("*********************************");
+        player.sendMessage("*********************************");
+        player.sendMessage(ChatColor.GOLD + "Informationen zum Plot '" + ChatColor.YELLOW + plot.getRegionName() + ChatColor.GOLD + "'");
+        player.sendMessage(ChatColor.GOLD + "Stadt: " + ChatColor.YELLOW + plot.getCity().getFriendlyName());
+        player.sendMessage(ChatColor.GOLD + "Besitzer (" + assignmentCount + "): " + ChatColor.YELLOW + assignmentsList);
+        player.sendMessage("*********************************");
     }
 
     public List<Plot> getPlots(City city) {
@@ -83,13 +84,47 @@ public class PlotManager {
         return null;
     }
 
+    public Plot getPlot(String regionName) {
+
+        // Region name should be "city_chunkX_chunkZ"
+        String[] parts = regionName.split("_");
+        if(parts.length != 3) return null;
+
+        int chunkX = 0;
+        int chunkZ = 0;
+        try {
+            chunkX = Integer.parseInt(parts[1]);
+            chunkZ = Integer.parseInt(parts[2]);
+
+        } catch(NumberFormatException e) {
+            return null;
+        }
+
+        for (Plot plot : cachedPlots.values()) {
+            if (plot.getLocation().getChunk().getX() == chunkX
+                    && plot.getLocation().getChunk().getZ() == chunkZ) {
+                return plot;
+            }
+        }
+        TPlot tPlot = TPlot.find.query()
+                .where().eq("X", chunkX * 16 + 8).eq("Z", chunkZ * 16 + 8).findOne();
+        if (tPlot != null && Bukkit.getWorld(tPlot.getCity().getWorld()) != null) {
+            Plot plot = new DatabasePlot(tPlot);
+            cachedPlots.put(plot.getLocation(), plot);
+            return plot;
+        }
+        return null;
+    }
+
     public Plot getPlot(Chunk chunk) {
 
-        Location simpleLocation = new Location(chunk.getWorld(), chunk.getX() * 16 + 8, 0, chunk.getZ() * 16 + 8);
+        Location simpleLocation = new Location(chunk.getWorld(), chunk.getX() * 16 + 8, 0,
+                chunk.getZ() * 16 + 8);
         Plot plot = cachedPlots.get(simpleLocation);
 
         if (plot == null) {
-            TPlot tPlot = TPlot.find.query().where().eq("x", simpleLocation.getX()).eq("z", simpleLocation.getZ()).findOne();
+            TPlot tPlot = TPlot.find.query().where().eq("x", simpleLocation.getX())
+                    .eq("z", simpleLocation.getZ()).findOne();
             if (tPlot != null && Bukkit.getWorld(tPlot.getCity().getWorld()) != null) {
                 plot = new DatabasePlot(tPlot);
                 cachedPlots.put(plot.getLocation(), plot);

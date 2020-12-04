@@ -24,6 +24,12 @@ public interface City {
 
     String getBankAccountName();
 
+    boolean hasEnoughMoney(double amount);
+
+    boolean withdrawMoney(double amount);
+
+    boolean depositMoney(double amount);
+
     UUID getCreator();
 
     Timestamp getCreationDate();

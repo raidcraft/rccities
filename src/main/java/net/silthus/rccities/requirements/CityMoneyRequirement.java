@@ -29,7 +29,7 @@ public class CityMoneyRequirement extends AbstractRequirement<City> {
 
     public boolean test(City city) {
 
-        return economy.has(city.getBankAccountName(), config.getDouble("money"));
+        return city.hasEnoughMoney(config.getDouble("money"));
     }
 
     @Override

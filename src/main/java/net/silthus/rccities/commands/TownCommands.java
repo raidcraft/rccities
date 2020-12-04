@@ -2,6 +2,7 @@ package net.silthus.rccities.commands;
 
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.CommandIssuer;
+import co.aikar.commands.ConditionFailedException;
 import co.aikar.commands.InvalidCommandArgument;
 import co.aikar.commands.annotation.*;
 import com.google.common.base.Strings;
@@ -96,6 +97,16 @@ public class TownCommands extends BaseCommand {
     @Subcommand("create")
     @CommandPermission("rccities.town.create")
     public void create(Player player, String cityName) {
+
+        // Check if there is already an plot
+        if(plugin.getPlotManager().getPlot(player.getLocation().getChunk()) != null) {
+            throw new ConditionFailedException("An dieser Stelle befindet sich bereits eine Stadt Plot!");
+        }
+
+        // check if here is a wrong region
+        if (!plugin.getWorldGuardManager().claimable(player.getLocation())) {
+            throw new ConditionFailedException("An dieser Stelle befindet sich bereits eine andere Region!");
+        }
 
         City city;
         try {

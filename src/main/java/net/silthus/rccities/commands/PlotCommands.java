@@ -1,6 +1,7 @@
 package net.silthus.rccities.commands;
 
 import co.aikar.commands.BaseCommand;
+import co.aikar.commands.ConditionFailedException;
 import co.aikar.commands.InvalidCommandArgument;
 import co.aikar.commands.annotation.*;
 import com.google.common.base.Strings;
@@ -40,9 +41,9 @@ public class PlotCommands extends BaseCommand {
     @Default
     @Subcommand("info")
     @CommandPermission("rccities.plot.info")
-    public void info(Plot plot) {
+    public void info(Player player, Plot plot) {
 
-        plugin.getPlotManager().printPlotInfo(plot,  getCurrentCommandIssuer());
+        plugin.getPlotManager().printPlotInfo(plot, player);
     }
 
     @Subcommand("take")
@@ -53,7 +54,8 @@ public class PlotCommands extends BaseCommand {
 
         // check if resident has permission
         Resident resident = plugin.getResidentManager().getResident(player.getUniqueId(), city);
-        if (resident == null || !resident.getRole().hasPermission(RolePermission.PLOT_DISTRIBUTION)) {
+        if (!player.hasPermission("rccities.admin") &&
+                (resident == null || !resident.getRole().hasPermission(RolePermission.PLOT_DISTRIBUTION))) {
             throw new InvalidCommandArgument("Du hast in der Stadt '" + city.getFriendlyName()
                     + "' nicht die Berechtigung Plots zu entziehen!");
         }
@@ -79,18 +81,19 @@ public class PlotCommands extends BaseCommand {
 
     @Subcommand("give")
     @CommandPermission("rccities.plot.give")
-    public void give(Player player, Plot plot, String targetResidentName) {
+    public void give(Player player, Plot plot, String resident) {
 
         City city = plot.getCity();
 
         // check if resident has permission
-        Resident resident = plugin.getResidentManager().getResident(player.getUniqueId(), city);
-        if (resident == null || !resident.getRole().hasPermission(RolePermission.PLOT_DISTRIBUTION)) {
+        Resident residentObj = plugin.getResidentManager().getResident(player.getUniqueId(), city);
+        if (!player.hasPermission("rccities.admin") &&
+                (residentObj == null || !residentObj.getRole().hasPermission(RolePermission.PLOT_DISTRIBUTION))) {
             throw new InvalidCommandArgument("Du hast in der Stadt '" + city.getFriendlyName()
                     + "' nicht die Berechtigung Plots zu vergeben!");
         }
 
-        OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(targetResidentName);
+        OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(resident);
         Resident targetResident = plugin.getResidentManager().getResident(offlinePlayer.getUniqueId(), city);
         if (targetResident == null) {
             throw new InvalidCommandArgument("Der angegebene Spieler ist kein Mitglied deiner Stadt '"
@@ -114,9 +117,14 @@ public class PlotCommands extends BaseCommand {
     @CommandPermission("rccities.plot.claim")
     public void claim(Player player, @Optional String cityName, @Optional String flags) {
 
+        // Check if there is already an plot
+        if(plugin.getPlotManager().getPlot(player.getLocation().getChunk()) != null) {
+            throw new ConditionFailedException("An dieser Stelle befindet sich bereits eine Stadt Plot!");
+        }
+
         // check if here is a wrong region
         if (!plugin.getWorldGuardManager().claimable(player.getLocation())) {
-            throw new InvalidCommandArgument("An dieser Stelle befindet sich bereits eine andere Region!");
+            throw new ConditionFailedException("An dieser Stelle befindet sich bereits eine andere Region!");
         }
 
         // get neighbor plot and city
@@ -143,7 +151,7 @@ public class PlotCommands extends BaseCommand {
         for (Plot plot : neighborPlots) {
             if (plot == null) continue;
             if (city != null && !city.equals(plot.getCity())) {
-                throw new InvalidCommandArgument("Dieser Plot liegt zu dicht an einer anderen Stadt!");
+                throw new ConditionFailedException("Dieser Plot liegt zu dicht an einer anderen Stadt!");
             }
             city = plot.getCity();
         }
@@ -156,20 +164,20 @@ public class PlotCommands extends BaseCommand {
                 city = plugin.getCityManager().getCity(cityName);
             }
         } else if (city == null) {
-            throw new InvalidCommandArgument("Neue Plots müssen an bestehende anknüpfen!");
+            throw new ConditionFailedException("Neue Plots müssen an bestehende anknüpfen!");
         }
 
         // check if resident has permission
         Resident resident = plugin.getResidentManager().getResident(player.getUniqueId(), city);
         if (!player.hasPermission("rccities.admin") &&
                 (resident == null || !resident.getRole().hasPermission(RolePermission.PLOT_CLAIM))) {
-            throw new InvalidCommandArgument("Du hast in der Stadt '"
+            throw new ConditionFailedException("Du hast in der Stadt '"
                     + city.getFriendlyName() + "' nicht die Berechtigung Plots zu claimen!");
         }
 
         // check plot credit
         if (city.getPlotCredit() == 0) {
-            throw new InvalidCommandArgument("Deine Stadt hat keine freien Plots zum claimen!");
+            throw new ConditionFailedException("Deine Stadt hat keine freien Plots zum claimen!");
         }
 
         // check max radius
@@ -177,7 +185,7 @@ public class PlotCommands extends BaseCommand {
         Location fixedSpawn = city.getSpawn().clone();
         fixedSpawn.setY(0);
         if (fixedSpawn.distance(plotCenter) > city.getMaxRadius()) {
-            throw new InvalidCommandArgument("Deine Stadt darf nur im Umkreis von "
+            throw new ConditionFailedException("Deine Stadt darf nur im Umkreis von "
                     + city.getMaxRadius() + " Blöcken um den Stadtmittelpunkt claimen!");
         }
 
@@ -225,7 +233,7 @@ public class PlotCommands extends BaseCommand {
                 player.sendMessage(ChatColor.DARK_RED
                         + "Bei der Löschung des Plots wird die Landschaft NICHT zurückgesetzt!");
             }
-            if(flags.contains("a")) {
+            if(!Strings.isNullOrEmpty(flags) && flags.contains("a")) {
                 player.sendMessage(ChatColor.DARK_RED
                         + "Bist du sicher dass ALLE plots wiederhergestellt werden sollen?");
                 new QueuedCaptchaCommand(player, this, "unclaimAll", player, plot.getCity());

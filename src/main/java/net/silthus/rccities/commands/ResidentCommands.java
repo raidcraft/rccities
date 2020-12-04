@@ -53,7 +53,6 @@ public class ResidentCommands extends BaseCommand {
         Role newRole;
         Role oldRole;
 
-
         Resident resident = plugin.getResidentManager().getResident(player.getUniqueId(), city);
         if (!player.hasPermission("rccities.resident.promote.all")) {
             if (resident == null || !resident.getRole().hasPermission(RolePermission.KICK)) {

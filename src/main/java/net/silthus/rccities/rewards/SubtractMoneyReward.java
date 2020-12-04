@@ -29,7 +29,6 @@ public class SubtractMoneyReward extends AbstractReward<City> {
     @Override
     public void reward(City city) {
 
-        Economy economy = RCCitiesPlugin.getPlugin().getEconomy();
-        economy.withdrawPlayer(city.getBankAccountName(), amount);
+        city.withdrawMoney(amount);
     }
 }
