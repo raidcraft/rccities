@@ -48,9 +48,12 @@ Am einfachsten stellt man sich beim Ausführen der Befehle in die betroffene Sta
 ``/town deposit <Betrag>``
 ##### Geld aus Stadtkasse abheben
 ``/town withdraw <Betrag>``
+* Die Stadtkasse kann nicht negativ werden
 #### Plot
-##### Plots Zukaufen
-
+##### Plots kaufen
+```/plot buy <Anzahl>``
+* Der kauf muss bestätigt werden
+* Der Befehl kann auch genutzt werden um sich den Preis anzeigen zu lassen
 #### Einwohner
 ### Admins
 Admins können grundsätzlich bei den meisten Befehlen mit Hilfe der Flag ``-f`` am Ende des Befehls die Ausführung erzwingen, auch wenn sie keine Mitglieder der Stadt sind.
