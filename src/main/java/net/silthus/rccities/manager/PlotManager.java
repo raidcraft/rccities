@@ -139,7 +139,7 @@ public class PlotManager {
         RCCitiesPluginConfig config = plugin.getPluginConfig();
         double cost = 0;
         for(int i = 0; i < count; i++) {
-            cost += config.getNewPlotCost() + (config.getNewPlotCostPerOldPlot() * (city.getPlotCredit() + i));
+            cost += config.getNewPlotCost() + (config.getNewPlotCostPerOldPlot() * (city.getSize() + i));
         }
         return cost;
     }
