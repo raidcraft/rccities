@@ -6,6 +6,7 @@ import lombok.Setter;
 import net.milkbowl.vault.economy.Economy;
 import net.silthus.rccities.RCCitiesPlugin;
 import net.silthus.rccities.api.city.City;
+import net.silthus.rccities.api.plot.Plot;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -39,9 +40,24 @@ public abstract class AbstractResident implements Resident {
     }
 
     @Override
-    public void setRole(Role role) {
+    public void setRole(Role newRole) {
 
-        this.profession = role;
+        // set owner on all city plots
+        if (!profession.hasPermission(RolePermission.BUILD_EVERYWHERE)
+                && profession.hasPermission(RolePermission.BUILD_EVERYWHERE)) {
+            for (Plot plot : RCCitiesPlugin.getPlugin().getPlotManager().getPlots(city)) {
+                plot.updateRegion(false);
+            }
+        }
+        // remove owner from all city plots
+        if (profession.hasPermission(RolePermission.BUILD_EVERYWHERE)
+                && !newRole.hasPermission(RolePermission.BUILD_EVERYWHERE)) {
+            for (Plot plot : RCCitiesPlugin.getPlugin().getPlotManager().getPlots(city)) {
+                plot.updateRegion(false);
+            }
+        }
+
+        this.profession = newRole;
         save();
     }
 

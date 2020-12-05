@@ -12,7 +12,8 @@ import java.util.Set;
 public enum Role {
 
     SLAVE("Sklave", true, ChatColor.GRAY,
-            RolePermission.COLLECT_EXP
+            RolePermission.COLLECT_EXP,
+            RolePermission.DEPOSIT
     ),
 
     RESIDENT("Einwohner", false, ChatColor.GREEN,

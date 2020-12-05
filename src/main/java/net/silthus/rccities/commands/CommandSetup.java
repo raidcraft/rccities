@@ -48,12 +48,13 @@ public class CommandSetup {
 
         commandManager.getCommandContexts().registerContext(CommandFlag.class, c -> {
 
-            String flagName = c.popFirstArg();
+            String flagName = c.getFirstArg();
 
             if(Strings.isNullOrEmpty(flagName) || !flagName.startsWith("-")) {
                 return CommandFlag.EMPTY_FLAG;
             }
 
+            c.popFirstArg();
             return new CommandFlag(flagName);
         });
     }

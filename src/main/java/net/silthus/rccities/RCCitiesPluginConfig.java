@@ -19,9 +19,9 @@ public class RCCitiesPluginConfig extends BukkitYamlConfiguration {
     private List<String> ignoredRegions = new ArrayList<>();
     private int defaultTownRadius = 64;
     private int initialPlotCredit = 3;
-    private double flagPlotMarkCost = 0.01;
+    private double flagPlotMarkCost = 20.0;
     private String cityUpgradeHolder = "cit-upgrade-holder";
-    private double joinCosts = 100.;
+    private double joinCosts = 100.0;
 
     @Comment("Cooldown between a city can make requests to process their upgrade to a higher level")
     private int upgradeRequestCooldown = 5 * 24 * 60;// 5 days in minutes

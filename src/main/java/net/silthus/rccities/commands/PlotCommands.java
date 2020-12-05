@@ -54,10 +54,7 @@ public class PlotCommands extends BaseCommand {
         City city = plot.getCity();
         Resident resident = plugin.getResidentManager().getResident(player.getUniqueId(), city);
 
-        // check if resident has permission
-        if(!CommandHelper.hasRolePermissions(player, city, RolePermission.PLOT_DISTRIBUTION)) {
-            throw new InvalidCommandArgument("Du hast in der Stadt nicht die Berechtigung Plots zu entziehen!");
-        }
+        CommandHelper.checkRolePermissions(player, city, RolePermission.PLOT_DISTRIBUTION);
 
         OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(targetResidentName);
         Resident targetResident = plugin.getResidentManager().getResident(offlinePlayer.getUniqueId(), city);
@@ -85,10 +82,7 @@ public class PlotCommands extends BaseCommand {
         City city = plot.getCity();
         Resident residentObj = plugin.getResidentManager().getResident(player.getUniqueId(), city);
 
-        // check if resident has permission
-        if(!CommandHelper.hasRolePermissions(player, city, RolePermission.PLOT_DISTRIBUTION)) {
-            throw new InvalidCommandArgument("Du hast in der Stadt nicht die Berechtigung Plots zu vergeben!");
-        }
+        CommandHelper.checkRolePermissions(player, city, RolePermission.PLOT_DISTRIBUTION);
 
         Resident targetResident = plugin.getResidentManager().getResident(resident, city);
         if (targetResident == null) {
@@ -163,10 +157,7 @@ public class PlotCommands extends BaseCommand {
             throw new ConditionFailedException("Neue Plots müssen an bestehende anknüpfen!");
         }
 
-        // check if resident has permission
-        if(!CommandHelper.hasRolePermissions(player, city, RolePermission.PLOT_CLAIM)) {
-            throw new InvalidCommandArgument("Du hast in der Stadt nicht die Berechtigung Plots zu Claimen!");
-        }
+        CommandHelper.checkRolePermissions(player, city, RolePermission.PLOT_CLAIM);
 
         // check plot credit
         if (city.getPlotCredit() == 0) {
@@ -265,10 +256,7 @@ public class PlotCommands extends BaseCommand {
 
         City city = plot.getCity();
 
-        // check if resident has permission
-        if(!CommandHelper.hasRolePermissions(player, city, RolePermission.PLOT_FLAG_MODIFICATION)) {
-            throw new InvalidCommandArgument("Du hast in der Stadt nicht die Berechtigung Plots zu Konfigurieren!");
-        }
+        CommandHelper.checkRolePermissions(player, city, RolePermission.PLOT_FLAG_MODIFICATION);
 
         try {
             plot.setFlag(player, flagName, flagValue);
@@ -287,10 +275,7 @@ public class PlotCommands extends BaseCommand {
 
         City city = plot.getCity();
 
-        // check if resident has permission
-        if(!CommandHelper.hasRolePermissions(player, city, RolePermission.PLOT_FLAG_MODIFICATION)) {
-            throw new InvalidCommandArgument("Du hast in der Stadt nicht die Berechtigung Plots zu Konfigurieren!");
-        }
+        CommandHelper.checkRolePermissions(player, city, RolePermission.PLOT_FLAG_MODIFICATION);
 
         try {
             plot.setFlag(player, "MARK", "ON");
@@ -306,10 +291,7 @@ public class PlotCommands extends BaseCommand {
 
         City city = plot.getCity();
 
-        // check if resident has permission
-        if(!CommandHelper.hasRolePermissions(player, city, RolePermission.PLOT_FLAG_MODIFICATION)) {
-            throw new InvalidCommandArgument("Du hast in der Stadt nicht die Berechtigung Plots zu Konfigurieren!");
-        }
+        CommandHelper.checkRolePermissions(player, city, RolePermission.PLOT_FLAG_MODIFICATION);
 
         try {
             plot.setFlag(player, "MARK", "OFF");

@@ -1,6 +1,7 @@
 package net.silthus.rccities.commands;
 
 import co.aikar.commands.BaseCommand;
+import co.aikar.commands.ConditionFailedException;
 import co.aikar.commands.InvalidCommandArgument;
 import co.aikar.commands.annotation.*;
 import com.google.common.base.Strings;
@@ -52,11 +53,8 @@ public class ResidentCommands extends BaseCommand {
     public void setRole(Player player, OfflinePlayer residentPlayer, City city, String roleName, CommandFlag flags) {
 
         Role newRole;
-        Role oldRole;
 
-        if(!CommandHelper.hasRolePermissions(player, city, RolePermission.PROMOTE)) {
-            throw new InvalidCommandArgument("Du hast in der Stadt nicht die Berechtigung Berufe zu verteilen!");
-        }
+        CommandHelper.checkRolePermissions(player, city, RolePermission.PROMOTE);
 
         try {
             newRole = Role.valueOf(roleName.toUpperCase());
@@ -64,42 +62,68 @@ public class ResidentCommands extends BaseCommand {
             throw new InvalidCommandArgument("Es gibt keinen Beruf mit diesem Namen. Verfügbare Berufe: "
                     + Arrays.toString(Role.values()));
         }
-        if (newRole.isAdminOnly() && !player.hasPermission("rccities.resident.promote.all")) {
-            throw new InvalidCommandArgument("Dieser Beruf kann nur von Administratoren vergeben werden!");
+
+        setResidentRole(player, residentPlayer, city, flags, newRole);
+    }
+
+    @Subcommand("setmayor")
+    @CommandCompletion("@cities")
+    @CommandPermission(CityPermissions.GROUP_USER + ".resident.promote")
+    public void setMayor(Player player, OfflinePlayer residentPlayer, City city, CommandFlag flags) {
+
+        setResidentRole(player, residentPlayer, city, flags, Role.MAYOR);
+    }
+
+    @Subcommand("setresident")
+    @CommandCompletion("@cities")
+    @CommandPermission(CityPermissions.GROUP_USER + ".resident.promote")
+    public void setResident(Player player, OfflinePlayer residentPlayer, City city, CommandFlag flags) {
+
+        setResidentRole(player, residentPlayer, city, flags, Role.RESIDENT);
+    }
+
+    @Subcommand("setvicemayor")
+    @CommandCompletion("@cities")
+    @CommandPermission(CityPermissions.GROUP_USER + ".resident.promote")
+    public void setViceMayor(Player player, OfflinePlayer residentPlayer, City city, CommandFlag flags) {
+
+        setResidentRole(player, residentPlayer, city, flags, Role.VICE_MAYOR);
+    }
+
+    @Subcommand("setassistant")
+    @CommandCompletion("@cities")
+    @CommandPermission(CityPermissions.GROUP_USER + ".resident.promote")
+    public void setAssistant(Player player, OfflinePlayer residentPlayer, City city, CommandFlag flags) {
+
+        setResidentRole(player, residentPlayer, city, flags, Role.ASSISTANT);
+    }
+
+    @Subcommand("setslave")
+    @CommandCompletion("@cities")
+    @CommandPermission(CityPermissions.GROUP_USER + ".resident.promote")
+    public void setSlave(Player player, OfflinePlayer residentPlayer, City city, CommandFlag flags) {
+
+        setResidentRole(player, residentPlayer, city, flags, Role.SLAVE);
+    }
+
+    private void setResidentRole(Player player, OfflinePlayer residentPlayer, City city, CommandFlag flags, Role role)
+        throws ConditionFailedException {
+
+        CommandHelper.checkRolePermissions(player, city, RolePermission.PROMOTE);
+
+        if (role.isAdminOnly() && !player.hasPermission(CityPermissions.GROUP_ADMIN)) {
+            throw new ConditionFailedException("Dieser Beruf kann nur von Administratoren vergeben werden!");
         }
 
-        Resident targetResident = plugin.getResidentManager().getResident(residentPlayer.getUniqueId(), city);
-        if (targetResident == null) {
-            if (flags.hasAdminFlag(player, 'f')) {
-                try {
-                    targetResident = plugin.getResidentManager().addResident(city, residentPlayer);
-                    targetResident.setRole(Role.RESIDENT);
-                } catch (RaidCraftException e) {
-                    throw new InvalidCommandArgument(e.getMessage());
-                }
-            } else {
-                throw new InvalidCommandArgument("In dieser Stadt gibt es kein Mitglied mit dem Namen '" + residentPlayer.getName() + "'");
-            }
-        }
-        oldRole = targetResident.getRole();
+        Resident targetResident = CommandHelper.getResident(residentPlayer, city, flags.hasAdminFlag(player, 'f'));
 
-        if (oldRole.isAdminOnly() && !player.hasPermission("rccities.resident.promote.all")) {
-            throw new InvalidCommandArgument("Der jetzige Beruf des Spielers kann nur von Administratoren geändert werden!");
+        if (targetResident.getRole().isAdminOnly() && !player.hasPermission(CityPermissions.GROUP_ADMIN)) {
+            throw new ConditionFailedException("Der jetzige Beruf des Spielers kann nur von Administratoren geändert werden!");
         }
 
-        targetResident.setRole(newRole);
-        // set owner on all city plots
-        if (!oldRole.hasPermission(RolePermission.BUILD_EVERYWHERE) && newRole.hasPermission(RolePermission.BUILD_EVERYWHERE)) {
-            for (Plot plot : plugin.getPlotManager().getPlots(city)) {
-                plot.updateRegion(false);
-            }
-        }
-        // remove owner from all city plots
-        if (oldRole.hasPermission(RolePermission.BUILD_EVERYWHERE) && !newRole.hasPermission(RolePermission.BUILD_EVERYWHERE)) {
-            for (Plot plot : plugin.getPlotManager().getPlots(city)) {
-                plot.updateRegion(false);
-            }
-        }
-        Bukkit.broadcastMessage(ChatColor.GOLD + targetResident.getName() + " ist nun " + newRole.getFriendlyName() + " der Stadt '" + city.getFriendlyName() + "'!");
+        targetResident.setRole(Role.MAYOR);
+
+        Bukkit.broadcastMessage(ChatColor.GOLD + targetResident.getName() + " ist nun "
+                + role.getFriendlyName() + " der Stadt '" + city.getFriendlyName() + "'!");
     }
 }

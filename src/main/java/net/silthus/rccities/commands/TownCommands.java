@@ -221,9 +221,7 @@ public class TownCommands extends BaseCommand {
     @CommandPermission(CityPermissions.GROUP_USER + ".town.spawn")
     public void spawn(Player player, City city) {
 
-        if(!CommandHelper.hasRolePermissions(player, city, RolePermission.SPAWN_TELEPORT)) {
-            throw new InvalidCommandArgument("Du darfst dich nicht zum Spawn der Stadt teleportieren!");
-        }
+        CommandHelper.checkRolePermissions(player, city, RolePermission.SPAWN_TELEPORT);
 
         if (!city.getSpawn().getWorld().equals(player.getWorld())) {
             throw new InvalidCommandArgument("Du befindest dich auf der falschen Welt!");
@@ -238,9 +236,7 @@ public class TownCommands extends BaseCommand {
     @CommandPermission(CityPermissions.GROUP_USER + ".town.setspawn")
     public void setSpawn(Player player, City city) {
 
-        if(!CommandHelper.hasRolePermissions(player, city, RolePermission.SET_SPAWN)) {
-            throw new InvalidCommandArgument("Du darfst den Spawn der Stadt nicht neu setzen!");
-        }
+        CommandHelper.checkRolePermissions(player, city, RolePermission.SET_SPAWN);
 
         if (!city.getSpawn().getWorld().equals(player.getWorld())) {
             throw new InvalidCommandArgument("Der Spawn muss sich auf der selben Welt wie die Stadt befinden!");
@@ -255,9 +251,7 @@ public class TownCommands extends BaseCommand {
     @CommandPermission(CityPermissions.GROUP_USER + ".town.setdesc")
     public void setDescription(Player player, City city, String description) {
 
-        if(!CommandHelper.hasRolePermissions(player, city, RolePermission.SET_DESCRIPTION)) {
-            throw new InvalidCommandArgument("Du darfst die Beschreibung der Stadt nicht ändern!");
-        }
+        CommandHelper.checkRolePermissions(player, city, RolePermission.SET_DESCRIPTION);
 
         city.setDescription(description);
         player.sendMessage(ChatColor.GREEN + "Du hast die Beschreibung der Stadt geändert!");
@@ -301,9 +295,7 @@ public class TownCommands extends BaseCommand {
             throw new InvalidCommandArgument("Verfügbare Flags: " + flagList);
         }
 
-        if(!CommandHelper.hasRolePermissions(player, city, RolePermission.CITY_FLAG_MODIFICATION)) {
-            throw new InvalidCommandArgument("Du darfst in der Stadt keine Flags ändern!");
-        }
+        CommandHelper.checkRolePermissions(player, city, RolePermission.CITY_FLAG_MODIFICATION);
 
         try {
             city.setFlag(player, flagName, flagValue);
@@ -325,9 +317,7 @@ public class TownCommands extends BaseCommand {
             throw new InvalidCommandArgument("Der gewählte Spieler muss online sein!");
         }
 
-        if(!CommandHelper.hasRolePermissions(player, city, RolePermission.INVITE)) {
-            throw new InvalidCommandArgument("Du darfst in der Stadt keine neuen Bürger einladen!");
-        }
+        CommandHelper.checkRolePermissions(player, city, RolePermission.INVITE);
 
         if (player.getName().equalsIgnoreCase(targetPlayer.getName())) {
             throw new InvalidCommandArgument("Du kannst dich nicht selbst in die Stadt einladen!");
@@ -370,9 +360,7 @@ public class TownCommands extends BaseCommand {
     @CommandPermission(CityPermissions.GROUP_USER + ".town.leave")
     public void leave(Player player, City city, CommandFlag flags) {
 
-        if(!CommandHelper.hasRolePermissions(player, city, RolePermission.LEAVE)) {
-            throw new InvalidCommandArgument("Du darfst die Stadt nicht verlassen!");
-        }
+        CommandHelper.checkRolePermissions(player, city, RolePermission.LEAVE);
 
         Resident resident = plugin.getResidentManager().getResident(player.getUniqueId(), city);
         if (resident == null) {
@@ -395,9 +383,7 @@ public class TownCommands extends BaseCommand {
     @CommandPermission(CityPermissions.GROUP_USER + ".town.kick")
     public void kick(Player player, City city, OfflinePlayer targetPlayer, CommandFlag flags) {
 
-        if(!CommandHelper.hasRolePermissions(player, city, RolePermission.KICK)) {
-            throw new InvalidCommandArgument("Du darfst keine Einwohner aus der Stadt werfen!");
-        }
+        CommandHelper.checkRolePermissions(player, city, RolePermission.KICK);
 
         if (!flags.hasAdminFlag(player,'f') && player.getName().equalsIgnoreCase(targetPlayer.getName())) {
             throw new InvalidCommandArgument("Du kannst dich nicht selbst aus der Stadt werfen!");
@@ -453,9 +439,7 @@ public class TownCommands extends BaseCommand {
             throw new InvalidCommandArgument("Nur Einwohner können Geld in die Stadtkasse einzahlen!");
         }
 
-        if(!CommandHelper.hasRolePermissions(player, city, RolePermission.DEPOSIT)) {
-            throw new InvalidCommandArgument("Du hast keine Rechte um Geld in die Stadtkasse einzuzahlen!");
-        }
+        CommandHelper.checkRolePermissions(player, city, RolePermission.DEPOSIT);
 
         resident.depositCity(amount);
 
@@ -479,9 +463,7 @@ public class TownCommands extends BaseCommand {
             throw new InvalidCommandArgument("Nur Einwohner können Geld aus der Stadtkasse nehmen!");
         }
 
-        if(!CommandHelper.hasRolePermissions(player, city, RolePermission.WITHDRAW)) {
-            throw new InvalidCommandArgument("Du hast keine Rechte um Geld aus der Stadtkasse zu nehmen!");
-        }
+        CommandHelper.checkRolePermissions(player, city, RolePermission.WITHDRAW);
 
         resident.withdrawCity(amount);
 
