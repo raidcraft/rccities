@@ -50,8 +50,13 @@ Am einfachsten stellt man sich beim Ausführen der Befehle in die betroffene Sta
 ``/town withdraw <Betrag>``
 * Die Stadtkasse kann nicht negativ werden
 #### Plot
-##### Plots kaufen
-```/plot buy <Anzahl>``
+##### Claimen
+``/plot claim``
+* Plots müssen aneinandern anknüpfen
+* Es darf keine andere Region an der Stelle existieren
+* Zwischen Städten muss mindestens ein Plot Abstand sein
+##### Kaufen
+``/plot buy <Anzahl>``
 * Der kauf muss bestätigt werden
 * Der Befehl kann auch genutzt werden um sich den Preis anzeigen zu lassen
 #### Einwohner
@@ -69,4 +74,7 @@ Hierfür muss nur der Bürgermeister ernannt werden:
 ``/town delete <Stadtname>``
 * Das Löschen der Stadt muss nochmals bestätigt werden.
 #### Plot
+##### Unlcaim
+``/plot unlcaim [-ra]``
+* ``-r`` Stellt den Ursprungszustand des Plots vor dem Claimen her (Chunk wird ersetzt)
 #### Einwohner
