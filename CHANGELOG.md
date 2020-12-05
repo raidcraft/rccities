@@ -1,3 +1,21 @@
+# [1.3.0](https://github.com/raidcraft/rccities/compare/v1.2.0...v1.3.0) (2020-12-04)
+
+
+### Bug Fixes
+
+* Fix DB migration files. Fix Plot Mark flag. ([cc72aae](https://github.com/raidcraft/rccities/commit/cc72aae1f211fd04fb14aa73ee02861971feae80))
+* Fix Plot Mark command ([587b689](https://github.com/raidcraft/rccities/commit/587b6891afeaf267134b0aeb648e1c4280ff8864))
+* Fix some NPEs ([6d98cf1](https://github.com/raidcraft/rccities/commit/6d98cf1ee3a90e4d5ad5b924d6ee18f96500403d))
+* More essential fixed ([fd622c2](https://github.com/raidcraft/rccities/commit/fd622c2a2d6275df8accb0f98da99808ef7ec490))
+
+
+### Features
+
+* Add dedicate commands to mark/unmark plots, fix NPEs ([f1a4f5f](https://github.com/raidcraft/rccities/commit/f1a4f5ffadf47e851959d236a62f699d4b3649ba))
+* Add deposit and withdraw resident commands ([a862d15](https://github.com/raidcraft/rccities/commit/a862d151bd95205812fc125a829a925d44d5d539))
+* Add money integration ([0ab9b5b](https://github.com/raidcraft/rccities/commit/0ab9b5bb1f882eec6b6888878a74cec4cb1a003d))
+* Fix commands ([7170037](https://github.com/raidcraft/rccities/commit/7170037bc1b540fa3f0b1313f16e0195f9fe7e8a))
+
 # [1.2.0](https://github.com/raidcraft/rccities/compare/v1.1.0...v1.2.0) (2020-12-02)
 
 
