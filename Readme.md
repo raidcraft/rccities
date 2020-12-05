@@ -42,8 +42,15 @@ Jede Stadt hat ein Guthaben an Plots, diese können von (Vize-) Bürgermeister a
 ## <a name="commands"></a>Befehle
 Die Verwaltung von Städten ist mit Hilfe von Chat-Befehlen möglich.
 ### <a name="commands-user"></a>Spieler
+Am einfachsten stellt man sich beim Ausführen der Befehle in die betroffene Stadt oder Plot. Alternativ kann man die Stadt oder den Plot auch manuell als Paramter mit angeben.
 #### Stadt
+##### Geld in Stadtkasse einzahlen
+``/town deposit <Betrag>``
+##### Geld aus Stadtkasse abheben
+``/town withdraw <Betrag>``
 #### Plot
+##### Plots Zukaufen
+
 #### Einwohner
 ### Admins
 Admins können grundsätzlich bei den meisten Befehlen mit Hilfe der Flag ``-f`` am Ende des Befehls die Ausführung erzwingen, auch wenn sie keine Mitglieder der Stadt sind.
@@ -52,8 +59,11 @@ Admins können grundsätzlich bei den meisten Befehlen mit Hilfe der Flag ``-f``
 ``/town create <Stadtname>``
 * Stadtnamen sollten keine Leerzeichen enthalten
 * Zum Beispiel: NewEden, NewRaidCity, Wallenstein
+##### Neue Stadt den Spielern übergeben
+Hierfür muss nur der Bürgermeister ernannt werden:
+``/town setmayor <Stadtname> <Spielername> -f``
 ##### Stadt Löschen
 ``/town delete <Stadtname>``
-Das Löschen der Stadt muss nochmals bestätigt werden.
+* Das Löschen der Stadt muss nochmals bestätigt werden.
 #### Plot
 #### Einwohner
