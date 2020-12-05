@@ -191,6 +191,13 @@ public class PlotCommands extends BaseCommand {
             throw new InvalidCommandArgument(e.getMessage());
         }
 
+        // Mark plot
+        try {
+            plot.setFlag(player, "MARK_FREE", "ON");
+        } catch (RaidCraftException e) {
+            throw new InvalidCommandArgument(e.getMessage());
+        }
+
         // withdraw plot credit
         city.setPlotCredit(city.getPlotCredit() - 1);
 

@@ -26,7 +26,7 @@ import org.bukkit.block.Block;
         cooldown = 5,
         needsRefresh = false
 )
-public class MarkPlotFlag extends AbstractPlotFlag {
+public class MarkPlotFlag extends MarkPlotBaseFlag {
 
     public MarkPlotFlag(Plot plot) {
 
@@ -45,8 +45,7 @@ public class MarkPlotFlag extends AbstractPlotFlag {
 
             Economy economy = RCCitiesPlugin.getPlugin().getEconomy();
             if (!getPlot().getCity().hasMoney(markCost)) {
-                throw new RaidCraftException("Es ist nicht genug Geld in der Stadtkasse! "
-                        + economy.format(markCost) + " benötigt!");
+                throw new RaidCraftException("Es ist nicht genug Geld in der Stadtkasse!");
             }
 
             // withdraw
@@ -54,89 +53,8 @@ public class MarkPlotFlag extends AbstractPlotFlag {
             RCCitiesPlugin.getPlugin().getResidentManager()
                     .broadcastCityMessage(getPlot().getCity(), "Plot Markierung: "
                             + economy.format(markCost) + ChatColor.GOLD + " abgezogen!");
-
-            //set torches
-            Chunk chunk = getPlot().getLocation().getChunk();
-            ChunkSnapshot chunkSnapshot = chunk.getChunkSnapshot();
-            Block block;
-            int i;
-
-            //EAST
-            for (i = 0; i < 16; i++) {
-                block = chunk.getBlock(i, chunkSnapshot.getHighestBlockYAt(i, 0), 0);
-                setTorch(block);
-            }
-
-            //WEST
-            for (i = 0; i < 16; i++) {
-                block = chunk.getBlock(i, chunkSnapshot.getHighestBlockYAt(i, 15), 15);
-                setTorch(block);
-            }
-
-            //NORTH
-            for (i = 0; i < 16; i++) {
-                block = chunk.getBlock(0, chunkSnapshot.getHighestBlockYAt(0, i), i);
-                setTorch(block);
-            }
-
-            //SOUTH
-            for (i = 0; i < 16; i++) {
-                block = chunk.getBlock(15, chunkSnapshot.getHighestBlockYAt(15, i), i);
-                setTorch(block);
-            }
-        } else {
-
-            //remove torches
-            Chunk chunk = getPlot().getLocation().getChunk();
-            ChunkSnapshot chunkSnapshot = chunk.getChunkSnapshot();
-            Block block;
-            int i;
-
-            //EAST
-            for (i = 0; i < 16; i++) {
-                block = chunk.getBlock(i, chunkSnapshot.getHighestBlockYAt(i, 0), 0);
-                removeTorch(block);
-            }
-
-            //WEST
-            for (i = 0; i < 16; i++) {
-                block = chunk.getBlock(i, chunkSnapshot.getHighestBlockYAt(i, 15), 15);
-                removeTorch(block);
-            }
-
-            //NORTH
-            for (i = 0; i < 16; i++) {
-                block = chunk.getBlock(0, chunkSnapshot.getHighestBlockYAt(0, i), i);
-                removeTorch(block);
-            }
-
-            //SOUTH
-            for (i = 0; i < 16; i++) {
-                block = chunk.getBlock(15, chunkSnapshot.getHighestBlockYAt(15, i), i);
-                removeTorch(block);
-            }
         }
-    }
 
-    private void setTorch(Block block) {
-
-        Block belowBlock = block.getRelative(0, -1, 0);
-
-        if (block.getType() != Material.AIR || !isTorchBlock(belowBlock)) return;
-
-        block.setType(Material.TORCH);
-    }
-
-    private void removeTorch(Block block) {
-
-        if (block.getType() != Material.TORCH) return;
-        block.setType(Material.AIR);
-    }
-
-    private boolean isTorchBlock(Block block) {
-
-        Material material = block.getType();
-
-        return material.isSolid() && material.isBlock();
+        super.refresh();
     }
 }
