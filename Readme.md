@@ -68,10 +68,12 @@ Admins können grundsätzlich bei den meisten Befehlen mit Hilfe der Flag ``-f``
 * Stadtnamen sollten keine Leerzeichen enthalten
 * Zum Beispiel: NewEden, NewRaidCity, Wallenstein
 ##### Neue Stadt den Spielern übergeben
-Hierfür muss nur der Bürgermeister ernannt werden:
+Hierfür muss nur der Bürgermeister ernannt werden:. 
 ``/town setmayor <Stadtname> <Spielername> -f``
 ##### Stadt Löschen
-Vor dem Löschen der Stadt sollten evtl. alle Plots Unclaimed werden um den Ursprungszustand wieder herzustellen. 
+Vor dem Löschen der Stadt sollten evtl. alle Plots Unclaimed werden um den Ursprungszustand wieder herzustellen:. 
+``/Plot unclaim -af``. 
+Ansonsten wird die Stadt selbst folgendermaßen gelöscht:. 
 ``/town delete <Stadtname>``
 * Das Löschen der Stadt muss nochmals bestätigt werden.
 #### Plot
