@@ -71,10 +71,12 @@ Admins können grundsätzlich bei den meisten Befehlen mit Hilfe der Flag ``-f``
 Hierfür muss nur der Bürgermeister ernannt werden:
 ``/town setmayor <Stadtname> <Spielername> -f``
 ##### Stadt Löschen
+Vor dem Löschen der Stadt sollten evtl. alle Plots Unclaimed werden um den Ursprungszustand wieder herzustellen. 
 ``/town delete <Stadtname>``
 * Das Löschen der Stadt muss nochmals bestätigt werden.
 #### Plot
 ##### Unlcaim
 ``/plot unlcaim [-ra]``
-* ``-r`` Stellt den Ursprungszustand des Plots vor dem Claimen her (Chunk wird ersetzt)
+* ``-r`` Stellt den Ursprungszustand des Plots vor dem Claimen her (Chunk wird mit Backup Schematic ersetzt)
+* ``-a`` Unclaimed ALLE Plots der Stadt
 #### Einwohner
