@@ -59,7 +59,7 @@ public class ResidentCommands extends BaseCommand {
         try {
             newRole = Role.valueOf(roleName.toUpperCase());
         } catch (IllegalArgumentException e) {
-            throw new InvalidCommandArgument("Es gibt keinen Beruf mit diesem Namen. Verfügbare Berufe: "
+            throw new ConditionFailedException("Es gibt keinen Beruf mit diesem Namen. Verfügbare Berufe: "
                     + Arrays.toString(Role.values()));
         }
 

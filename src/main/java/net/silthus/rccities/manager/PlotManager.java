@@ -3,6 +3,7 @@ package net.silthus.rccities.manager;
 import co.aikar.commands.CommandIssuer;
 import net.silthus.rccities.DatabasePlot;
 import net.silthus.rccities.RCCitiesPlugin;
+import net.silthus.rccities.RCCitiesPluginConfig;
 import net.silthus.rccities.api.city.City;
 import net.silthus.rccities.api.plot.Plot;
 import net.silthus.rccities.api.resident.Resident;
@@ -131,6 +132,16 @@ public class PlotManager {
             }
         }
         return plot;
+    }
+
+    public double getNewPlotCosts(City city, int count) {
+
+        RCCitiesPluginConfig config = plugin.getPluginConfig();
+        double cost = 0;
+        for(int i = 0; i < count; i++) {
+            cost += config.getNewPlotCost() + (config.getNewPlotCostPerOldPlot() * (city.getPlotCredit() + i));
+        }
+        return cost;
     }
 
     public void clearCache() {

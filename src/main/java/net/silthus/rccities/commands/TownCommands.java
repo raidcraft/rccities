@@ -170,7 +170,7 @@ public class TownCommands extends BaseCommand {
 
         List<UpgradeRequest> upgradeRequests = plugin.getUpgradeRequestManager().getOpenRequests(city);
         if (upgradeRequests.size() == 0) {
-            throw new InvalidCommandArgument("Für diese Stadt liegen keine Upgrade-Anträge vor!");
+            throw new ConditionFailedException("Für diese Stadt liegen keine Upgrade-Anträge vor!");
         }
         // only process first entry
         UpgradeRequest upgradeRequest = upgradeRequests.get(0);
@@ -192,7 +192,7 @@ public class TownCommands extends BaseCommand {
             if (action.startsWith("reject")) {
                 String reason = action.substring("reject".length()).trim();
                 if (Strings.isNullOrEmpty(reason)) {
-                    throw new InvalidCommandArgument("Gib bitte noch einen Grund als weiteren Parameter an!");
+                    throw new ConditionFailedException("Gib bitte noch einen Grund als weiteren Parameter an!");
                 }
                 upgradeRequest.reject(reason);
                 player.sendMessage(ChatColor.GREEN + " Du hast den Upgrade-Antrag von '" + city.getFriendlyName()
@@ -224,7 +224,7 @@ public class TownCommands extends BaseCommand {
         CommandHelper.checkRolePermissions(player, city, RolePermission.SPAWN_TELEPORT);
 
         if (!city.getSpawn().getWorld().equals(player.getWorld())) {
-            throw new InvalidCommandArgument("Du befindest dich auf der falschen Welt!");
+            throw new ConditionFailedException("Du befindest dich auf der falschen Welt!");
         }
 
         player.teleport(city.getSpawn());
@@ -239,7 +239,7 @@ public class TownCommands extends BaseCommand {
         CommandHelper.checkRolePermissions(player, city, RolePermission.SET_SPAWN);
 
         if (!city.getSpawn().getWorld().equals(player.getWorld())) {
-            throw new InvalidCommandArgument("Der Spawn muss sich auf der selben Welt wie die Stadt befinden!");
+            throw new ConditionFailedException("Der Spawn muss sich auf der selben Welt wie die Stadt befinden!");
         }
 
         city.setSpawn(player.getLocation());
@@ -314,19 +314,19 @@ public class TownCommands extends BaseCommand {
     public void invite(Player player, City city, OfflinePlayer targetPlayer) {
 
         if(!targetPlayer.isOnline()) {
-            throw new InvalidCommandArgument("Der gewählte Spieler muss online sein!");
+            throw new ConditionFailedException("Der gewählte Spieler muss online sein!");
         }
 
         CommandHelper.checkRolePermissions(player, city, RolePermission.INVITE);
 
         if (player.getName().equalsIgnoreCase(targetPlayer.getName())) {
-            throw new InvalidCommandArgument("Du kannst dich nicht selbst in die Stadt einladen!");
+            throw new ConditionFailedException("Du kannst dich nicht selbst in die Stadt einladen!");
         }
 
         // invite is locked
         CityFlag inviteFlag = plugin.getFlagManager().getCityFlag(city, InviteCityFlag.class);
         if (inviteFlag != null && !inviteFlag.getType().convertToBoolean(inviteFlag.getValue())) {
-            throw new InvalidCommandArgument("Deine Stadt darf zurzeit keine neuen Spieler einladen!");
+            throw new ConditionFailedException("Deine Stadt darf zurzeit keine neuen Spieler einladen!");
         }
 
         invites.put(targetPlayer.getName(), city);
@@ -342,7 +342,7 @@ public class TownCommands extends BaseCommand {
     public void accept(Player player) {
 
         if (!invites.containsKey(player.getName())) {
-            throw new InvalidCommandArgument("Du hast keine offenen Einladungen!");
+            throw new ConditionFailedException("Du hast keine offenen Einladungen!");
         }
 
         City city = invites.get(player.getName());
@@ -364,7 +364,7 @@ public class TownCommands extends BaseCommand {
 
         Resident resident = plugin.getResidentManager().getResident(player.getUniqueId(), city);
         if (resident == null) {
-            throw new InvalidCommandArgument("Du bist kein Mitglied der Stadt '" + city.getFriendlyName() + "'!");
+            throw new ConditionFailedException("Du bist kein Mitglied der Stadt '" + city.getFriendlyName() + "'!");
         }
 
         if (flags.hasFlag('f')) {
@@ -386,18 +386,18 @@ public class TownCommands extends BaseCommand {
         CommandHelper.checkRolePermissions(player, city, RolePermission.KICK);
 
         if (!flags.hasAdminFlag(player,'f') && player.getName().equalsIgnoreCase(targetPlayer.getName())) {
-            throw new InvalidCommandArgument("Du kannst dich nicht selbst aus der Stadt werfen!");
+            throw new ConditionFailedException("Du kannst dich nicht selbst aus der Stadt werfen!");
         }
 
         Resident resident = plugin.getResidentManager().getResident(targetPlayer.getUniqueId(), city);
         if (resident == null) {
-            throw new InvalidCommandArgument(targetPlayer.getName() + " ist kein Mitglied von '"
+            throw new ConditionFailedException(targetPlayer.getName() + " ist kein Mitglied von '"
                     + city.getFriendlyName() + "'!");
         }
 
         if (!resident.getRole().hasPermission(RolePermission.GET_KICKED)
                 && !player.hasMetadata("rccities.town.kick.all")) {
-            throw new InvalidCommandArgument("Du kannst diesen Einwohner nicht aus der Stadt werfen!");
+            throw new ConditionFailedException("Du kannst diesen Einwohner nicht aus der Stadt werfen!");
         }
 
         resident.delete();
@@ -409,15 +409,15 @@ public class TownCommands extends BaseCommand {
     @CommandPermission(CityPermissions.GROUP_USER + ".town.confirm")
     public void confirm(Player player, @Optional String captcha) {
         if (!plugin.getQueuedCommands().containsKey(player.getName())) {
-            throw new InvalidCommandArgument("Es gibt nichts was du aktuell bestätigen kannst!");
+            throw new ConditionFailedException("Es gibt nichts was du aktuell bestätigen kannst!");
         }
         QueuedCommand command = plugin.getQueuedCommands().get(player.getName());
         if (command instanceof QueuedCaptchaCommand) {
             if (Strings.isNullOrEmpty(captcha)) {
-                throw new InvalidCommandArgument("Captcha vergessen! /rcconfirm <Captcha>");
+                throw new ConditionFailedException("Captcha vergessen! /rcconfirm <Captcha>");
             }
             if (!((QueuedCaptchaCommand) command).getCaptcha().equals(captcha)) {
-                throw new InvalidCommandArgument("Falscher Captcha Code! Bitte versuche es erneut.");
+                throw new ConditionFailedException("Falscher Captcha Code! Bitte versuche es erneut.");
             }
         }
         command.run();
@@ -460,7 +460,7 @@ public class TownCommands extends BaseCommand {
 
         Resident resident = plugin.getResidentManager().getResident(player.getUniqueId(), city);
         if(resident == null) {
-            throw new InvalidCommandArgument("Nur Einwohner können Geld aus der Stadtkasse nehmen!");
+            throw new ConditionFailedException("Nur Einwohner können Geld aus der Stadtkasse nehmen!");
         }
 
         CommandHelper.checkRolePermissions(player, city, RolePermission.WITHDRAW);

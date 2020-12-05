@@ -22,6 +22,10 @@ public class RCCitiesPluginConfig extends BukkitYamlConfiguration {
     private double flagPlotMarkCost = 20.0;
     private String cityUpgradeHolder = "cit-upgrade-holder";
     private double joinCosts = 100.0;
+    @Comment("This is the base cost of a new plot")
+    private double newPlotCost = 500.0;
+    @Comment("For each existing plot of a city the new plot is more expensive")
+    private double newPlotCostPerOldPlot = 25.0;
 
     @Comment("Cooldown between a city can make requests to process their upgrade to a higher level")
     private int upgradeRequestCooldown = 5 * 24 * 60;// 5 days in minutes

@@ -14,6 +14,7 @@ import net.silthus.rccities.api.plot.Plot;
 import net.silthus.rccities.api.resident.Resident;
 import net.silthus.rccities.api.resident.RolePermission;
 import net.silthus.rccities.util.QueuedCaptchaCommand;
+import net.silthus.rccities.util.QueuedCommand;
 import net.silthus.rccities.util.RaidCraftException;
 import org.bukkit.*;
 import org.bukkit.command.CommandSender;
@@ -59,7 +60,7 @@ public class PlotCommands extends BaseCommand {
         OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(targetResidentName);
         Resident targetResident = plugin.getResidentManager().getResident(offlinePlayer.getUniqueId(), city);
         if (targetResident == null) {
-            throw new InvalidCommandArgument("Der angegebene Spieler ist kein Mitglied deiner Stadt '"
+            throw new ConditionFailedException("Der angegebene Spieler ist kein Mitglied deiner Stadt '"
                     + city.getFriendlyName() + "'!");
         }
 
@@ -86,7 +87,7 @@ public class PlotCommands extends BaseCommand {
 
         Resident targetResident = plugin.getResidentManager().getResident(resident, city);
         if (targetResident == null) {
-            throw new InvalidCommandArgument("Der angegebene Spieler ist kein Mitglied deiner Stadt '"
+            throw new ConditionFailedException("Der angegebene Spieler ist kein Mitglied deiner Stadt '"
                     + city.getFriendlyName() + "'!");
         }
 
@@ -213,7 +214,7 @@ public class PlotCommands extends BaseCommand {
         }
 
         if (plugin.getPlotManager().getPlots(plot.getCity()).size() == 1) {
-            throw new InvalidCommandArgument("Der letze Plot kann nicht gelöscht werden!");
+            throw new ConditionFailedException("Der letze Plot kann nicht gelöscht werden!");
         }
 
         try {
@@ -301,9 +302,49 @@ public class PlotCommands extends BaseCommand {
         player.sendMessage(ChatColor.GREEN + "Du hast erfolgreich die Plot Markierung entfernt!");
     }
 
+    @Subcommand("buy")
+    @CommandPermission(CityPermissions.GROUP_USER + ".plot.buy")
+    public void buy(Player player, City city, @Optional Integer count) {
+
+        if(count == null) {
+            count = 1;
+        }
+
+        CommandHelper.checkRolePermissions(player, city, RolePermission.PLOT_BUY);
+
+        double requiredMoney = plugin.getPlotManager().getNewPlotCosts(city, count);
+
+        if(!city.hasMoney(requiredMoney)) {
+            throw new ConditionFailedException("Es werden " + plugin.getEconomy().format(requiredMoney)
+                    + " in der Stadtkasse benötigt");
+        }
+
+        try {
+            new QueuedCommand(player, this, "buyPlots", player, city, count);
+        } catch (NoSuchMethodException e) {
+            throw new InvalidCommandArgument(e.getMessage());
+        }
+    }
+
     /*
      *******************************************************************************************************************
      */
+
+    public void buyPlots(Player player, City city, Integer count) {
+        double requiredMoney = plugin.getPlotManager().getNewPlotCosts(city, count);
+
+        if(!city.hasMoney(requiredMoney)) {
+            throw new ConditionFailedException("Es werden " + plugin.getEconomy().format(requiredMoney)
+                    + " in der Stadtkasse benötigt");
+        }
+
+        city.withdrawMoney(requiredMoney);
+        city.setPlotCredit(city.getPlotCredit() + count);
+
+        plugin.getResidentManager().broadcastCityMessage(city, ChatColor.GOLD + "Es wurden "
+                + ChatColor.DARK_GREEN + count + " neue Plots " + ChatColor.GOLD + "für "
+                + ChatColor.DARK_RED + plugin.getEconomy().format(requiredMoney) + ChatColor.GOLD + " gekauft!");
+    }
 
     public void unclaimPlot(CommandSender sender, Plot plot, boolean restoreSchematics) {
 
