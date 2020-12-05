@@ -200,6 +200,12 @@ public class ResidentManager {
         return null;
     }
 
+    public Resident getResident(String residentName, City city) {
+
+        OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(residentName);
+        return getResident(offlinePlayer.getUniqueId(), city);
+    }
+
     public List<Resident> getResidents(City city) {
 
         return getResidents(city, true);

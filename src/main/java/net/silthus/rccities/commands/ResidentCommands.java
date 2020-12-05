@@ -4,6 +4,7 @@ import co.aikar.commands.BaseCommand;
 import co.aikar.commands.InvalidCommandArgument;
 import co.aikar.commands.annotation.*;
 import com.google.common.base.Strings;
+import net.silthus.rccities.CityPermissions;
 import net.silthus.rccities.RCCitiesPlugin;
 import net.silthus.rccities.api.city.City;
 import net.silthus.rccities.api.plot.Plot;
@@ -36,7 +37,7 @@ public class ResidentCommands extends BaseCommand {
 
     @Default
     @Subcommand("info")
-    @CommandPermission("rccities.resident.info")
+    @CommandPermission(CityPermissions.GROUP_USER + ".resident.info")
     public void resident(Player player, @Optional OfflinePlayer resident) {
 
         if(resident == null) {
@@ -47,18 +48,14 @@ public class ResidentCommands extends BaseCommand {
 
     @Subcommand("setrole|promote")
     @CommandCompletion("@cities")
-    @CommandPermission("rccities.resident.promote")
-    public void setRole(Player player, OfflinePlayer residentPlayer, City city, String roleName, @Optional String flags) {
+    @CommandPermission(CityPermissions.GROUP_USER + ".resident.promote")
+    public void setRole(Player player, OfflinePlayer residentPlayer, City city, String roleName, CommandFlag flags) {
 
         Role newRole;
         Role oldRole;
 
-        Resident resident = plugin.getResidentManager().getResident(player.getUniqueId(), city);
-        if (!player.hasPermission("rccities.resident.promote.all")) {
-            if (resident == null || !resident.getRole().hasPermission(RolePermission.KICK)) {
-                throw new InvalidCommandArgument("Du darfst keine Berufe in der Stadt '" + city.getFriendlyName()
-                        + "' zuweisen!");
-            }
+        if(!CommandHelper.hasRolePermissions(player, city, RolePermission.PROMOTE)) {
+            throw new InvalidCommandArgument("Du hast in der Stadt nicht die Berechtigung Berufe zu verteilen!");
         }
 
         try {
@@ -73,7 +70,7 @@ public class ResidentCommands extends BaseCommand {
 
         Resident targetResident = plugin.getResidentManager().getResident(residentPlayer.getUniqueId(), city);
         if (targetResident == null) {
-            if (!Strings.isNullOrEmpty(flags) && flags.contains("f") && player.hasPermission("rccities.resident.promote.all")) {
+            if (flags.hasAdminFlag(player, 'f')) {
                 try {
                     targetResident = plugin.getResidentManager().addResident(city, residentPlayer);
                     targetResident.setRole(Role.RESIDENT);

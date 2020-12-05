@@ -7,12 +7,14 @@ import com.google.common.base.Strings;
 import com.sk89q.worldguard.WorldGuard;
 import kr.entree.spigradle.annotations.PluginMain;
 import lombok.Getter;
+import lombok.Setter;
 import net.milkbowl.vault.economy.Economy;
 import net.silthus.ebean.Config;
 import net.silthus.ebean.EbeanWrapper;
 import net.silthus.rccities.api.city.City;
 import net.silthus.rccities.api.plot.Plot;
 import net.silthus.rccities.api.resident.Resident;
+import net.silthus.rccities.commands.CommandSetup;
 import net.silthus.rccities.commands.PlotCommands;
 import net.silthus.rccities.commands.ResidentCommands;
 import net.silthus.rccities.commands.TownCommands;
@@ -64,6 +66,7 @@ public class RCCitiesPlugin extends JavaPlugin {
     private Economy economy;
     private Permission permission;
     private Database database;
+    @Setter
     private PaperCommandManager commandManager;
     private LanguageManager languageManager;
 
@@ -175,7 +178,8 @@ public class RCCitiesPlugin extends JavaPlugin {
 
         if (!isTesting()) {
             setupListeners();
-            setupCommands();
+            CommandSetup commandSetup = new CommandSetup(this);
+            commandSetup.setupCommands();
         }
     }
 
@@ -255,101 +259,6 @@ public class RCCitiesPlugin extends JavaPlugin {
 
         upgradeListener = new UpgradeListener(this);
         Bukkit.getPluginManager().registerEvents(upgradeListener, this);
-    }
-
-
-    private void setupCommands() {
-
-        this.commandManager = new PaperCommandManager(this);
-
-        registerPlotContext(commandManager);
-        registerOfflinePlayerContext(commandManager);
-        registerCityContext(commandManager);
-
-        registerCityCompletion(commandManager);
-
-        commandManager.registerCommand(new PlotCommands(this));
-        commandManager.registerCommand(new ResidentCommands(this));
-        commandManager.registerCommand(new TownCommands(this));
-    }
-
-    private void registerCityCompletion(PaperCommandManager commandManager) {
-
-        commandManager.getCommandCompletions().registerAsyncCompletion("cities", context ->
-                getCityManager().getCities().stream().map(City::getName).collect(Collectors.toSet()));
-    }
-
-    private void registerOfflinePlayerContext(PaperCommandManager commandManager) {
-
-        commandManager.getCommandContexts().registerIssuerAwareContext(OfflinePlayer.class, c -> {
-            String playerName = c.popFirstArg();
-
-            if(Strings.isNullOrEmpty(playerName)) {
-                return c.getPlayer();
-            } else {
-                return Bukkit.getOfflinePlayer(playerName);
-            }
-        });
-    }
-
-    private void registerCityContext(PaperCommandManager commandManager) {
-
-        commandManager.getCommandContexts().registerIssuerAwareContext(City.class, c -> {
-            String cityName = c.popFirstArg();
-
-            City city;
-            if(Strings.isNullOrEmpty(cityName)) {
-                Plot plot = getPlotManager().getPlot(c.getPlayer().getLocation().getChunk());
-                if (plot == null) {
-
-                    List<Resident> citizenships = getResidentManager().getCitizenships(c.getPlayer().getUniqueId());
-                    if (1 != citizenships.size()) {
-                        throw new InvalidCommandArgument(
-                                "Hier befindet sich keine Stadt oder du bist Einwohner in mehr als einer Stadt!");
-                    }
-                    city = citizenships.get(0).getCity();
-                } else {
-                    city = plot.getCity();
-                }
-                if (city == null) {
-                    throw new InvalidCommandArgument(
-                            "Es ist ein Fehler aufgetreten. Gebe den Stadtnamen direkt an!");
-                }
-            } else {
-                city = getCityManager().getCity(cityName);
-                if (city == null) {
-                    throw new InvalidCommandArgument("Es gibt keine Stadt mit diesem Namen!");
-                }
-            }
-
-            return city;
-        });
-    }
-
-    private void registerPlotContext(PaperCommandManager commandManager) {
-
-        commandManager.getCommandContexts().registerIssuerAwareContext(Plot.class, c -> {
-            String plotRegionName = c.popFirstArg();
-
-            Plot plot;
-            if(Strings.isNullOrEmpty(plotRegionName)) {
-                plot = getPlotManager().getPlot(c.getPlayer().getLocation().getChunk());
-                if (plot == null) {
-                    throw new ConditionFailedException("Hier befindet sich kein Plot!");
-                }
-            } else {
-                try {
-                    plot = getPlotManager().getPlot(plotRegionName);
-                } catch (IllegalArgumentException e) {
-                    plot = null;
-                }
-                if (plot == null) {
-                    throw new InvalidCommandArgument("Es gibt kein Plot mit diesem Namen!");
-                }
-            }
-
-            return plot;
-        });
     }
 
     public final void queueCommand(final QueuedCommand command) {
