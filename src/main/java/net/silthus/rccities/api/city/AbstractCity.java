@@ -25,7 +25,7 @@ public abstract class AbstractCity implements City {
     protected int plotCredit;
     protected int maxRadius;
     protected int exp;
-    protected UpgradeHolder upgradeHolder;
+    protected UpgradeHolder<City> upgradeHolder;
     protected double money;
 
     protected AbstractCity() {

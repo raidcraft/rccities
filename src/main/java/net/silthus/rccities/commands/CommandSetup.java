@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 
 public class CommandSetup {
 
-    private RCCitiesPlugin plugin;
+    private final RCCitiesPlugin plugin;
 
     public CommandSetup(RCCitiesPlugin plugin) {
         this.plugin = plugin;

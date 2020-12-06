@@ -42,15 +42,15 @@ public class SimpleUpgradeLevel<T> extends AbstractUpgradeLevel<T> {
 
         this.rewards = rewards;
 
-        for(Reward reward : rewards) {
+        for(Reward<T> reward : rewards) {
             if(reward.getDescription() == null || reward.getDescription().isEmpty()) continue;
             addRewardDescription(reward.getDescription());
         }
     }
 
-    public <T> boolean isMeetingAllRequirements(T object) {
+    public boolean isMeetingAllRequirements(T object) {
 
-        for(Requirement requirement : requirements) {
+        for(Requirement<T> requirement : requirements) {
 
             if(!requirement.test(object)) {
                 unlockResult.setSuccessful(false);
@@ -77,7 +77,7 @@ public class SimpleUpgradeLevel<T> extends AbstractUpgradeLevel<T> {
             }
 
             // reward
-            for (Reward reward : rewards) {
+            for (Reward<T> reward : rewards) {
                 reward.reward(object);
             }
             // save

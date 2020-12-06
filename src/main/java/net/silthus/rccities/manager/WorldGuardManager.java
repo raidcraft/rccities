@@ -2,23 +2,17 @@ package net.silthus.rccities.manager;
 
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.math.BlockVector3;
-import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
-import com.sk89q.worldguard.bukkit.event.block.PlaceBlockEvent;
 import com.sk89q.worldguard.protection.ApplicableRegionSet;
 import com.sk89q.worldguard.protection.managers.storage.StorageException;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import net.silthus.rccities.RCCitiesPlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.World;
-import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPistonExtendEvent;
-
-import java.util.*;
 
 /**
  * @author Philip Urban
@@ -32,22 +26,22 @@ public class WorldGuardManager implements Listener {
         this.plugin = plugin;
     }
 
-    public boolean claimable(Location location) {
+    public boolean notClaimable(Location location) {
 
         BlockVector3 blockVector3 = BukkitAdapter.asBlockVector(location);
         ApplicableRegionSet regions = plugin.getWorldGuard().getPlatform().getRegionContainer()
                 .get(BukkitAdapter.adapt(location.getWorld())).getApplicableRegions(blockVector3);
         if (regions.size() == 0) {
-            return true;
+            return false;
         }
         for (ProtectedRegion region : regions) {
             for (String ignoredRegion : plugin.getPluginConfig().getIgnoredRegions()) {
                 if (!region.getId().startsWith(ignoredRegion)) {
-                    return false;
+                    return true;
                 }
             }
         }
-        return true;
+        return false;
     }
 
     public void save() {

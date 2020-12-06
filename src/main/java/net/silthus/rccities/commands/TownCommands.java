@@ -101,7 +101,7 @@ public class TownCommands extends BaseCommand {
         }
 
         // check if here is a wrong region
-        if (!plugin.getWorldGuardManager().claimable(player.getLocation())) {
+        if (plugin.getWorldGuardManager().notClaimable(player.getLocation())) {
             throw new ConditionFailedException("An dieser Stelle befindet sich bereits eine andere Region!");
         }
 

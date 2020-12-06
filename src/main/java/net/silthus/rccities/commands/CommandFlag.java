@@ -7,7 +7,7 @@ import org.bukkit.entity.Player;
 @Getter
 public class CommandFlag {
 
-    private String flagString;
+    private final String flagString;
 
     public static CommandFlag EMPTY_FLAG = new CommandFlag("");
 
