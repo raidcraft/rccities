@@ -101,6 +101,7 @@ Am einfachsten stellt man sich beim Ausführen der Befehle in die betroffene Sta
 * Der Spieler hat darauf im Plot keine Baurechte mehr
 #### Plot markieren (Fakeln)
 ``/plot mark``
+* Es wird nicht geprüft ob der Plot bereits markiert ist!
 * Die Begrenzung des Plots wird mit Fakeln markiert (sofern möglich)
 * Das Markieren des Plots kostet Geld (um das kostenlose Generieren von Fakeln zu unterbinden)
 #### Plot Markierung entfernen
