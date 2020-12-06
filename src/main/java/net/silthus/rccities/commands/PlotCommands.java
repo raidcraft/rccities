@@ -13,6 +13,8 @@ import net.silthus.rccities.api.flags.FlagInformation;
 import net.silthus.rccities.api.plot.Plot;
 import net.silthus.rccities.api.resident.Resident;
 import net.silthus.rccities.api.resident.RolePermission;
+import net.silthus.rccities.flags.plot.MarkPlotBaseFlag;
+import net.silthus.rccities.flags.plot.MarkPlotFlag;
 import net.silthus.rccities.util.RaidCraftException;
 import org.bukkit.*;
 import org.bukkit.command.CommandSender;
@@ -261,7 +263,7 @@ public class PlotCommands extends BaseCommand {
         CommandHelper.checkRolePermissions(player, city, RolePermission.PLOT_FLAG_MODIFICATION);
 
         try {
-            plot.setFlag(player, "MARK", "ON");
+            plot.setFlag(MarkPlotFlag.class, true);
         } catch (RaidCraftException e) {
             throw new InvalidCommandArgument(e.getMessage());
         }
@@ -277,7 +279,7 @@ public class PlotCommands extends BaseCommand {
         CommandHelper.checkRolePermissions(player, city, RolePermission.PLOT_FLAG_MODIFICATION);
 
         try {
-            plot.setFlag(player, "MARK", "OFF");
+            plot.setFlag(MarkPlotFlag.class, false);
         } catch (RaidCraftException e) {
             throw new InvalidCommandArgument(e.getMessage());
         }
@@ -350,7 +352,7 @@ public class PlotCommands extends BaseCommand {
 
         UnclaimAllTask unclaimAllTask = new UnclaimAllTask(sender, city, restoreSchematics);
         unclaimTask = Bukkit.getScheduler()
-                .runTaskTimer(RCCitiesPlugin.getPlugin(), unclaimAllTask, 0, 5 * 20).getTaskId();
+                .runTaskTimer(RCCitiesPlugin.getPlugin(), unclaimAllTask, 0, 2 * 20).getTaskId();
     }
 
     private class UnclaimAllTask implements Runnable {

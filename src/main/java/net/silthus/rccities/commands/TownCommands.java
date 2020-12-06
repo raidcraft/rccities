@@ -220,8 +220,8 @@ public class TownCommands extends BaseCommand {
                         < plugin.getPluginConfig().getSpawnTeleportCooldown() * 1000.) {
             double remainingSeconds = (plugin.getPluginConfig().getSpawnTeleportCooldown())
                     - ((double)(System.currentTimeMillis() - lastTeleport.get(player.getUniqueId())) / 1000.);
-            throw new ConditionFailedException(ChatColor.RED + "Du musst noch "
-                    + ((double)Math.round(remainingSeconds*100.) / 100.) + "s bis zum nächsten Teleport warten.");
+            throw new ConditionFailedException(ChatColor.RED + "Warte noch "
+                    + ((double)Math.round(remainingSeconds*100.) / 100.) + "s bis zum nächsten Teleport.");
         }
 
         player.sendMessage(ChatColor.YELLOW + "Du wirst in "

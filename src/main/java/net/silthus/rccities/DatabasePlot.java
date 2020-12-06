@@ -3,8 +3,11 @@ package net.silthus.rccities;
 import co.aikar.commands.InvalidCommandArgument;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import net.silthus.rccities.api.city.City;
+import net.silthus.rccities.api.flags.FlagInformation;
+import net.silthus.rccities.api.flags.PlotFlag;
 import net.silthus.rccities.api.plot.AbstractPlot;
 import net.silthus.rccities.api.resident.Resident;
+import net.silthus.rccities.flags.plot.MarkPlotBaseFlag;
 import net.silthus.rccities.tables.TAssignment;
 import net.silthus.rccities.tables.TPlot;
 import net.silthus.rccities.util.RaidCraftException;
@@ -37,7 +40,7 @@ public class DatabasePlot extends AbstractPlot {
 
         // Mark plot
         try {
-            setFlag("MARK_FREE", "ON");
+            setFlag(MarkPlotBaseFlag.class, true);
         } catch (RaidCraftException e) {
             RCCitiesPlugin.getPlugin().getLogger().warning(e.getMessage());
         }
@@ -58,6 +61,26 @@ public class DatabasePlot extends AbstractPlot {
         this.region = RCCitiesPlugin.getPlugin().getWorldGuard().getPlatform().getRegionContainer()
                 .get(BukkitAdapter.adapt(location.getWorld())).getRegion(getRegionName());
         loadAssignments();
+    }
+
+    @Override
+    public <T> void setFlag(Class<T> clazz, boolean value) throws RaidCraftException {
+        setFlag(clazz, String.valueOf(value));
+    }
+
+    @Override
+    public <T> void setFlag(Class<T> clazz, double value) throws RaidCraftException {
+        setFlag(clazz, String.valueOf(value));
+    }
+
+    @Override
+    public <T> void setFlag(Class<T> clazz, String value) throws RaidCraftException {
+        FlagInformation annotation = clazz.getAnnotation(FlagInformation.class);
+        if(annotation == null) {
+            throw new RaidCraftException("Class '" + clazz.getName() + "' without FlagInformation annotation");
+        }
+
+        setFlag(annotation.name(), value);
     }
 
     @Override

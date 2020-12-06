@@ -2,6 +2,7 @@ package net.silthus.rccities.api.plot;
 
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import net.silthus.rccities.api.city.City;
+import net.silthus.rccities.api.flags.PlotFlag;
 import net.silthus.rccities.api.resident.Resident;
 import net.silthus.rccities.util.RaidCraftException;
 import org.bukkit.Location;
@@ -30,6 +31,12 @@ public interface Plot {
     void assignResident(Resident resident);
 
     void removeResident(Resident resident);
+
+    <T> void setFlag(Class<T> clazz, String value) throws RaidCraftException;
+
+    <T> void setFlag(Class<T> clazz, boolean value) throws RaidCraftException;
+
+    <T> void setFlag(Class<T> clazz, double value) throws RaidCraftException;
 
     void setFlag(String flagName, String flagValue) throws RaidCraftException;
 
