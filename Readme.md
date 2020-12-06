@@ -72,10 +72,14 @@ Am einfachsten stellt man sich beim Ausführen der Befehle in die betroffene Sta
 ##### Geld aus Stadtkasse abheben
 ``/town withdraw <Betrag>``
 * Die Stadtkasse kann nicht negativ belastet werden
-##### Eigenschaft von Stadt ändern
+##### Eigenschaften von Städten ändern
 ``/town flag <Flag> <Wert>``
 * Folgende Flags stehen zur Auswahl:
-** Name: ``GREETINGS`` Wert: ``ON|OFF`` Schaltet die Begrüßung beim betreten von Plots ein oder aus
+    * ``GREETINGS`` ``ON|OFF`` Schaltet die Begrüßung beim betreten von Plots ein oder aus
+    * ``LEAF_DECAY`` ``ON|OFF`` Verhindert/Erlaubt das verschwinden von Blättern ohne Stamm
+    * ``MOB_SPWANING`` ``ON|OFF`` Verhindert/Erlaubt das Spawnen von Mobs
+    * ``PVP`` ``ON|OFF`` Verbietet/Erlaubt PVP im Stadtgebiet
+    * ``JOIN_COSTS`` ``Geldbetrag`` Legt den nötigen Betrag fest um Einwohner der Stadt werden zu können
 #### Plot
 ##### Info Anzeigen
 ``/plot`` oder ``/plot info <Plotname>``
