@@ -44,6 +44,17 @@ Die Verwaltung von Städten ist mit Hilfe von Chat-Befehlen möglich.
 ### <a name="commands-user"></a>Spieler
 Am einfachsten stellt man sich beim Ausführen der Befehle in die betroffene Stadt oder Plot. Alternativ kann man die Stadt oder den Plot auch manuell als Paramter mit angeben.
 #### Stadt
+##### Info Anzeigne
+``/town`` oder ``/town info <Stadtname``
+##### An den Stadtspawn teleportieren
+``/town spawn``
+##### Stadtspawn neu setzen
+``/town setspawn``
+* Es wird die aktuelle Position des Spielers übernommen
+##### Beschreibung der Stadt ändern
+``/town setdesc <Beschreibung>``
+* Die Beschreibung wird unter ``/town info`` angezeigt
+* Die Beschreibung darf Leerzeichen enthalten
 ##### Geld in Stadtkasse einzahlen
 ``/town deposit <Betrag>``
 ##### Geld aus Stadtkasse abheben
@@ -56,7 +67,7 @@ Am einfachsten stellt man sich beim Ausführen der Befehle in die betroffene Sta
 ``/plot claim``
 * Plots müssen aneinandern anknüpfen
 * Es darf keine andere Region an der Stelle existieren
-* Zwischen Städten muss mindestens ein Plot Abstand sein
+* Zwischen Städten muss mindestens ein Plot Abstand eingehalten werden
 ##### Zusätzliche Plots Kaufen
 ``/plot buy <Anzahl>``
 * Der kauf muss bestätigt werden
@@ -78,6 +89,16 @@ Am einfachsten stellt man sich beim Ausführen der Befehle in die betroffene Sta
 * Es werden alle Fakeln auf der Plot Begrenzung entfernt - unabhängig ob von Spielern oder ``/plot mark`` gesetzt
 * Das entfernen von Markierungen ist kostenlos
 #### Einwohner
+##### Info Anzeigen
+``/resident`` oder ``/resident <Spielername>``
+##### Zum Bürgermeister benennen
+``/resident setmayor <Spielername>``
+##### Zum Vize Bürgermeister benennen
+``/resident setvicemayor <Spielername>``
+##### Zum Assistent benennen
+``/resident setassistant <Spielername>``
+##### Zum normalen Einwohner benennen
+``/resident setresident <Spielername>``
 ### Admins
 Admins können grundsätzlich bei den meisten Befehlen mit Hilfe der Flag ``-f`` am Ende des Befehls die Ausführung erzwingen, auch wenn sie keine Mitglieder der Stadt sind.
 #### Stadt
