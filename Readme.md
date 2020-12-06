@@ -141,4 +141,10 @@ Die Stadt selbst wird folgendermaßen gelöscht.
 ``/plot unlcaim [-ra]``
 * ``-r`` Stellt den Ursprungszustand des Plots vor dem Claimen her (Chunk wird mit Backup Schematic ersetzt)
 * ``-a`` Unclaimed ALLE Plots der Stadt
-#### Einwohner
+## Permissions
+Es gibt zwei Hauptgruppen:
+* ``rccities.user``
+* ``rccities.admin``
+Einzelne Befehle lassen sich auch granularer steuern:
+* ``rccities.user.<Typ>.<Befehl>
+Z.B. ``rccities.user.plot.claim``
