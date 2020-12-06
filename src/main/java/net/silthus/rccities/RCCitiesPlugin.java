@@ -31,6 +31,7 @@ import net.silthus.rccities.upgrades.RequirementManager;
 import net.silthus.rccities.upgrades.api.reward.RewardManager;
 import net.silthus.rccities.commands.QueuedCommand;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -254,8 +255,11 @@ public class RCCitiesPlugin extends JavaPlugin {
     public final void queueCommand(final QueuedCommand command) {
 
         queuedCommands.put(command.getSender().getName(), command);
-        Bukkit.getScheduler().scheduleSyncDelayedTask(this, () ->
-                queuedCommands.remove(command.getSender().getName()), 900L);
+        Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
+
+                queuedCommands.remove(command.getSender().getName());
+                command.getSender().sendMessage(ChatColor.RED + "Du hast nicht rechtzeitig bestätigt");
+        }, 900L);
         // 45 second remove delay
     }
 }

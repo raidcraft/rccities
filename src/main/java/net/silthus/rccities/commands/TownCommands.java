@@ -6,6 +6,7 @@ import co.aikar.commands.InvalidCommandArgument;
 import co.aikar.commands.annotation.*;
 import co.aikar.commands.annotation.Optional;
 import com.google.common.base.Strings;
+import com.sk89q.minecraft.util.commands.Command;
 import net.milkbowl.vault.economy.Economy;
 import net.silthus.rccities.CityPermissions;
 import net.silthus.rccities.DatabasePlot;
@@ -97,12 +98,12 @@ public class TownCommands extends BaseCommand {
 
         // Check if there is already an plot
         if(plugin.getPlotManager().getPlot(player.getLocation().getChunk()) != null) {
-            throw new ConditionFailedException("An dieser Stelle befindet sich bereits eine Stadt Plot!");
+            throw new ConditionFailedException("Hier befindet sich bereits eine Stadt Plot!");
         }
 
         // check if here is a wrong region
-        if (plugin.getWorldGuardManager().notClaimable(player.getLocation())) {
-            throw new ConditionFailedException("An dieser Stelle befindet sich bereits eine andere Region!");
+        if (!plugin.getWorldGuardManager().claimable(player.getLocation())) {
+            throw new ConditionFailedException("Hier befindet sich bereits eine andere Region!");
         }
 
         City city;
@@ -116,7 +117,7 @@ public class TownCommands extends BaseCommand {
 
             // set flags at the end because of possible errors
             plugin.getFlagManager().setCityFlag(city, player, PvpCityFlag.class, false);       // disable pvp
-            plugin.getFlagManager().setCityFlag(city, player, InviteCityFlag.class, false);    // disable invites
+            plugin.getFlagManager().setCityFlag(city, player, InviteCityFlag.class, true);    // enable invites
             plugin.getFlagManager().setCityFlag(city, player, GreetingsCityFlag.class, true);  // enable greetings
             plugin.getFlagManager().setCityFlag(city, player, JoinCostsCityFlag.class,
                     plugin.getPluginConfig().getJoinCosts());   // default join costs
@@ -215,17 +216,24 @@ public class TownCommands extends BaseCommand {
             throw new ConditionFailedException("Du befindest dich auf der falschen Welt!");
         }
 
+        double warmupTime = plugin.getPluginConfig().getSpawnTeleportWarmup();
+        double cooldownTime = plugin.getPluginConfig().getSpawnTeleportCooldown();
+
+        if(player.hasPermission(CityPermissions.GROUP_ADMIN)) {
+            warmupTime = 0.5;
+            cooldownTime = 0;
+        }
+
         if(lastTeleport.get(player.getUniqueId()) != null &&
-                System.currentTimeMillis() - lastTeleport.get(player.getUniqueId())
-                        < plugin.getPluginConfig().getSpawnTeleportCooldown() * 1000.) {
-            double remainingSeconds = (plugin.getPluginConfig().getSpawnTeleportCooldown())
+                System.currentTimeMillis() - lastTeleport.get(player.getUniqueId()) < cooldownTime * 1000.) {
+            double remainingSeconds = (cooldownTime)
                     - ((double)(System.currentTimeMillis() - lastTeleport.get(player.getUniqueId())) / 1000.);
             throw new ConditionFailedException(ChatColor.RED + "Warte noch "
                     + ((double)Math.round(remainingSeconds*100.) / 100.) + "s bis zum nächsten Teleport.");
         }
 
         player.sendMessage(ChatColor.YELLOW + "Du wirst in "
-                + plugin.getPluginConfig().getSpawnTeleportWarmup() + "s zum Stadt Spawn teleportiert...");
+                + warmupTime + "s zum Stadt Spawn teleportiert...");
         Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
             @Override
             public void run() {
@@ -233,21 +241,22 @@ public class TownCommands extends BaseCommand {
                 lastTeleport.put(player.getUniqueId(), System.currentTimeMillis());
                 player.sendMessage(ChatColor.YELLOW + "Willkommen am Stadt Spawn von " + city.getFriendlyName() + "!");
             }
-        }, (long)(plugin.getPluginConfig().getSpawnTeleportWarmup() * 20.));
+        }, (long)(warmupTime * 20.));
     }
 
-    @Subcommand("setspwan")
+    @Subcommand("setspawn")
     @CommandCompletion("@cities")
     @CommandPermission(CityPermissions.GROUP_USER + ".town.setspawn")
     public void setSpawn(Player player, City city) {
 
         CommandHelper.checkRolePermissions(player, city, RolePermission.SET_SPAWN);
 
-        if (!city.getSpawn().getWorld().equals(player.getWorld())) {
-            throw new ConditionFailedException("Der Spawn muss sich auf der selben Welt wie die Stadt befinden!");
+        if(plugin.getPlotManager().getPlot(player.getLocation().getChunk()) == null) {
+            throw new ConditionFailedException("Der Spawn muss sich innerhalb der Stadt befinden!");
         }
 
         city.setSpawn(player.getLocation());
+        player.sendMessage(ChatColor.GREEN + "Du hast den Stadt Spawn versetzt!");
         plugin.getResidentManager().broadcastCityMessage(city, "Der Spawn wurde versetzt!");
     }
 
@@ -314,7 +323,7 @@ public class TownCommands extends BaseCommand {
     }
 
     @Subcommand("invite")
-    @CommandCompletion("@cities")
+    @CommandCompletion("@cities @players")
     @CommandPermission(CityPermissions.GROUP_USER + ".town.invite")
     public void invite(Player player, City city, OfflinePlayer targetPlayer) {
 
@@ -332,6 +341,11 @@ public class TownCommands extends BaseCommand {
         CityFlag inviteFlag = plugin.getFlagManager().getCityFlag(city, InviteCityFlag.class);
         if (inviteFlag != null && !inviteFlag.getType().convertToBoolean(inviteFlag.getValue())) {
             throw new ConditionFailedException("Deine Stadt darf zurzeit keine neuen Spieler einladen!");
+        }
+
+        Resident resident = plugin.getResidentManager().getResident(targetPlayer.getUniqueId(), city);
+        if(resident != null) {
+            throw new ConditionFailedException("Der Spieler ist bereits Einwohner dieser Stadt");
         }
 
         invites.put(targetPlayer.getName(), city);
@@ -401,7 +415,7 @@ public class TownCommands extends BaseCommand {
     }
 
     @Subcommand("kick")
-    @CommandCompletion("@cities")
+    @CommandCompletion("@cities @players")
     @CommandPermission(CityPermissions.GROUP_USER + ".town.kick")
     public void kick(Player player, City city, OfflinePlayer targetPlayer, CommandFlag flags) {
 
@@ -447,10 +461,15 @@ public class TownCommands extends BaseCommand {
     }
 
     @Subcommand("deposit")
+    @CommandCompletion("@cities")
     @CommandPermission(CityPermissions.GROUP_USER + ".town.deposit")
     public void deposit(Player player, City city, double amount) {
 
         Economy economy = plugin.getEconomy();
+
+        if(amount < 0) {
+            throw new ConditionFailedException("Der Betrag muss größer als 0 sein");
+        }
 
         if(!economy.has(player, amount)) {
             throw new ConditionFailedException("Du hast nicht genügend Geld auf dem Konto");
@@ -471,13 +490,18 @@ public class TownCommands extends BaseCommand {
     }
 
     @Subcommand("withdraw")
+    @CommandCompletion("@cities")
     @CommandPermission(CityPermissions.GROUP_USER + ".town.withdraw")
     public void withdraw(Player player, City city, double amount) {
 
         Economy economy = plugin.getEconomy();
 
+        if(amount < 0) {
+            throw new ConditionFailedException("Der Betrag muss größer als 0 sein");
+        }
+
         if(!city.hasMoney(amount)) {
-            throw new ConditionFailedException("Es ist nicht genug Geld in der Stadtkasse!");
+            throw new ConditionFailedException("Es ist nicht genügend Geld in der Stadtkasse!");
         }
 
         Resident resident = plugin.getResidentManager().getResident(player.getUniqueId(), city);

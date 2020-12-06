@@ -26,22 +26,24 @@ public class WorldGuardManager implements Listener {
         this.plugin = plugin;
     }
 
-    public boolean notClaimable(Location location) {
+    public boolean claimable(Location location) {
 
-        BlockVector3 blockVector3 = BukkitAdapter.asBlockVector(location);
+        BlockVector3 blockVector3 = BlockVector3.at(location.getX(), location.getY(), location.getZ());
         ApplicableRegionSet regions = plugin.getWorldGuard().getPlatform().getRegionContainer()
                 .get(BukkitAdapter.adapt(location.getWorld())).getApplicableRegions(blockVector3);
         if (regions.size() == 0) {
-            return false;
+            return true;
         }
         for (ProtectedRegion region : regions) {
+            boolean ignored = false;
             for (String ignoredRegion : plugin.getPluginConfig().getIgnoredRegions()) {
-                if (!region.getId().startsWith(ignoredRegion)) {
-                    return true;
+                if (region.getId().startsWith(ignoredRegion)) {
+                    ignored = true;
                 }
             }
+            if(!ignored) return false;
         }
-        return false;
+        return true;
     }
 
     public void save() {

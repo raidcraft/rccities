@@ -24,7 +24,7 @@ public class QueuedCaptchaCommand extends QueuedCommand {
     }
 
     /**
-     * Generate a CAPTCHA String consisting of random lowercase and uppercase letters, and numbers.
+     * Generate a CAPTCHA String consisting of random lowercase letters, and numbers.
      */
     public String generateCaptchaString() {
 
@@ -35,7 +35,7 @@ public class QueuedCaptchaCommand extends QueuedCommand {
             int baseCharNumber = Math.abs(MathUtil.RANDOM.nextInt()) % 62;
             int charNumber;
             if (baseCharNumber < 26) {
-                charNumber = 65 + baseCharNumber;
+                charNumber = 97 + baseCharNumber;
             } else if (baseCharNumber < 52) {
                 charNumber = 97 + (baseCharNumber - 26);
             } else {

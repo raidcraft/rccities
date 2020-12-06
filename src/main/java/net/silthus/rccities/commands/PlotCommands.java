@@ -45,7 +45,20 @@ public class PlotCommands extends BaseCommand {
         plugin.getPlotManager().printPlotInfo(plot, player);
     }
 
-    @Subcommand("take")
+    @Subcommand("tp")
+    @CommandPermission(CityPermissions.GROUP_ADMIN + ".plot.tp")
+    public void tp(Player player, Plot plot) {
+
+        Location plotLocation = plot.getLocation();
+        Location location = new Location(player.getWorld(),
+                plotLocation.getX(),
+                player.getWorld().getHighestBlockYAt(plotLocation) + 1,
+                plotLocation.getZ());
+        player.teleport(location);
+    }
+
+    @Subcommand("take ")
+    @CommandCompletion("@players")
     @CommandPermission(CityPermissions.GROUP_USER + ".plot.take")
     public void take(Player player, Plot plot, String targetResidentName) {
 
@@ -74,6 +87,7 @@ public class PlotCommands extends BaseCommand {
     }
 
     @Subcommand("give")
+    @CommandCompletion("@players")
     @CommandPermission(CityPermissions.GROUP_USER + ".plot.give")
     public void give(Player player, Plot plot, String resident) {
 
@@ -107,12 +121,12 @@ public class PlotCommands extends BaseCommand {
 
         // Check if there is already an plot
         if(plugin.getPlotManager().getPlot(player.getLocation().getChunk()) != null) {
-            throw new ConditionFailedException("An dieser Stelle befindet sich bereits eine Stadt Plot!");
+            throw new ConditionFailedException("Hier befindet sich bereits eine Stadt Plot!");
         }
 
         // check if here is a wrong region
-        if (plugin.getWorldGuardManager().notClaimable(player.getLocation())) {
-            throw new ConditionFailedException("An dieser Stelle befindet sich bereits eine andere Region!");
+        if (!plugin.getWorldGuardManager().claimable(player.getLocation())) {
+            throw new ConditionFailedException("Hier befindet sich bereits eine andere Region!");
         }
 
         // get neighbor plot and city
@@ -196,7 +210,8 @@ public class PlotCommands extends BaseCommand {
             force = true;
         }
 
-        if (plugin.getPlotManager().getPlots(plot.getCity()).size() == 1) {
+        if (!flags.hasAdminFlag(player, 'a')
+                && plugin.getPlotManager().getPlots(plot.getCity()).size() == 1) {
             throw new ConditionFailedException("Der letze Plot kann nicht gelöscht werden!");
         }
 

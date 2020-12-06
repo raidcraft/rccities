@@ -48,7 +48,7 @@ public class ResidentCommands extends BaseCommand {
     }
 
     @Subcommand("setrole|promote")
-    @CommandCompletion("@cities")
+    @CommandCompletion("@cities @players")
     @CommandPermission(CityPermissions.GROUP_USER + ".resident.promote")
     public void setRole(Player player, OfflinePlayer residentPlayer, City city, String roleName, CommandFlag flags) {
 
@@ -67,7 +67,7 @@ public class ResidentCommands extends BaseCommand {
     }
 
     @Subcommand("setmayor")
-    @CommandCompletion("@cities")
+    @CommandCompletion("@cities @players")
     @CommandPermission(CityPermissions.GROUP_USER + ".resident.promote")
     public void setMayor(Player player, OfflinePlayer residentPlayer, City city, CommandFlag flags) {
 
@@ -75,7 +75,7 @@ public class ResidentCommands extends BaseCommand {
     }
 
     @Subcommand("setresident")
-    @CommandCompletion("@cities")
+    @CommandCompletion("@cities @players")
     @CommandPermission(CityPermissions.GROUP_USER + ".resident.promote")
     public void setResident(Player player, OfflinePlayer residentPlayer, City city, CommandFlag flags) {
 
@@ -83,7 +83,7 @@ public class ResidentCommands extends BaseCommand {
     }
 
     @Subcommand("setvicemayor")
-    @CommandCompletion("@cities")
+    @CommandCompletion("@cities @players")
     @CommandPermission(CityPermissions.GROUP_USER + ".resident.promote")
     public void setViceMayor(Player player, OfflinePlayer residentPlayer, City city, CommandFlag flags) {
 
@@ -91,7 +91,7 @@ public class ResidentCommands extends BaseCommand {
     }
 
     @Subcommand("setassistant")
-    @CommandCompletion("@cities")
+    @CommandCompletion("@cities @players")
     @CommandPermission(CityPermissions.GROUP_USER + ".resident.promote")
     public void setAssistant(Player player, OfflinePlayer residentPlayer, City city, CommandFlag flags) {
 
@@ -99,7 +99,7 @@ public class ResidentCommands extends BaseCommand {
     }
 
     @Subcommand("setslave")
-    @CommandCompletion("@cities")
+    @CommandCompletion("@cities @players")
     @CommandPermission(CityPermissions.GROUP_USER + ".resident.promote")
     public void setSlave(Player player, OfflinePlayer residentPlayer, City city, CommandFlag flags) {
 
@@ -128,6 +128,6 @@ public class ResidentCommands extends BaseCommand {
         targetResident.setRole(role);
 
         Bukkit.broadcastMessage(ChatColor.GOLD + targetResident.getName() + " ist nun "
-                + role.getFriendlyName() + " der Stadt '" + city.getFriendlyName() + "'!");
+                + role.getFriendlyName() + " von '" + city.getFriendlyName() + "'!");
     }
 }

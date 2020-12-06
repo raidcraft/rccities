@@ -93,7 +93,7 @@ public class CommandSetup {
             //-------------------------------------------
             if(city == null) {
                 List<Resident> citizenships = plugin.getResidentManager().getCitizenships(c.getPlayer().getUniqueId());
-                if (1 == citizenships.size()) {
+                if (citizenships != null && 1 == citizenships.size()) {
                     city = citizenships.get(0).getCity();
                 }
             }
