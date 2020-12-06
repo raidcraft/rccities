@@ -358,12 +358,13 @@ public class TownCommands extends BaseCommand {
                 throw  new ConditionFailedException("Du benötigst "
                         + plugin.getEconomy().format(flag.getAmount()) + " um der Stadt beizutreten");
             }
-
-            plugin.getEconomy().withdrawPlayer(player, flag.getAmount());
         }
 
         try {
-            plugin.getResidentManager().addResident(city, player);
+            Resident resident = plugin.getResidentManager().addResident(city, player);
+            if(flag != null) {
+                resident.depositCity(flag.getAmount());
+            }
         } catch (RaidCraftException e) {
             throw new InvalidCommandArgument(e.getMessage());
         }
