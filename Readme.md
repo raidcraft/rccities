@@ -144,7 +144,9 @@ Die Stadt selbst wird folgendermaßen gelöscht.
 ## Permissions
 Es gibt zwei Hauptgruppen:  
 * ``rccities.user``
-* ``rccities.admin``  
+* ``rccities.admin``
+
 Einzelne Befehle lassen sich auch granularer steuern:
-* ``rccities.user.<Typ>.<Befehl>
+* ``rccities.user.<Typ>.<Befehl>``
+
 Z.B. ``rccities.user.plot.claim``
