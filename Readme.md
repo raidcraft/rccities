@@ -44,8 +44,20 @@ Die Verwaltung von Städten ist mit Hilfe von Chat-Befehlen möglich.
 ### <a name="commands-user"></a>Spieler
 Am einfachsten stellt man sich beim Ausführen der Befehle in die betroffene Stadt oder Plot. Alternativ kann man die Stadt oder den Plot auch manuell als Paramter mit angeben.
 #### Stadt
-##### Info Anzeigne
-``/town`` oder ``/town info <Stadtname``
+##### Info Anzeigen
+``/town`` oder ``/town info <Stadtname>``
+##### Serverstädte Auflisten
+``/town list``
+##### Spieler in eigene Stadt einladen
+``/town invite <Spielername>``
+* Der Spieler muss Online sein
+* Die Einladung muss bestätigt werden
+##### Einladung annehmen
+``/town accept``
+##### Stadt verlassen
+``/town leave``
+##### Spieler aus Stadt werfen
+``/town kick <Spielername>``
 ##### An den Stadtspawn teleportieren
 ``/town spawn``
 ##### Stadtspawn neu setzen
@@ -60,6 +72,10 @@ Am einfachsten stellt man sich beim Ausführen der Befehle in die betroffene Sta
 ##### Geld aus Stadtkasse abheben
 ``/town withdraw <Betrag>``
 * Die Stadtkasse kann nicht negativ belastet werden
+##### Eigenschaft von Stadt ändern
+``/town flag <Flag> <Wert>``
+* Folgende Flags stehen zur Auswahl:
+** Name: ``GREETINGS`` Wert: ``ON|OFF`` Schaltet die Begrüßung beim betreten von Plots ein oder aus
 #### Plot
 ##### Info Anzeigen
 ``/plot`` oder ``/plot info <Plotname>``
