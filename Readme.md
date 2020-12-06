@@ -87,7 +87,6 @@ Am einfachsten stellt man sich beim Ausführen der Befehle in die betroffene Sta
 ``/plot claim``
 * Plots müssen aneinandern anknüpfen
 * Es darf keine andere Region an der Stelle existieren
-* Zwischen Städten muss mindestens ein Plot Abstand eingehalten werden
 ##### Zusätzliche Plots Kaufen
 ``/plot buy <Anzahl>``
 * Der kauf muss bestätigt werden
