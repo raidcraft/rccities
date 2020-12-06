@@ -48,17 +48,35 @@ Am einfachsten stellt man sich beim Ausführen der Befehle in die betroffene Sta
 ``/town deposit <Betrag>``
 ##### Geld aus Stadtkasse abheben
 ``/town withdraw <Betrag>``
-* Die Stadtkasse kann nicht negativ werden
+* Die Stadtkasse kann nicht negativ belastet werden
 #### Plot
-##### Claimen
+##### Info Anzeigen
+``/plot`` oder ``/plot info <Plotname>``
+##### <a name="command-plot-claim">Claimen
 ``/plot claim``
 * Plots müssen aneinandern anknüpfen
 * Es darf keine andere Region an der Stelle existieren
 * Zwischen Städten muss mindestens ein Plot Abstand sein
-##### Kaufen
+##### Zusätzliche Plots Kaufen
 ``/plot buy <Anzahl>``
 * Der kauf muss bestätigt werden
 * Der Befehl kann auch genutzt werden um sich den Preis anzeigen zu lassen
+* Neu gekaufte Plots werden dem Plot Guthaben gutgeschrieben und können anschließend [geclaimed](#command-plot-claim) werden
+##### Plot Anwohnern zuweisen
+``/plot give <Spielername>``
+* Der Spieler muss Einwohner der Stadt sein
+* Der Spieler hat dadurch Baurechte in dem kompletten Plot
+##### Plot Anwohnern wegnehmen
+``/plot take <Spielername>``
+* Der Spieler hat darauf im Plot keine Baurechte mehr
+#### Plot markieren (Fakeln)
+``/plot mark``
+* Die Begrenzung des Plots wird mit Fakeln markiert (sofern möglich)
+* Das Markieren des Plots kostet Geld (um das kostenlose Generieren von Fakeln zu unterbinden)
+#### Plot Markierung entfernen
+``/plot unmark``
+* Es werden alle Fakeln auf der Plot Begrenzung entfernt - unabhängig ob von Spielern oder ``/plot mark`` gesetzt
+* Das entfernen von Markierungen ist kostenlos
 #### Einwohner
 ### Admins
 Admins können grundsätzlich bei den meisten Befehlen mit Hilfe der Flag ``-f`` am Ende des Befehls die Ausführung erzwingen, auch wenn sie keine Mitglieder der Stadt sind.
@@ -72,10 +90,11 @@ Hierfür muss nur der Bürgermeister ernannt werden.
 ``/town setmayor <Stadtname> <Spielername> -f``
 ##### Stadt Löschen
 Vor dem Löschen der Stadt sollten evtl. alle Plots Unclaimed werden um den Ursprungszustand wieder herzustellen. 
-``/Plot unclaim -af``. 
-Ansonsten wird die Stadt selbst folgendermaßen gelöscht. 
+``/Plot unclaim -ra``. 
+Die Stadt selbst wird folgendermaßen gelöscht. 
 ``/town delete <Stadtname>``
 * Das Löschen der Stadt muss nochmals bestätigt werden.
+* Ein Wiederherstellen der Stadt ist nicht möglich!
 #### Plot
 ##### Unlcaim
 ``/plot unlcaim [-ra]``
