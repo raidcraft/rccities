@@ -1,3 +1,20 @@
+## [1.4.1](https://github.com/raidcraft/rccities/compare/v1.4.0...v1.4.1) (2020-12-06)
+
+
+### Bug Fixes
+
+* Fix a few bugs detected during tests ([934db4f](https://github.com/raidcraft/rccities/commit/934db4f814c838dffb79fcf325fd06c43477448f))
+* Fix calculation of plot costs ([1ba8efa](https://github.com/raidcraft/rccities/commit/1ba8efa296fb32781440c7828668a663bf060965))
+* Fix join costs handling ([8c8028c](https://github.com/raidcraft/rccities/commit/8c8028cfe3c7d79c8843f9487e5df67c67fca657))
+* Fix npe ([6842b6f](https://github.com/raidcraft/rccities/commit/6842b6f0bfdcb50c7fc0db7e36318707655c41fe))
+* Fix plot costs calculation ([a09bdea](https://github.com/raidcraft/rccities/commit/a09bdea02fefd5d3fe9d5a840fdf5fedb8b99a87))
+* Fix processing of join costs ([a0b01bd](https://github.com/raidcraft/rccities/commit/a0b01bdceadd0f973ee708d59b64adc70bd42b87))
+* Fix some npes ([c7a6932](https://github.com/raidcraft/rccities/commit/c7a6932145082a3e6d8f3791d531e34a30128e23))
+* More bugfixes ([027a135](https://github.com/raidcraft/rccities/commit/027a1354ccd88b990864af75a8814ec226a5aa5b))
+* More bugfixes ([b268f78](https://github.com/raidcraft/rccities/commit/b268f78006a70145c2d3f841046624f450ca4128))
+* More fixes ([f824bae](https://github.com/raidcraft/rccities/commit/f824bae6cbe845a6f40538ce3ead7322627b50f4))
+* Remove usage of raw plot flag names. Use class reference instead ([8b9d7ac](https://github.com/raidcraft/rccities/commit/8b9d7ac34e306350afc461969e6d2e85f64c56ab))
+
 # [1.4.0](https://github.com/raidcraft/rccities/compare/v1.3.0...v1.4.0) (2020-12-05)
 
 
