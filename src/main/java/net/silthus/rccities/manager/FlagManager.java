@@ -129,6 +129,10 @@ public class FlagManager {
         cachedCityFlags.get(city.getName()).remove(flagName);
     }
 
+    public void setPlotFlag(Plot plot, String flagName, String flagValue) throws RaidCraftException {
+        setPlotFlag(plot, null, flagName, flagValue);
+    }
+
     public void setPlotFlag(Plot plot, Player player, String flagName, String flagValue) throws RaidCraftException {
 
         if (!registeredPlotFlags.containsKey(flagName)) {

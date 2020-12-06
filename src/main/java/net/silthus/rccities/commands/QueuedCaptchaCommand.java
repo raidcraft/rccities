@@ -1,5 +1,6 @@
-package net.silthus.rccities.util;
+package net.silthus.rccities.commands;
 
+import net.silthus.rccities.util.MathUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 

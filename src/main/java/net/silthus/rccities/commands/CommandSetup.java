@@ -46,7 +46,7 @@ public class CommandSetup {
 
     private void registerFlagContext(PaperCommandManager commandManager) {
 
-        commandManager.getCommandContexts().registerContext(CommandFlag.class, c -> {
+        commandManager.getCommandContexts().registerIssuerAwareContext(CommandFlag.class, c -> {
 
             String flagName = c.getFirstArg();
 

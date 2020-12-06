@@ -121,7 +121,11 @@ public class ResidentCommands extends BaseCommand {
             throw new ConditionFailedException("Der jetzige Beruf des Spielers kann nur von Administratoren geändert werden!");
         }
 
-        targetResident.setRole(Role.MAYOR);
+        if(targetResident.getRole() == role) {
+            throw new ConditionFailedException("Der Einwohner hat bereits diesen Bruf");
+        }
+
+        targetResident.setRole(role);
 
         Bukkit.broadcastMessage(ChatColor.GOLD + targetResident.getName() + " ist nun "
                 + role.getFriendlyName() + " der Stadt '" + city.getFriendlyName() + "'!");

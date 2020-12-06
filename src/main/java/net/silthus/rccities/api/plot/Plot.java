@@ -31,6 +31,8 @@ public interface Plot {
 
     void removeResident(Resident resident);
 
+    void setFlag(String flagName, String flagValue) throws RaidCraftException;
+
     void setFlag(Player player, String flagName, String flagValue) throws RaidCraftException;
 
     void removeFlag(String flagName);

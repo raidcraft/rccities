@@ -13,18 +13,13 @@ import net.silthus.rccities.api.flags.FlagInformation;
 import net.silthus.rccities.api.plot.Plot;
 import net.silthus.rccities.api.resident.Resident;
 import net.silthus.rccities.api.resident.RolePermission;
-import net.silthus.rccities.util.QueuedCaptchaCommand;
-import net.silthus.rccities.util.QueuedCommand;
 import net.silthus.rccities.util.RaidCraftException;
 import org.bukkit.*;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * @author Philip Urban
@@ -176,20 +171,6 @@ public class PlotCommands extends BaseCommand {
 
         Plot plot = new DatabasePlot(plotCenter, city);
 
-        // create schematic
-        try {
-            plugin.getSchematicManager().createSchematic(plot);
-        } catch (RaidCraftException e) {
-            throw new InvalidCommandArgument(e.getMessage());
-        }
-
-        // Mark plot
-        try {
-            plot.setFlag(player, "MARK_FREE", "ON");
-        } catch (RaidCraftException e) {
-            throw new InvalidCommandArgument(e.getMessage());
-        }
-
         // withdraw plot credit
         city.setPlotCredit(city.getPlotCredit() - 1);
 
@@ -228,7 +209,8 @@ public class PlotCommands extends BaseCommand {
             if(flags.hasAdminFlag(player, 'a')) {
                 player.sendMessage(ChatColor.DARK_RED
                         + "Bist du sicher dass ALLE plots wiederhergestellt werden sollen?");
-                new QueuedCaptchaCommand(player, this, "unclaimAll", player, plot.getCity());
+                new QueuedCaptchaCommand(player, this, "unclaimAll",
+                        player, plot.getCity(), restoreSchematics);
 
             } else {
                 if (force) {
@@ -425,6 +407,7 @@ public class PlotCommands extends BaseCommand {
             if (restoreSchematics) {
                 int i = 0;
                 for (Entity entity : plot.getLocation().getChunk().getEntities()) {
+                    if(entity instanceof Player) continue;
                     entity.remove();
                     i++;
                 }

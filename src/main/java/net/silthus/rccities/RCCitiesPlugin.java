@@ -1,9 +1,5 @@
 package net.silthus.rccities;
 
-import co.aikar.commands.BukkitCommandExecutionContext;
-import co.aikar.commands.ConditionFailedException;
-import co.aikar.commands.InvalidCommandArgument;
-import com.google.common.base.Strings;
 import com.sk89q.worldguard.WorldGuard;
 import kr.entree.spigradle.annotations.PluginMain;
 import lombok.Getter;
@@ -13,11 +9,7 @@ import net.silthus.ebean.Config;
 import net.silthus.ebean.EbeanWrapper;
 import net.silthus.rccities.api.city.City;
 import net.silthus.rccities.api.plot.Plot;
-import net.silthus.rccities.api.resident.Resident;
 import net.silthus.rccities.commands.CommandSetup;
-import net.silthus.rccities.commands.PlotCommands;
-import net.silthus.rccities.commands.ResidentCommands;
-import net.silthus.rccities.commands.TownCommands;
 import net.silthus.rccities.flags.city.*;
 import net.silthus.rccities.flags.city.admin.InviteCityFlag;
 import net.silthus.rccities.flags.plot.*;
@@ -37,9 +29,8 @@ import net.silthus.rccities.tables.*;
 import net.silthus.rccities.upgrades.RCUpgrades;
 import net.silthus.rccities.upgrades.RequirementManager;
 import net.silthus.rccities.upgrades.api.reward.RewardManager;
-import net.silthus.rccities.util.QueuedCommand;
+import net.silthus.rccities.commands.QueuedCommand;
 import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -47,13 +38,11 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.java.JavaPluginLoader;
 import co.aikar.commands.PaperCommandManager;
 import io.ebean.Database;
-import me.wiefferink.interactivemessenger.processing.Message;
 import me.wiefferink.interactivemessenger.source.LanguageManager;
 import net.milkbowl.vault.permission.Permission;
 
 import java.io.File;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * @author Philip Urban
@@ -158,6 +147,7 @@ public class RCCitiesPlugin extends JavaPlugin {
 
         // plot flags
         flagManager.registerPlotFlag(MarkPlotFlag.class);
+        flagManager.registerPlotFlag(MarkPlotBaseFlag.class);
         flagManager.registerPlotFlag(PvpPlotFlag.class);
         flagManager.registerPlotFlag(TntPlotFlag.class);
         flagManager.registerPlotFlag(MobSpawnPlotFlag.class);
@@ -265,12 +255,7 @@ public class RCCitiesPlugin extends JavaPlugin {
 
         queuedCommands.put(command.getSender().getName(), command);
         Bukkit.getScheduler().scheduleSyncDelayedTask(this, () ->
-                queuedCommands.remove(command.getSender().getName()), 600L);
-        // 30 second remove delay
-    }
-
-    public final Map<String, QueuedCommand> getQueuedCommands() {
-
-        return queuedCommands;
+                queuedCommands.remove(command.getSender().getName()), 900L);
+        // 45 second remove delay
     }
 }

@@ -1,12 +1,11 @@
 package net.silthus.rccities.commands;
 
 import co.aikar.commands.BaseCommand;
-import co.aikar.commands.CommandIssuer;
 import co.aikar.commands.ConditionFailedException;
 import co.aikar.commands.InvalidCommandArgument;
 import co.aikar.commands.annotation.*;
+import co.aikar.commands.annotation.Optional;
 import com.google.common.base.Strings;
-import com.sk89q.minecraft.util.commands.CommandException;
 import net.milkbowl.vault.economy.Economy;
 import net.silthus.rccities.CityPermissions;
 import net.silthus.rccities.DatabasePlot;
@@ -26,19 +25,14 @@ import net.silthus.rccities.upgrades.api.level.UpgradeLevel;
 import net.silthus.rccities.upgrades.api.unlockresult.UnlockResult;
 import net.silthus.rccities.upgrades.api.upgrade.Upgrade;
 import net.silthus.rccities.util.CaseInsensitiveMap;
-import net.silthus.rccities.util.QueuedCaptchaCommand;
-import net.silthus.rccities.util.QueuedCommand;
 import net.silthus.rccities.util.RaidCraftException;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author Philip Urban
@@ -48,6 +42,7 @@ public class TownCommands extends BaseCommand {
 
     private final RCCitiesPlugin plugin;
     private final Map<String, City> invites = new CaseInsensitiveMap<>();
+    private final Map<UUID, Long> lastTeleport = new HashMap<>();
 
     public TownCommands(RCCitiesPlugin plugin) {
 
@@ -118,13 +113,6 @@ public class TownCommands extends BaseCommand {
 
             // create initial plot
             Plot plot = new DatabasePlot(player.getLocation(), city);
-
-            // create schematic
-            try {
-                plugin.getSchematicManager().createSchematic(plot);
-            } catch (RaidCraftException e) {
-                throw new InvalidCommandArgument(e.getMessage());
-            }
 
             // set flags at the end because of possible errors
             plugin.getFlagManager().setCityFlag(city, player, PvpCityFlag.class, false);       // disable pvp
@@ -227,8 +215,25 @@ public class TownCommands extends BaseCommand {
             throw new ConditionFailedException("Du befindest dich auf der falschen Welt!");
         }
 
-        player.teleport(city.getSpawn());
-        player.sendMessage(ChatColor.YELLOW + "Du wurdest zum Stadt-Spawn von teleportiert!");
+        if(lastTeleport.get(player.getUniqueId()) != null &&
+                System.currentTimeMillis() - lastTeleport.get(player.getUniqueId())
+                        < plugin.getPluginConfig().getSpawnTeleportCooldown() * 1000.) {
+            double remainingSeconds = (plugin.getPluginConfig().getSpawnTeleportCooldown())
+                    - ((double)(System.currentTimeMillis() - lastTeleport.get(player.getUniqueId())) / 1000.);
+            throw new ConditionFailedException(ChatColor.RED + "Du musst noch "
+                    + ((double)Math.round(remainingSeconds*100.) / 100.) + "s bis zum nächsten Teleport warten.");
+        }
+
+        player.sendMessage(ChatColor.YELLOW + "Du wirst in "
+                + plugin.getPluginConfig().getSpawnTeleportWarmup() + "s zum Stadt Spawn teleportiert...");
+        Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
+            @Override
+            public void run() {
+                player.teleport(city.getSpawn());
+                lastTeleport.put(player.getUniqueId(), System.currentTimeMillis());
+                player.sendMessage(ChatColor.YELLOW + "Willkommen am Stadt Spawn von " + city.getFriendlyName() + "!");
+            }
+        }, (long)(plugin.getPluginConfig().getSpawnTeleportWarmup() * 20.));
     }
 
     @Subcommand("setspwan")

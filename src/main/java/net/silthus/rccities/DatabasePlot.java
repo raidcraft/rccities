@@ -1,5 +1,6 @@
 package net.silthus.rccities;
 
+import co.aikar.commands.InvalidCommandArgument;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import net.silthus.rccities.api.city.City;
 import net.silthus.rccities.api.plot.AbstractPlot;
@@ -26,6 +27,20 @@ public class DatabasePlot extends AbstractPlot {
     public DatabasePlot(Location location, City city) {
 
         super(location, city);
+
+        // create schematic
+        try {
+            RCCitiesPlugin.getPlugin().getSchematicManager().createSchematic(this);
+        } catch (RaidCraftException e) {
+            RCCitiesPlugin.getPlugin().getLogger().warning(e.getMessage());
+        }
+
+        // Mark plot
+        try {
+            setFlag("MARK_FREE", "ON");
+        } catch (RaidCraftException e) {
+            RCCitiesPlugin.getPlugin().getLogger().warning(e.getMessage());
+        }
     }
 
     public DatabasePlot(TPlot tPlot) {
@@ -43,6 +58,11 @@ public class DatabasePlot extends AbstractPlot {
         this.region = RCCitiesPlugin.getPlugin().getWorldGuard().getPlatform().getRegionContainer()
                 .get(BukkitAdapter.adapt(location.getWorld())).getRegion(getRegionName());
         loadAssignments();
+    }
+
+    @Override
+    public void setFlag(String flagName, String flagValue) throws RaidCraftException {
+        setFlag(null, flagName, flagValue);
     }
 
     @Override
