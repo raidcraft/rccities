@@ -140,6 +140,8 @@ Die Stadt selbst wird folgendermaßen gelöscht.
 ``/plot unlcaim [-ra]``
 * ``-r`` Stellt den Ursprungszustand des Plots vor dem Claimen her (Chunk wird mit Backup Schematic ersetzt)
 * ``-a`` Unclaimed ALLE Plots der Stadt
+##### Teleport zu Plot
+``/plot tp <Plotname>``
 ## Config
 ``ignored_regions``
    
