@@ -99,10 +99,21 @@ public abstract class AbstractPlot implements Plot {
             refreshFlags();
 
             // owner
-            DefaultDomain defaultDomain = new DefaultDomain();
-            for (Resident resident : getAssignedResidents()) {
-                defaultDomain.addPlayer(resident.getName());
+            DefaultDomain defaultDomain = region.getOwners();
+
+            if(defaultDomain == null) {
+                defaultDomain = new DefaultDomain();
             }
+            // remove all
+            defaultDomain.removeAll();
+
+            // add assigned residents
+            for (Resident resident : getAssignedResidents()) {
+                if(!defaultDomain.contains(resident.getPlayerId())) {
+                    defaultDomain.addPlayer(resident.getPlayerId());
+                }
+            }
+
             // add city staff
             for (Resident resident : getCity().getResidents()) {
                 if (!resident.getRole().hasPermission(RolePermission.BUILD_EVERYWHERE)) continue;
@@ -111,7 +122,7 @@ public abstract class AbstractPlot implements Plot {
                             .info("name of resident is null: " + resident.getId());
                     continue;
                 }
-                defaultDomain.addPlayer(resident.getName());
+                defaultDomain.addPlayer(resident.getPlayerId());
             }
             region.setOwners(defaultDomain);
         }

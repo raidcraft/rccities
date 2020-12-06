@@ -109,10 +109,6 @@ public class DatabasePlot extends AbstractPlot {
     @Override
     public List<Resident> getAssignedResidents() {
 
-        // prevent NPE!?!?!?
-        if (assignedResidents == null) {
-            return new ArrayList<>();
-        }
         return new ArrayList<>(assignedResidents.values());
     }
 

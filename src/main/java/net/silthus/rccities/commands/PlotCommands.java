@@ -322,7 +322,7 @@ public class PlotCommands extends BaseCommand {
                     + " in der Stadtkasse benötigt");
         }
 
-        player.sendMessage("Info: " + count + " neue Plots kosten "
+        player.sendMessage(ChatColor.YELLOW + "Info: " + count + " neue Plots kosten "
                 + ChatColor.DARK_RED + plugin.getEconomy().format(requiredMoney));
 
         try {
