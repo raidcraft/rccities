@@ -1,3 +1,18 @@
+# [1.4.0](https://github.com/raidcraft/rccities/compare/v1.3.0...v1.4.0) (2020-12-05)
+
+
+### Bug Fixes
+
+* Fix command context ([f5e7391](https://github.com/raidcraft/rccities/commit/f5e73911d3e80b7683a29645aa9bb1109e115ec0))
+* Improve command handling ([5c3995f](https://github.com/raidcraft/rccities/commit/5c3995fbdfa81bc67380c798fe2e405c873b400e))
+
+
+### Features
+
+* Add command to buy new plots ([de06272](https://github.com/raidcraft/rccities/commit/de062725419dab653f6340d911c05e94b5af8e22))
+* Add simple commands to set resident role ([6efdc05](https://github.com/raidcraft/rccities/commit/6efdc05f68dea8c7947262d43538a8c82020274a))
+* Plots will be automatically marked when claimed ([b51743d](https://github.com/raidcraft/rccities/commit/b51743d2baadb29724d9633407b720f7562731a2))
+
 # [1.3.0](https://github.com/raidcraft/rccities/compare/v1.2.0...v1.3.0) (2020-12-04)
 
 
