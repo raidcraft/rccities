@@ -67,22 +67,25 @@ public class PlotCommands extends BaseCommand {
 
         CommandHelper.checkRolePermissions(player, city, RolePermission.PLOT_DISTRIBUTION);
 
-        OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(targetResidentName);
-        Resident targetResident = plugin.getResidentManager().getResident(offlinePlayer.getUniqueId(), city);
+        Resident targetResident = plugin.getResidentManager().getResident(targetResidentName, city);
         if (targetResident == null) {
             throw new ConditionFailedException("Der angegebene Spieler ist kein Mitglied deiner Stadt '"
                     + city.getFriendlyName() + "'!");
         }
 
+        if(targetResident.getName().equalsIgnoreCase(player.getName())) {
+            throw new ConditionFailedException("Du kannst dir selbst keine Plots entziehen!");
+        }
+
         plot.removeResident(resident);
         plot.getCity().refreshFlags();
         plot.refreshFlags();
-        player.sendMessage(ChatColor.GREEN + "Du hast den Plot '" + plot.getRegionName() + "' erfolgreich "
+        player.sendMessage(ChatColor.GREEN + "Plot '" + plot.getRegionName() + "' wurde "
                 + targetResident.getName() + " entzogen!");
         if (targetResident.getPlayer() != null) {
             targetResident.getPlayer()
-                    .sendMessage(ChatColor.GREEN + "Dir wurde in der Stadt '" + city.getFriendlyName()
-                            + "' der Plot '" + plot.getRegionName() + "' entzogen!");
+                    .sendMessage(ChatColor.GREEN + "Dir wurde in " + city.getFriendlyName()
+                            + " der Plot '" + plot.getRegionName() + "' entzogen!");
         }
     }
 
@@ -105,19 +108,19 @@ public class PlotCommands extends BaseCommand {
         plot.assignResident(targetResident);
         plot.getCity().refreshFlags();
         plot.refreshFlags();
-        player.sendMessage(ChatColor.GREEN + "Du hast den Plot '" + plot.getRegionName() + "' erfolgreich an "
+        player.sendMessage(ChatColor.GREEN + "Plot '" + plot.getRegionName() + "' wurde an "
                 + targetResident.getName() + " vergeben!");
         if (targetResident.getPlayer() != null) {
             targetResident.getPlayer()
-                    .sendMessage(ChatColor.GREEN + "Dir wurde in der Stadt '"
-                            + city.getFriendlyName() + "' der Plot '" + plot.getRegionName() + "' zugewiesen!");
+                    .sendMessage(ChatColor.GREEN + "Dir wurde in "
+                            + city.getFriendlyName() + " der Plot '" + plot.getRegionName() + "' zugewiesen!");
         }
     }
 
     @Subcommand("claim")
     @CommandCompletion("@cities")
     @CommandPermission(CityPermissions.GROUP_USER + ".plot.claim")
-    public void claim(Player player, @Optional String cityName, CommandFlag flags) {
+    public void claim(Player player, @Optional String cityName) {
 
         // Check if there is already an plot
         if(plugin.getPlotManager().getPlot(player.getLocation().getChunk()) != null) {
@@ -158,11 +161,12 @@ public class PlotCommands extends BaseCommand {
             city = plot.getCity();
         }
         // admins can claim wild chunks
-        if(flags.hasAdminFlag(player, 'f')) {
+        if(player.hasPermission(CityPermissions.GROUP_ADMIN)) {
             if(city == null) {
                 if(Strings.isNullOrEmpty(cityName)) {
                     throw new InvalidCommandArgument("Gebe eine Stadt als ersten Parameter an!");
                 }
+                player.sendMessage(ChatColor.RED + "Dieser Plot wird als Admin frei geclaimed!");
                 city = plugin.getCityManager().getCity(cityName);
             }
         } else if (city == null) {
@@ -225,7 +229,7 @@ public class PlotCommands extends BaseCommand {
             }
             if(flags.hasAdminFlag(player, 'a')) {
                 player.sendMessage(ChatColor.DARK_RED
-                        + "Bist du sicher dass ALLE plots wiederhergestellt werden sollen?");
+                        + "Bist du sicher dass ALLE plots gelöscht werden sollen?");
                 new QueuedCaptchaCommand(player, this, "unclaimAll",
                         player, plot.getCity(), restoreSchematics);
 
@@ -280,7 +284,7 @@ public class PlotCommands extends BaseCommand {
         try {
             plot.setFlag(MarkPlotFlag.class, true);
         } catch (RaidCraftException e) {
-            throw new InvalidCommandArgument(e.getMessage());
+            throw new ConditionFailedException(e.getMessage());
         }
         player.sendMessage(ChatColor.GREEN + "Du hast erfolgreich den Plot markiert!");
     }
@@ -296,7 +300,7 @@ public class PlotCommands extends BaseCommand {
         try {
             plot.setFlag(MarkPlotFlag.class, false);
         } catch (RaidCraftException e) {
-            throw new InvalidCommandArgument(e.getMessage());
+            throw new ConditionFailedException(e.getMessage());
         }
         player.sendMessage(ChatColor.GREEN + "Du hast erfolgreich die Plot Markierung entfernt!");
     }
@@ -317,6 +321,9 @@ public class PlotCommands extends BaseCommand {
             throw new ConditionFailedException("Es werden " + plugin.getEconomy().format(requiredMoney)
                     + " in der Stadtkasse benötigt");
         }
+
+        player.sendMessage("Info: " + count + " neue Plots kosten "
+                + ChatColor.DARK_RED + plugin.getEconomy().format(requiredMoney));
 
         try {
             new QueuedCommand(player, this, "buyPlots", player, city, count);
@@ -359,6 +366,8 @@ public class PlotCommands extends BaseCommand {
         }
 
         plot.delete();
+        city.setPlotCredit(city.getPlotCredit() + 1);
+        sender.sendMessage("Du hast den Plot erfolgreich gelöscht");
         plugin.getResidentManager().broadcastCityMessage(city, "Der Plot '"
                 + plot.getRegionName() + "' wurde gelöscht!");
     }
@@ -420,6 +429,7 @@ public class PlotCommands extends BaseCommand {
             }
 
             plot.delete();
+            city.setPlotCredit(city.getPlotCredit() + 1);
 
             if (restoreSchematics) {
                 int i = 0;
