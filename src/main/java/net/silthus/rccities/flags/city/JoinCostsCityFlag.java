@@ -22,6 +22,10 @@ public class JoinCostsCityFlag extends AbstractCityFlag {
         super(city);
     }
 
+    public double getAmount() {
+        return Double.parseDouble(getValue());
+    }
+
     @Override
     public void refresh() throws RaidCraftException {
 

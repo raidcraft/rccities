@@ -332,6 +332,11 @@ public class TownCommands extends BaseCommand {
         invites.put(targetPlayer.getName(), city);
         targetPlayer.getPlayer().sendMessage(ChatColor.GOLD + "Du wurdest in die Stadt '"
                 + city.getFriendlyName() + "' eingeladen!");
+        JoinCostsCityFlag flag = (JoinCostsCityFlag)plugin.getFlagManager().getCityFlag(city, JoinCostsCityFlag.class);
+        if(flag != null) {
+            targetPlayer.getPlayer().sendMessage(ChatColor.GOLD + "Der Beitritt kostet dich " + ChatColor.DARK_RED +
+                    + flag.getAmount());
+        }
         targetPlayer.getPlayer().sendMessage(ChatColor.GOLD + "Bestätige die Einladung mit '/town accept'");
         player.sendMessage(ChatColor.GREEN + "Du hast " + targetPlayer.getName() + " in die Stadt '"
                 + city.getFriendlyName() + "' eingeladen!");
@@ -346,6 +351,17 @@ public class TownCommands extends BaseCommand {
         }
 
         City city = invites.get(player.getName());
+
+        JoinCostsCityFlag flag = (JoinCostsCityFlag)plugin.getFlagManager().getCityFlag(city, JoinCostsCityFlag.class);
+        if(flag != null) {
+            if(!plugin.getEconomy().has(player, flag.getAmount())) {
+                throw  new ConditionFailedException("Du benötigst "
+                        + plugin.getEconomy().format(flag.getAmount()) + " um der Stadt beizutreten");
+            }
+
+            plugin.getEconomy().withdrawPlayer(player, flag.getAmount());
+        }
+
         try {
             plugin.getResidentManager().addResident(city, player);
         } catch (RaidCraftException e) {
