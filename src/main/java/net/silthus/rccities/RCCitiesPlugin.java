@@ -257,8 +257,10 @@ public class RCCitiesPlugin extends JavaPlugin {
         queuedCommands.put(command.getSender().getName(), command);
         Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
 
-                queuedCommands.remove(command.getSender().getName());
+            if(queuedCommands.containsKey(command.getSender().getName())) {
                 command.getSender().sendMessage(ChatColor.RED + "Du hast nicht rechtzeitig bestätigt");
+                queuedCommands.remove(command.getSender().getName());
+            }
         }, 900L);
         // 45 second remove delay
     }
