@@ -1,3 +1,13 @@
+## [1.4.2](https://github.com/raidcraft/rccities/compare/v1.4.1...v1.4.2) (2020-12-07)
+
+
+### Bug Fixes
+
+* Check if resident is already member of another town. Introduce -u flag for /plot claim command to avoid marking new plot with torches. ([ff6b355](https://github.com/raidcraft/rccities/commit/ff6b3550cfb5f09e38db5b70b3257e87eade2f8c))
+* Improve order of intelligent city detection ([1d0c837](https://github.com/raidcraft/rccities/commit/1d0c837c747659265b2f1dc821e3424d2e811a59))
+* NPE with citiy names containing german umlauts ([b8866cc](https://github.com/raidcraft/rccities/commit/b8866cc079d88a56899f7865dd9cba3b690eddf2))
+* Remove warning about missed confirmation if already confirmed ([0048819](https://github.com/raidcraft/rccities/commit/0048819657e11bff921b280629ddff1dba6c8ada))
+
 ## [1.4.1](https://github.com/raidcraft/rccities/compare/v1.4.0...v1.4.1) (2020-12-06)
 
 
