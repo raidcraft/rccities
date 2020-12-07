@@ -348,6 +348,10 @@ public class TownCommands extends BaseCommand {
             throw new ConditionFailedException("Der Spieler ist bereits Einwohner dieser Stadt");
         }
 
+        if(plugin.getResidentManager().getCitizenships(targetPlayer.getUniqueId()).size() > 0) {
+            throw new ConditionFailedException("Der Spieler ist bereits Einwohner einer anderen Stadt");
+        }
+
         invites.put(targetPlayer.getName(), city);
         targetPlayer.getPlayer().sendMessage(ChatColor.GOLD + "Du wurdest in die Stadt '"
                 + city.getFriendlyName() + "' eingeladen!");
@@ -367,6 +371,10 @@ public class TownCommands extends BaseCommand {
 
         if (!invites.containsKey(player.getName())) {
             throw new ConditionFailedException("Du hast keine offenen Einladungen!");
+        }
+
+        if(plugin.getResidentManager().getCitizenships(player.getUniqueId()).size() > 0) {
+            throw new ConditionFailedException("Du bist bereits Einwohner einer anderen Stadt");
         }
 
         City city = invites.get(player.getName());

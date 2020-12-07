@@ -63,7 +63,6 @@ public class PlotCommands extends BaseCommand {
     public void take(Player player, Plot plot, String targetResidentName) {
 
         City city = plot.getCity();
-        Resident resident = plugin.getResidentManager().getResident(player.getUniqueId(), city);
 
         CommandHelper.checkRolePermissions(player, city, RolePermission.PLOT_DISTRIBUTION);
 
@@ -77,7 +76,7 @@ public class PlotCommands extends BaseCommand {
             throw new ConditionFailedException("Du kannst dir selbst keine Plots entziehen!");
         }
 
-        plot.removeResident(resident);
+        plot.removeResident(targetResident);
         plot.getCity().refreshFlags();
         plot.refreshFlags();
         player.sendMessage(ChatColor.GREEN + "Plot '" + plot.getRegionName() + "' wurde "
@@ -95,7 +94,6 @@ public class PlotCommands extends BaseCommand {
     public void give(Player player, Plot plot, String resident) {
 
         City city = plot.getCity();
-        Resident residentObj = plugin.getResidentManager().getResident(player.getUniqueId(), city);
 
         CommandHelper.checkRolePermissions(player, city, RolePermission.PLOT_DISTRIBUTION);
 
@@ -190,6 +188,16 @@ public class PlotCommands extends BaseCommand {
         }
 
         Plot plot = new DatabasePlot(plotCenter, city);
+
+        // Unmark plot if flag -u is given
+        // (we use the cityName here due to special command parameters)
+        if(!Strings.isNullOrEmpty(cityName) && cityName.startsWith("-u")) {
+            try {
+                plot.setFlag(MarkPlotBaseFlag.class, false);
+            } catch (RaidCraftException e) {
+                throw new ConditionFailedException(e.getMessage());
+            }
+        }
 
         // withdraw plot credit
         city.setPlotCredit(city.getPlotCredit() - 1);
