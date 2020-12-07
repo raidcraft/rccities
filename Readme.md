@@ -37,7 +37,7 @@ Jede Rolle hat unterschiedliche Berechtigungen:
 Städte bestehen aus 'Plots' welche jeweils die Größe eines Chunks besitzen. Spieler können neue Plots kaufen und auf der Welt zusammenhängend 'Claimen' um so ihre Stadt zu vergrößern.
 Einwohnern können Plots zugewiesen werden um dort zu bauen.
 
-Jede Stadt hat ein Guthaben an Plots, diese können von (Vize-) Bürgermeister auf der Welt verteilt werden. Das Plot-Guthaben kann durch Zukauf, oder den Zugewinn von neuen Einwohnern erhöht werden.
+Jede Stadt hat ein Guthaben an Plots, diese können von (Vize-) Bürgermeister auf der Welt verteilt werden. Das Plot-Guthaben kann durch Zukauf erhöht werden.
 
 ## <a name="commands"></a>Befehle
 Die Verwaltung von Städten ist mit Hilfe von Chat-Befehlen möglich.
