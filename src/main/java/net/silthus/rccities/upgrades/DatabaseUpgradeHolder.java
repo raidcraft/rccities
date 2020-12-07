@@ -89,6 +89,7 @@ public class DatabaseUpgradeHolder<T> extends ConfigurationUpgradeHolder<T> {
 
         // get holder
         TUpgradeHolder tUpgradeHolder = TUpgradeHolder.find.byId(getId());
+        if(tUpgradeHolder == null) return;
 
         // load upgrades
         for(Upgrade upgrade : getUpgrades()) {

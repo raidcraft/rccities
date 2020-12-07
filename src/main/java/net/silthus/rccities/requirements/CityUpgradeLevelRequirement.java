@@ -10,7 +10,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import java.util.Optional;
 
 @RequirementInformation(
-        value = "city.unlocked",
+        value = "CITY_UNLOCKED",
         desc = "Other upgrade must be unlocked."
 )
 public class CityUpgradeLevelRequirement extends AbstractRequirement<City> {

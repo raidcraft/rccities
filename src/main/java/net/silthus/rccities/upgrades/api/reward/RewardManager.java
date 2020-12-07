@@ -28,17 +28,16 @@ public class RewardManager {
             return rewards;
         }
 
-        for (String rewardKey : config.getKeys(false)) {
-            ConfigurationSection rewardSection = config.getConfigurationSection(rewardKey);
+        for (String rewardType : config.getKeys(false)) {
+            ConfigurationSection rewardSection = config.getConfigurationSection(rewardType);
 
-            String type = rewardSection.getString("type");
             ConfigurationSection args = rewardSection.isConfigurationSection("args")
                     ? rewardSection.getConfigurationSection("args") : new MemoryConfiguration();
-            args.set("name", type);
+            args.set("name", rewardType);
 
-            Class<? extends Reward<?>> rClass = rewardClasses.get(type);
+            Class<? extends Reward<?>> rClass = rewardClasses.get(rewardType);
             if (rClass == null) {
-                RCCitiesPlugin.getPlugin().getLogger().warning("There are no reward types defined for the type " + type);
+                RCCitiesPlugin.getPlugin().getLogger().warning("There are no reward types defined for the type " + rewardType);
                 RCCitiesPlugin.getPlugin().getLogger().warning("Available Reward Types are: " + String.join(", ", new ArrayList<>(rewardClasses.keySet())));
                 return rewards;
             }
@@ -69,7 +68,7 @@ public class RewardManager {
                 // get the displayName for aliasing
                 String name = StringUtils.formatName(rClass.getAnnotation(RewardInformation.class).value());
                 rewardClasses.put(name, rClass);
-                RCCitiesPlugin.getPlugin().getLogger().info("Registered Reward Type: " + name);
+                //RCCitiesPlugin.getPlugin().getLogger().info("Registered Reward Type: " + name);
                 break;
             }
         }

@@ -20,7 +20,6 @@ public class RCCitiesPluginConfig extends BukkitYamlConfiguration {
     private int defaultTownRadius = 64;
     private int initialPlotCredit = 3;
     private double flagPlotMarkCost = 20.0;
-    private String cityUpgradeHolder = "cit-upgrade-holder";
     private double joinCosts = 100.0;
     @Comment("This is the base cost of a new plot")
     private double newPlotCost = 500.0;

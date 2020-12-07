@@ -1,6 +1,7 @@
 package net.silthus.rccities.upgrades;
 
 import com.google.common.base.Joiner;
+import net.silthus.rccities.RCCitiesPlugin;
 import net.silthus.rccities.upgrades.api.holder.UpgradeHolder;
 import net.silthus.rccities.upgrades.api.level.UpgradeLevel;
 import net.silthus.rccities.upgrades.api.upgrade.Upgrade;

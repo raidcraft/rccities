@@ -12,7 +12,7 @@ import java.util.Optional;
  * @author Silthus
  */
 @RequirementInformation(
-        value = "city.exp",
+        value = "CITY_EXP",
         desc = "Checks the exp of the city."
 )
 public class CityExpRequirement extends AbstractRequirement<City> {

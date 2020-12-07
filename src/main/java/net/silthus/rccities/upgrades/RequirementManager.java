@@ -91,7 +91,7 @@ public class RequirementManager {
             // get the displayName for aliasing
             String name = StringUtils.formatName(rClass.getAnnotation(RequirementInformation.class).value());
             requirementClasses.put(name, rClass);
-            RCCitiesPlugin.getPlugin().getLogger().info("Registered Requirement Type: " + name);
+            //RCCitiesPlugin.getPlugin().getLogger().info("Registered Requirement Type: " + name);
             break;
         }
     }

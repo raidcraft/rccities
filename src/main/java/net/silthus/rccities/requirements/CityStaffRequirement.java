@@ -14,7 +14,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
 @RequirementInformation(
-        value = "city.staff",
+        value = "CITY_STAFF",
         desc = "Staff must approve."
 )
 public class CityStaffRequirement extends AbstractRequirement<City> {

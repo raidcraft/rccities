@@ -15,7 +15,7 @@ import java.util.Optional;
  * @author Silthus
  */
 @RequirementInformation(
-        value = "city.money",
+        value = "CITY_MONEY",
         desc = "Checks the balance of the city."
 )
 public class CityMoneyRequirement extends AbstractRequirement<City> {
