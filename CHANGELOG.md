@@ -1,3 +1,10 @@
+## [1.4.3](https://github.com/raidcraft/rccities/compare/v1.4.2...v1.4.3) (2020-12-07)
+
+
+### Bug Fixes
+
+* Fix loading of upgrade holder configuration ([67c837c](https://github.com/raidcraft/rccities/commit/67c837c2ef625d201501a836567487221899e1e8))
+
 ## [1.4.2](https://github.com/raidcraft/rccities/compare/v1.4.1...v1.4.2) (2020-12-07)
 
 
