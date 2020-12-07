@@ -109,6 +109,8 @@ public class DatabasePlot extends AbstractPlot {
     @Override
     public List<Resident> getAssignedResidents() {
 
+        // Without null check there is a NPE!? Why?
+        if(assignedResidents == null) return new ArrayList<>();
         return new ArrayList<>(assignedResidents.values());
     }
 

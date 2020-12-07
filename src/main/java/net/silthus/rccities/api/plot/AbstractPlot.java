@@ -13,6 +13,7 @@ import net.silthus.rccities.RCCitiesPlugin;
 import net.silthus.rccities.api.city.City;
 import net.silthus.rccities.api.resident.Resident;
 import net.silthus.rccities.api.resident.RolePermission;
+import net.silthus.rccities.util.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
@@ -46,7 +47,9 @@ public abstract class AbstractPlot implements Plot {
     @Override
     public final String getRegionName() {
 
-        return city.getName().toLowerCase() + "_" + location.getChunk().getX() + "_" + location.getChunk().getZ();
+        String fixedCityName = city.getName().toLowerCase();
+        fixedCityName = StringUtils.replaceUmlaut(fixedCityName);
+        return fixedCityName + "_" + location.getChunk().getX() + "_" + location.getChunk().getZ();
     }
 
     @Override

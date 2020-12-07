@@ -110,8 +110,6 @@ public class TownCommands extends BaseCommand {
         try {
             city = plugin.getCityManager().createCity(cityName, player.getLocation(), player.getUniqueId());
 
-            // default flags
-
             // create initial plot
             Plot plot = new DatabasePlot(player.getLocation(), city);
 
