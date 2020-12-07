@@ -84,9 +84,11 @@ Am einfachsten stellt man sich beim Ausführen der Befehle in die betroffene Sta
 ##### Info Anzeigen
 ``/plot`` oder ``/plot info <Plotname>``
 ##### <a name="command-plot-claim">Claimen
-``/plot claim``
+``/plot claim [-u]``
 * Plots müssen aneinandern anknüpfen
 * Es darf keine andere Region an der Stelle existieren
+* Plot wird automatisch mit Fakeln markiert
+* Mit der Flag ``-u`` werden keine Fakeln gesetzt
 ##### Zusätzliche Plots Kaufen
 ``/plot buy <Anzahl>``
 * Der kauf muss bestätigt werden
