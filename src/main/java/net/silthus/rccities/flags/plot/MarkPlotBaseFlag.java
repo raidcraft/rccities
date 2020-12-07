@@ -20,7 +20,7 @@ import org.bukkit.block.Block;
         name = "MARK_FREE",
         friendlyName = "Fackelmarkierung",
         type = FlagType.BOOLEAN,
-        cooldown = 5,
+        cooldown = 0,
         needsRefresh = false
 )
 public class MarkPlotBaseFlag extends AbstractPlotFlag {
