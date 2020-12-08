@@ -4,15 +4,25 @@ import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldguard.protection.ApplicableRegionSet;
 import com.sk89q.worldguard.protection.managers.storage.StorageException;
+import com.sk89q.worldguard.protection.regions.ProtectedCuboidRegion;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import net.silthus.rccities.RCCitiesPlugin;
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
+import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPistonExtendEvent;
+import org.bukkit.util.BlockVector;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 /**
  * @author Philip Urban
@@ -26,20 +36,33 @@ public class WorldGuardManager implements Listener {
         this.plugin = plugin;
     }
 
-    public boolean claimable(Location location) {
+    public ApplicableRegionSet getChunkRegions(Location location) {
+        Chunk chunk = location.getChunk();
+        int bx = chunk.getX() << 4;
+        int bz = chunk.getZ() << 4;
+        BlockVector3 pt1 = BlockVector3.at(bx, 0, bz);
+        BlockVector3 pt2 = BlockVector3.at(bx + 15, 256, bz + 15);
+        ProtectedCuboidRegion chunkRegion = new ProtectedCuboidRegion("chunkRegion", pt1, pt2);
 
-        BlockVector3 blockVector3 = BlockVector3.at(location.getX(), location.getY(), location.getZ());
         ApplicableRegionSet regions = plugin.getWorldGuard().getPlatform().getRegionContainer()
-                .get(BukkitAdapter.adapt(location.getWorld())).getApplicableRegions(blockVector3);
+                .get(BukkitAdapter.adapt(location.getWorld())).getApplicableRegions(chunkRegion);
+        return regions;
+    }
+
+    public boolean claimable(String cityName, Location location) {
+
+        ApplicableRegionSet regions = getChunkRegions(location);
         if (regions.size() == 0) {
             return true;
         }
         for (ProtectedRegion region : regions) {
             boolean ignored = false;
-            for (String ignoredRegion : plugin.getPluginConfig().getIgnoredRegions()) {
-                if (region.getId().startsWith(ignoredRegion)) {
-                    ignored = true;
-                }
+            if(plugin.getPluginConfig().getIgnoredRegions().stream()
+                    .anyMatch(a -> a.equalsIgnoreCase(region.getId()))) {
+                ignored = true;
+            }
+            if(isOldPlotRegion(cityName, region)) {
+                ignored = true;
             }
             if(!ignored) return false;
         }
@@ -57,68 +80,77 @@ public class WorldGuardManager implements Listener {
         }
     }
 
+    public boolean isOldPlotRegion(String cityName, ProtectedRegion region) {
 
+        // Old region name pattern is: cit_id
 
-    /**
-     *  Allow pistons move across regions
-     */
+        String regionName = region.getId();
 
-//    private static Set<Material> allowedMaterials = new HashSet<>(Arrays.asList(
-//            Material.PISTON_BASE,
-//            Material.PISTON_EXTENSION,
-//            Material.PISTON_MOVING_PIECE,
-//            Material.PISTON_STICKY_BASE
-//    ));
-//
-//    private Map<PlaceBlockEvent, Integer> events = new HashMap<>();
-//
-//    @EventHandler(ignoreCancelled = false, priority = EventPriority.LOWEST)
-//    public void onPlaceBlockLowest(final PlaceBlockEvent event) {
-//
-//        // we are only interested in block causes
-//        if(!(event.getCause().getRootCause() instanceof Block)) return;
-//
-//        Block block = (Block) event.getCause().getRootCause();
-//
-//        // process pistons
-//        if(allowedMaterials.contains(block.getType())) {
-//            events.put(event, event.getBlocks().size());
-//        }
-//    }
-//
-//    @EventHandler(ignoreCancelled = false, priority = EventPriority.HIGHEST)
-//    public void onPlaceBlockHighest(final PlaceBlockEvent event) {
-//
-//        // we are only interested in block causes
-//        if(!(event.getCause().getRootCause() instanceof Block)) return;
-//
-//        // get original list size
-//        Integer originalSize = events.remove(event);
-//
-//        // event was not tracked
-//        if(originalSize == null) return;
-//
-//        // we are only interested in cancelled events
-//        if(!event.isCancelled()) return;
-//
-//        RaidCraft.LOGGER.info("[RCCDebug] Cancelled PlaceBlockEvent: " + event.getCause().getRootCause().getClass().getName());
-//
-//        Block block = (Block) event.getCause().getRootCause();
-//
-//        RaidCraft.LOGGER.info("[RCCDebug] BlockCause: " + block.getType());
-//
-//        // process pistons
-//        if(allowedMaterials.contains(block.getType())) {
-//
-//            if(event.getBlocks().size() != originalSize) {
-//                RaidCraft.LOGGER.info("[RCCDebug] Original size: " + originalSize + " | Current size: " + event.getBlocks().size());
-//                for(int i = 0; i < originalSize - event.getBlocks().size(); i++) {
-//                    event.getBlocks().add(block);
-//                }
-//            }
-//            event.setCancelled(false);
-//        }
-//    }
+        if(!plugin.getPluginConfig().isMigrateOldPlots()) {
+            return false;
+        }
+
+        if(!regionName.startsWith(cityName.toLowerCase())) {
+            return false;
+        }
+
+        // Strip city name
+        regionName = regionName.replace(cityName.toLowerCase() + "_", "");
+
+        // Check if only id is left
+        if(!StringUtils.isNumeric(regionName)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public boolean isOldPlot(String cityName, Location location) {
+        ApplicableRegionSet regions = getChunkRegions(location);
+        if (regions.size() == 0) {
+            return false;
+        }
+
+        for (ProtectedRegion region : regions) {
+            if(isOldPlotRegion(cityName, region)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public Map<String, Location> getAllOldPlots(String cityName, World world) {
+
+        if(!plugin.getPluginConfig().isMigrateOldPlots()) {
+            return new HashMap<String, Location>();
+        }
+
+        String regionName = cityName.toLowerCase() + "_";
+
+        // Get all regions with old plot name: city_id
+        Map<String, Location> regions = plugin.getWorldGuard().getPlatform().getRegionContainer()
+                .get(BukkitAdapter.adapt(world)).getRegions().entrySet().stream()
+                .filter(map -> map.getKey().startsWith(regionName))
+                .filter(map -> StringUtils.isNumeric(map.getKey().replace(regionName, "")))
+                .collect(Collectors.toMap(map -> map.getKey(), map -> BukkitAdapter.adapt(world, map.getValue().getMinimumPoint())));
+        return regions;
+    }
+
+    public boolean deleteOldPlotRegion(String cityName, Location location) {
+        ApplicableRegionSet regions = getChunkRegions(location);
+        if (regions.size() == 0) {
+            return false;
+        }
+
+        for (ProtectedRegion region : regions) {
+            if(isOldPlotRegion(cityName, region)) {
+                plugin.getWorldGuard().getPlatform().getRegionContainer()
+                        .get(BukkitAdapter.adapt(location.getWorld())).removeRegion(region.getId());
+                return true;
+            }
+        }
+        return false;
+    }
 
     @EventHandler(ignoreCancelled = false, priority = EventPriority.MONITOR)
     public void onPistonExtend(BlockPistonExtendEvent event) {

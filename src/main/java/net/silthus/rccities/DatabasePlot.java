@@ -37,13 +37,6 @@ public class DatabasePlot extends AbstractPlot {
         } catch (RaidCraftException e) {
             RCCitiesPlugin.getPlugin().getLogger().warning(e.getMessage());
         }
-
-        // Mark plot
-        try {
-            setFlag(MarkPlotBaseFlag.class, true);
-        } catch (RaidCraftException e) {
-            RCCitiesPlugin.getPlugin().getLogger().warning(e.getMessage());
-        }
     }
 
     public DatabasePlot(TPlot tPlot) {

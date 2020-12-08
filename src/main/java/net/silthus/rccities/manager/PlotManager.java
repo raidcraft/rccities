@@ -1,6 +1,6 @@
 package net.silthus.rccities.manager;
 
-import co.aikar.commands.CommandIssuer;
+import lombok.Setter;
 import net.silthus.rccities.DatabasePlot;
 import net.silthus.rccities.RCCitiesPlugin;
 import net.silthus.rccities.RCCitiesPluginConfig;
@@ -12,7 +12,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.*;
@@ -148,5 +147,84 @@ public class PlotManager {
     public void clearCache() {
 
         cachedPlots.clear();
+    }
+
+    public boolean migrateOldPlot(City city, Location location) {
+
+        // Delete old plot region
+        if(!plugin.getWorldGuardManager().deleteOldPlotRegion(city.getName(), location)) {
+            return false;
+        }
+
+        plugin.getLogger().info("Ein alter Plot (" + location.getChunk().getX()
+                + "/" + location.getChunk().getZ() + ") von " + city.getName() + " wurde migriert!");
+
+        // Create new plot
+        Plot plot = new DatabasePlot(location, city);
+
+        return true;
+    }
+
+    public void migrateAllPlots(City city) {
+
+        Map<String, Location> oldPlotMap = plugin.getWorldGuardManager()
+                .getAllOldPlots(city.getName(), city.getSpawn().getWorld());
+
+        if(oldPlotMap.size() == 0) return;
+
+        OldPlotMigrationTask oldPlotMigrationTask = new OldPlotMigrationTask(city, oldPlotMap);
+        plugin.getLogger().info("Es werden nun " + oldPlotMap.size() + " Plots von "
+                + city.getFriendlyName() + " migriert...");
+        int taskId = Bukkit.getScheduler()
+                .runTaskTimer(RCCitiesPlugin.getPlugin(), oldPlotMigrationTask, 0, 5).getTaskId();
+        oldPlotMigrationTask.setTaskId(taskId);
+    }
+
+    private class OldPlotMigrationTask implements Runnable {
+
+        City city;
+        Map<String, Location> oldPlotMap;
+        @Setter
+        int taskId = -1;
+        int totalCount = 0;
+        int goodCount = 0;
+        int failCount = 0;
+        int doneCount = 0;
+
+        public OldPlotMigrationTask(City city, Map<String, Location> oldPlotMap) {
+
+            this.city = city;
+            this.oldPlotMap = oldPlotMap;
+            totalCount = oldPlotMap.size();
+        }
+
+        @Override
+        public void run() {
+
+            if(oldPlotMap.size() > 0) {
+                Map.Entry<String, Location> nextEntry = oldPlotMap.entrySet().iterator().next();
+                Location location = nextEntry.getValue();
+                if(migrateOldPlot(city, location)) {
+                    goodCount++;
+                } else {
+                    failCount++;
+                }
+                doneCount++;
+
+                oldPlotMap.remove(nextEntry.getKey());
+
+                if(doneCount % 20 == 0) {
+                    plugin.getLogger().info("Migration von " + city.getFriendlyName() + ": Total(" + totalCount
+                            + ") Fertig(" + goodCount + ") Fehler(" + failCount + ") Offen("
+                            + (totalCount - doneCount) + ")");
+                }
+            }
+
+            if(oldPlotMap.size() == 0 && taskId != -1) {
+                plugin.getLogger().info("Es wurden " + goodCount + " Plots von "
+                        + city.getFriendlyName() + " migriert!");
+                Bukkit.getScheduler().cancelTask(taskId);
+            }
+        }
     }
 }

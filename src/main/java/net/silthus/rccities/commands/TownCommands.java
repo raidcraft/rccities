@@ -22,6 +22,8 @@ import net.silthus.rccities.flags.city.GreetingsCityFlag;
 import net.silthus.rccities.flags.city.JoinCostsCityFlag;
 import net.silthus.rccities.flags.city.PvpCityFlag;
 import net.silthus.rccities.flags.city.admin.InviteCityFlag;
+import net.silthus.rccities.flags.plot.MarkPlotBaseFlag;
+import net.silthus.rccities.manager.FlagManager;
 import net.silthus.rccities.upgrades.api.level.UpgradeLevel;
 import net.silthus.rccities.upgrades.api.unlockresult.UnlockResult;
 import net.silthus.rccities.upgrades.api.upgrade.Upgrade;
@@ -88,6 +90,9 @@ public class TownCommands extends BaseCommand {
         for (Plot plot : plugin.getPlotManager().getPlots(city)) {
             plot.updateRegion(false);
         }
+
+        plugin.getPlotManager().migrateAllPlots(city);
+
     getCurrentCommandIssuer().sendMessage(ChatColor.GREEN + "Die Plots der Stadt '"
             + city.getFriendlyName() + "' wurden aktualisiert!");
     }
@@ -102,7 +107,7 @@ public class TownCommands extends BaseCommand {
         }
 
         // check if here is a wrong region
-        if (!plugin.getWorldGuardManager().claimable(player.getLocation())) {
+        if (!plugin.getWorldGuardManager().claimable(cityName, player.getLocation())) {
             throw new ConditionFailedException("Hier befindet sich bereits eine andere Region!");
         }
 
@@ -110,19 +115,33 @@ public class TownCommands extends BaseCommand {
         try {
             city = plugin.getCityManager().createCity(cityName, player.getLocation(), player.getUniqueId());
 
-            // create initial plot
-            Plot plot = new DatabasePlot(player.getLocation(), city);
+            // Migrate old plot otherwise create new
+            if (!plugin.getPlotManager().migrateOldPlot(city, player.getLocation())) {
+
+                // create initial plot
+                Plot plot = new DatabasePlot(player.getLocation(), city);
+
+                // Mark plot
+                try {
+                    plot.setFlag(MarkPlotBaseFlag.class, true);
+                } catch (RaidCraftException e) {
+                    RCCitiesPlugin.getPlugin().getLogger().warning(e.getMessage());
+                }
+            }
 
             // set flags at the end because of possible errors
-            plugin.getFlagManager().setCityFlag(city, player, PvpCityFlag.class, false);       // disable pvp
-            plugin.getFlagManager().setCityFlag(city, player, InviteCityFlag.class, true);    // enable invites
-            plugin.getFlagManager().setCityFlag(city, player, GreetingsCityFlag.class, true);  // enable greetings
-            plugin.getFlagManager().setCityFlag(city, player, JoinCostsCityFlag.class,
-                    plugin.getPluginConfig().getJoinCosts());   // default join costs
+            FlagManager flagManager = plugin.getFlagManager();
+            flagManager.setCityFlag(city, player, PvpCityFlag.class, false);
+            flagManager.setCityFlag(city, player, InviteCityFlag.class, true);
+            flagManager.setCityFlag(city, player, GreetingsCityFlag.class, true);
+            flagManager.setCityFlag(city, player, JoinCostsCityFlag.class, plugin.getPluginConfig().getJoinCosts());
 
         } catch (RaidCraftException e) {
             throw new InvalidCommandArgument(e.getMessage());
         }
+
+        plugin.getPlotManager().migrateAllPlots(city);
+
         Bukkit.broadcastMessage(ChatColor.GOLD + "Es wurde die Stadt '" + city.getFriendlyName() + "' gegründet!");
     }
 

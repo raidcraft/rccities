@@ -49,12 +49,9 @@ public class PlotCommands extends BaseCommand {
     @CommandPermission(CityPermissions.GROUP_ADMIN + ".plot.tp")
     public void tp(Player player, Plot plot) {
 
-        Location plotLocation = plot.getLocation();
-        Location location = new Location(player.getWorld(),
-                plotLocation.getX(),
-                player.getWorld().getHighestBlockYAt(plotLocation) + 1,
-                plotLocation.getZ());
-        player.teleport(location);
+        Location plotLocation = plot.getLocation().clone();
+        plotLocation.setY(player.getWorld().getHighestBlockYAt(plotLocation) + 1);
+        player.teleport(plotLocation);
     }
 
     @Subcommand("take ")
@@ -125,11 +122,6 @@ public class PlotCommands extends BaseCommand {
             throw new ConditionFailedException("Hier befindet sich bereits eine Stadt Plot!");
         }
 
-        // check if here is a wrong region
-        if (!plugin.getWorldGuardManager().claimable(player.getLocation())) {
-            throw new ConditionFailedException("Hier befindet sich bereits eine andere Region!");
-        }
-
         // get neighbor plot and city
         Chunk chunk = player.getLocation().getChunk();
         Plot[] neighborPlots = new Plot[8];
@@ -171,11 +163,9 @@ public class PlotCommands extends BaseCommand {
             throw new ConditionFailedException("Neue Plots müssen an bestehende anknüpfen!");
         }
 
-        CommandHelper.checkRolePermissions(player, city, RolePermission.PLOT_CLAIM);
-
-        // check plot credit
-        if (city.getPlotCredit() == 0) {
-            throw new ConditionFailedException("Deine Stadt hat keine freien Plots zum claimen!");
+        // check if here is a wrong region
+        if (!plugin.getWorldGuardManager().claimable(city.getName(), player.getLocation())) {
+            throw new ConditionFailedException("Hier befindet sich bereits eine andere Region!");
         }
 
         // check max radius
@@ -187,15 +177,31 @@ public class PlotCommands extends BaseCommand {
                     + city.getMaxRadius() + " Blöcken um den Stadtmittelpunkt claimen!");
         }
 
+        // check if here is an old plot which could be migrated
+        if (plugin.getPlotManager().migrateOldPlot(city, plotCenter)) {
+            player.sendMessage(ChatColor.GREEN
+                    + "An dieser Stelle befand sich ein alter Plot. Dieser wurde kostenlos migriert.");
+            return;
+        }
+
+        CommandHelper.checkRolePermissions(player, city, RolePermission.PLOT_CLAIM);
+
+        // check plot credit
+        if (city.getPlotCredit() == 0) {
+            throw new ConditionFailedException("Deine Stadt hat keine freien Plots zum claimen!");
+        }
+
+
         Plot plot = new DatabasePlot(plotCenter, city);
 
-        // Unmark plot if flag -u is given
+        // Mark plot if flag -u is not given
         // (we use the cityName here due to special command parameters)
-        if(!Strings.isNullOrEmpty(cityName) && cityName.startsWith("-u")) {
+        if(!Strings.isNullOrEmpty(cityName) || !cityName.startsWith("-u")) {
+            // Mark plot
             try {
-                plot.setFlag(MarkPlotBaseFlag.class, false);
+                plot.setFlag(MarkPlotBaseFlag.class, true);
             } catch (RaidCraftException e) {
-                throw new ConditionFailedException(e.getMessage());
+                RCCitiesPlugin.getPlugin().getLogger().warning(e.getMessage());
             }
         }
 

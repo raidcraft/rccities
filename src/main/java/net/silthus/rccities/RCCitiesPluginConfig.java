@@ -17,6 +17,8 @@ public class RCCitiesPluginConfig extends BukkitYamlConfiguration {
 
     private DatabaseConfig database = new DatabaseConfig();
     private List<String> ignoredRegions = new ArrayList<>();
+    @Comment("Enable it to automatically migrate old plot regions into new city plots")
+    private boolean migrateOldPlots = true;
     private int defaultTownRadius = 64;
     private int initialPlotCredit = 3;
     private double flagPlotMarkCost = 20.0;
