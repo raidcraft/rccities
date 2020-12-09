@@ -1,3 +1,15 @@
+# [1.5.0](https://github.com/raidcraft/rccities/compare/v1.4.3...v1.5.0) (2020-12-08)
+
+
+### Bug Fixes
+
+* Silent debug comment, increased migration delay to 500ms to decrease pressure ([fcba10f](https://github.com/raidcraft/rccities/commit/fcba10fd982df27767bdc7a01ed45957b52e457b))
+
+
+### Features
+
+* Implement plot migration from old RCCities plot regions ([86c4ee4](https://github.com/raidcraft/rccities/commit/86c4ee4de7fc3ece555fec57adaa5d3665043e90))
+
 ## [1.4.3](https://github.com/raidcraft/rccities/compare/v1.4.2...v1.4.3) (2020-12-07)
 
 
