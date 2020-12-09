@@ -75,9 +75,11 @@ public class DynmapManager {
             return;
         }
 
-        removeMarker(city);
+        removeCityMarker(city);
 
-        api.getMarkerSet().createMarker(city.getName().toLowerCase().replace(" ", "_")
+        String cityMarkerId = city.getName().toLowerCase().replace(" ", "_");
+
+        api.getMarkerSet().createMarker(cityMarkerId
                 , city.getFriendlyName()
                 , city.getSpawn().getWorld().getName()
                 , city.getSpawn().getBlockX()
@@ -85,6 +87,20 @@ public class DynmapManager {
                 , city.getSpawn().getBlockZ()
                 , api.getMarkerAPI().getMarkerIcon("bighouse")
                 , true /* persistent */);
+    }
+
+    public void removeCityMarker(City city) {
+
+        API api = getApi();
+        if (api == null) {
+            return;
+        }
+
+        String markerId = city.getName().toLowerCase().replace(" ", "_");
+        Marker marker = api.getMarkerSet().findMarker(markerId);
+        if(marker != null) {
+            marker.deleteMarker();
+        }
     }
 
     public void addPlotAreaMarker(Plot plot) {
@@ -114,17 +130,17 @@ public class DynmapManager {
                 true /* persistent */);
     }
 
-    public void removeMarker(City city) {
+    public void removePlotAreaMarker(Plot plot) {
 
         API api = getApi();
         if (api == null) {
             return;
         }
 
-        for (Marker marker : api.getMarkerSet().getMarkers()) {
-            if (marker.getLabel().equalsIgnoreCase(city.getFriendlyName())) {
-                marker.deleteMarker();
-            }
+        String markerId = plot.getRegionName().replace("-", "m");
+        AreaMarker marker = api.getMarkerSet().findAreaMarker(markerId);
+        if(marker != null) {
+            marker.deleteMarker();
         }
     }
 }

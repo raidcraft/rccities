@@ -162,6 +162,8 @@ public class DatabaseCity extends AbstractCity {
         
         RCCitiesPlugin.getPlugin().getUpgrades().getUpgradeManager().deleteUpgradeHolder(getUpgrades().getId());
 
+        plugin.getDynmapManager().removeCityMarker(this);
+
         plugin.getCityManager().removeFromCache(this);
         TCity tCity = TCity.find.byId(getId());
         tCity.delete();

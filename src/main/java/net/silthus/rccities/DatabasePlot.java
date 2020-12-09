@@ -170,6 +170,8 @@ public class DatabasePlot extends AbstractPlot {
         // delete from cache
         plugin.getPlotManager().removeFromCache(this);
 
+        plugin.getDynmapManager().removePlotAreaMarker(this);
+
         // delete plot
         TPlot tPlot = TPlot.find.byId(getId());
         tPlot.delete();
