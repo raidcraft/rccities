@@ -37,6 +37,8 @@ public class DatabasePlot extends AbstractPlot {
         } catch (RaidCraftException e) {
             RCCitiesPlugin.getPlugin().getLogger().warning(e.getMessage());
         }
+
+        RCCitiesPlugin.getPlugin().getDynmapManager().addPlotAreaMarker(this);
     }
 
     public DatabasePlot(TPlot tPlot) {

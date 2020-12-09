@@ -48,6 +48,9 @@ public class CityManager {
         }
         city = new DatabaseCity(cityName, location, creator);
         city.setDescription("Dies ist eine neue Stadt!");
+
+        plugin.getDynmapManager().addCityMarker(city);
+
         cachedCities.put(cityName, city);
         return city;
     }

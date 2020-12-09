@@ -49,6 +49,8 @@ public class PlotCommands extends BaseCommand {
     @CommandPermission(CityPermissions.GROUP_ADMIN + ".plot.tp")
     public void tp(Player player, Plot plot) {
 
+        player.sendMessage(ChatColor.YELLOW + "Du wirst zum Plot '" + plot.getRegionName() + "' teleportiert!");
+
         Location plotLocation = plot.getLocation().clone();
         plotLocation.setY(player.getWorld().getHighestBlockYAt(plotLocation) + 1);
         player.teleport(plotLocation);
@@ -158,6 +160,9 @@ public class PlotCommands extends BaseCommand {
                 }
                 player.sendMessage(ChatColor.RED + "Dieser Plot wird als Admin frei geclaimed!");
                 city = plugin.getCityManager().getCity(cityName);
+                if(city == null) {
+                    throw new InvalidCommandArgument("Angegebene Stadt nicht gefunden!");
+                }
             }
         } else if (city == null) {
             throw new ConditionFailedException("Neue Plots müssen an bestehende anknüpfen!");
@@ -196,7 +201,7 @@ public class PlotCommands extends BaseCommand {
 
         // Mark plot if flag -u is not given
         // (we use the cityName here due to special command parameters)
-        if(!Strings.isNullOrEmpty(cityName) || !cityName.startsWith("-u")) {
+        if(Strings.isNullOrEmpty(cityName) || !cityName.startsWith("-u")) {
             // Mark plot
             try {
                 plot.setFlag(MarkPlotBaseFlag.class, true);

@@ -52,7 +52,7 @@ public class WorldGuardManager implements Listener {
     public boolean claimable(String cityName, Location location) {
 
         ApplicableRegionSet regions = getChunkRegions(location);
-        if (regions.size() == 0) {
+        if (regions == null || regions.size() == 0) {
             return true;
         }
         for (ProtectedRegion region : regions) {

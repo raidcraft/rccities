@@ -70,6 +70,7 @@ public class RCCitiesPlugin extends JavaPlugin {
     private WorldGuardManager worldGuardManager;
     private UpgradeRequestManager upgradeRequestManager;
     private SchematicManager schematicManager;
+    private DynmapManager dynmapManager;
 
     private EntityListener entityListener;
     private ResidentListener residentListener;
@@ -137,6 +138,7 @@ public class RCCitiesPlugin extends JavaPlugin {
         worldGuardManager = new WorldGuardManager(this);
         upgradeRequestManager = new UpgradeRequestManager(this);
         schematicManager = new SchematicManager(this);
+        dynmapManager = new DynmapManager(this);
 
         // city flags
         flagManager.registerCityFlag(PvpCityFlag.class);

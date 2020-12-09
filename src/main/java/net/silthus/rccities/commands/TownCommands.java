@@ -87,8 +87,11 @@ public class TownCommands extends BaseCommand {
     @CommandPermission(CityPermissions.GROUP_ADMIN + ".town.update")
     public void update(City city) {
 
+        plugin.getDynmapManager().addCityMarker(city);
+
         for (Plot plot : plugin.getPlotManager().getPlots(city)) {
             plot.updateRegion(false);
+            plugin.getDynmapManager().addPlotAreaMarker(plot);
         }
 
         plugin.getPlotManager().migrateAllPlots(city);

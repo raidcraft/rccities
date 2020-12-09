@@ -19,18 +19,20 @@ public class RCCitiesPluginConfig extends BukkitYamlConfiguration {
     private List<String> ignoredRegions = new ArrayList<>();
     @Comment("Enable it to automatically migrate old plot regions into new city plots")
     private boolean migrateOldPlots = true;
-    private int defaultTownRadius = 64;
+    private int defaultTownRadius = 256;
     private int initialPlotCredit = 3;
     private double flagPlotMarkCost = 20.0;
     private double joinCosts = 100.0;
     @Comment("This is the base cost of a new plot")
-    private double newPlotCost = 500.0;
+    private double newPlotCost = 250.0;
     @Comment("For each existing plot of a city the new plot is more expensive")
-    private double newPlotCostPerOldPlot = 25.0;
+    private double newPlotCostPerOldPlot = 10.0;
     @Comment("Time to wait in seconds before player will be teleported to city spawn")
     private double spawnTeleportWarmup = 5;
     @Comment("Timeout in seconds between two teleport requests")
     private double spawnTeleportCooldown = 60;
+
+    private String dynmapMarkerSetLabel = "Spielerstädte";
 
     @Comment("Cooldown between a city can make requests to process their upgrade to a higher level")
     private int upgradeRequestCooldown = 5 * 24 * 60;// 5 days in minutes
