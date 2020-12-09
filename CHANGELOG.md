@@ -1,3 +1,10 @@
+# [1.6.0](https://github.com/raidcraft/rccities/compare/v1.5.0...v1.6.0) (2020-12-09)
+
+
+### Features
+
+* Add dynmap integration ([9e4d865](https://github.com/raidcraft/rccities/commit/9e4d8651c4aca948304abbbd925c7549d606d9dc))
+
 # [1.5.0](https://github.com/raidcraft/rccities/compare/v1.4.3...v1.5.0) (2020-12-08)
 
 
