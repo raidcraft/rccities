@@ -1,3 +1,10 @@
+# [1.8.0](https://github.com/raidcraft/rccities/compare/v1.7.1...v1.8.0) (2020-12-10)
+
+
+### Features
+
+* Change default config values ([2445c9a](https://github.com/raidcraft/rccities/commit/2445c9a3168a0bf1ff6933e58bbc91f8ecd9a5ee))
+
 ## [1.7.1](https://github.com/raidcraft/rccities/compare/v1.7.0...v1.7.1) (2020-12-10)
 
 
