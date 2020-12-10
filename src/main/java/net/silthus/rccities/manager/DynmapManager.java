@@ -7,10 +7,7 @@ import net.silthus.rccities.api.plot.Plot;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.dynmap.DynmapAPI;
-import org.dynmap.markers.AreaMarker;
-import org.dynmap.markers.Marker;
-import org.dynmap.markers.MarkerAPI;
-import org.dynmap.markers.MarkerSet;
+import org.dynmap.markers.*;
 
 /**
  * Author: Philip
@@ -19,19 +16,22 @@ import org.dynmap.markers.MarkerSet;
  */
 public class DynmapManager {
 
-    private static String MARKER_SET_NAME = "rccities";
-    private RCCitiesPlugin plugin;
+    private final static String CITY_MARKER_SET = "rccities_cities";
+    private final static String PLOT_MARKER_SET = "rccities_plots";
+    private final RCCitiesPlugin plugin;
     private DynmapAPI dynmap;
 
     @Getter
     private class API {
 
         MarkerAPI markerAPI;
-        MarkerSet markerSet;
+        MarkerSet cityMarkerSet;
+        MarkerSet plotMarkerSet;
 
-        public API(MarkerAPI markerAPI, MarkerSet markerSet) {
+        public API(MarkerAPI markerAPI, MarkerSet cityMarkerSet, MarkerSet plotMarkerSet) {
             this.markerAPI = markerAPI;
-            this.markerSet = markerSet;
+            this.cityMarkerSet = cityMarkerSet;
+            this.plotMarkerSet = plotMarkerSet;
         }
     }
 
@@ -53,15 +53,34 @@ public class DynmapManager {
             return null;
         }
 
-        MarkerSet cityMarkers = dynmap.getMarkerAPI().getMarkerSet(MARKER_SET_NAME);
+        MarkerSet cityMarkers = dynmap.getMarkerAPI().getMarkerSet(CITY_MARKER_SET);
+        MarkerSet plotMarkers = dynmap.getMarkerAPI().getMarkerSet(PLOT_MARKER_SET);
 
         if(cityMarkers == null) {
-            plugin.getLogger().warning("Create Dynmap marker set");
-            cityMarkers = dynmap.getMarkerAPI().createMarkerSet(MARKER_SET_NAME, plugin.getPluginConfig().getDynmapMarkerSetLabel(),
-                    dynmap.getMarkerAPI().getMarkerIcons(), true /* persistent */);
+            plugin.getLogger().warning("Create Dynmap city marker set");
+            cityMarkers = dynmap.getMarkerAPI().createMarkerSet(CITY_MARKER_SET, plugin.getPluginConfig().getDynmap().getCityMarkerSetLabel(),
+                    null /* icon limit */, true /* persistent */);
         }
 
-        return new API(dynmap.getMarkerAPI(), cityMarkers);
+        if(plotMarkers == null) {
+            plugin.getLogger().warning("Create Dynmap plot marker set");
+            plotMarkers = dynmap.getMarkerAPI().createMarkerSet(PLOT_MARKER_SET, plugin.getPluginConfig().getDynmap().getPlotMarkerSetLabel(),
+                    null /* icon limit */, true /* persistent */);
+        }
+
+        return new API(dynmap.getMarkerAPI(), cityMarkers, plotMarkers);
+    }
+
+    private String getCityMarkerId(City city) {
+        return city.getName().toLowerCase().replace(" ", "_");
+    }
+
+    private String getCityCircleId(City city) {
+        return getCityMarkerId(city) + "_radius";
+    }
+
+    private String getPlotAreaMarkerId(Plot plot) {
+        return plot.getRegionName().replace("-", "m");
     }
 
     public void addCityMarker(City city) {
@@ -77,16 +96,31 @@ public class DynmapManager {
 
         removeCityMarker(city);
 
-        String cityMarkerId = city.getName().toLowerCase().replace(" ", "_");
+        api.getCityMarkerSet().createMarker(getCityMarkerId(city),
+                city.getFriendlyName(),
+                city.getSpawn().getWorld().getName(),
+                city.getSpawn().getBlockX(),
+                city.getSpawn().getBlockY(),
+                city.getSpawn().getBlockZ(),
+                api.getMarkerAPI().getMarkerIcon("bighouse"),
+                true /* persistent */);
 
-        api.getMarkerSet().createMarker(cityMarkerId
-                , city.getFriendlyName()
-                , city.getSpawn().getWorld().getName()
-                , city.getSpawn().getBlockX()
-                , city.getSpawn().getBlockY()
-                , city.getSpawn().getBlockZ()
-                , api.getMarkerAPI().getMarkerIcon("bighouse")
-                , true /* persistent */);
+        CircleMarker circleMarker = api.getCityMarkerSet().createCircleMarker(getCityCircleId(city),
+                city.getFriendlyName(),
+                false,
+                city.getSpawn().getWorld().getName(),
+                city.getSpawn().getX(),
+                city.getSpawn().getY(),
+                city.getSpawn().getZ(),
+                city.getMaxRadius(),
+                city.getMaxRadius(),
+                true /* persistent */);
+        circleMarker.setFillStyle(0, 0); // Set filling it transparent
+        circleMarker.setLineStyle(
+                plugin.getPluginConfig().getDynmap().getPlotMarkerLineWeight() /* Line weight */,
+                1.0 /* Opacity */,
+                plugin.getPluginConfig().getDynmap().getPlotMarkerRGBLineColor() /* Color in RGB */);
+
     }
 
     public void removeCityMarker(City city) {
@@ -96,10 +130,14 @@ public class DynmapManager {
             return;
         }
 
-        String markerId = city.getName().toLowerCase().replace(" ", "_");
-        Marker marker = api.getMarkerSet().findMarker(markerId);
+        Marker marker = api.getCityMarkerSet().findMarker(getCityMarkerId(city));
         if(marker != null) {
             marker.deleteMarker();
+        }
+
+        CircleMarker circleMarker = api.getCityMarkerSet().findCircleMarker(getCityCircleId(city));
+        if(circleMarker != null) {
+            circleMarker.deleteMarker();
         }
     }
 
@@ -117,17 +155,22 @@ public class DynmapManager {
         double[] corner_x = { plot.getLocation().getX() - 8, plot.getLocation().getX() + 8 };
         double[] corner_y = { plot.getLocation().getZ() - 8, plot.getLocation().getZ() + 8 };
 
-        // minus (-) is not supported as maker ID due to usage as YAML key
-        String markerId = plot.getRegionName().replace("-", "m");
-
-        AreaMarker areaMarker = api.getMarkerSet().createAreaMarker(
-                markerId /* id */,
+        AreaMarker areaMarker = api.getPlotMarkerSet().createAreaMarker(
+                getPlotAreaMarkerId(plot) /* id */,
                 plot.getRegionName() /* label */,
                 false /* markup */,
                 plot.getLocation().getWorld().getName() /* world */,
                 corner_x,
                 corner_y,
                 true /* persistent */);
+
+        areaMarker.setFillStyle(
+                0.2 /* Opacity */,
+                plugin.getPluginConfig().getDynmap().getPlotMarkerRGBFillColor() /* Color in RGB */);
+        areaMarker.setLineStyle(
+                plugin.getPluginConfig().getDynmap().getPlotMarkerLineWeight() /* Line weight */,
+                1.0 /* Opacity */,
+                plugin.getPluginConfig().getDynmap().getPlotMarkerRGBLineColor() /* Color in RGB */);
     }
 
     public void removePlotAreaMarker(Plot plot) {
@@ -137,8 +180,7 @@ public class DynmapManager {
             return;
         }
 
-        String markerId = plot.getRegionName().replace("-", "m");
-        AreaMarker marker = api.getMarkerSet().findAreaMarker(markerId);
+        AreaMarker marker = api.getPlotMarkerSet().findAreaMarker(getPlotAreaMarkerId(plot));
         if(marker != null) {
             marker.deleteMarker();
         }

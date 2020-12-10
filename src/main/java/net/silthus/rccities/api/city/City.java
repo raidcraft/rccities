@@ -50,8 +50,6 @@ public interface City {
 
     int getMaxRadius();
 
-    void setMaxRadius(int maxRadius);
-
     int getExp();
 
     void addExp(int exp);

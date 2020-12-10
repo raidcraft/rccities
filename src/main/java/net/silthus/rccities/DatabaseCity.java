@@ -37,7 +37,6 @@ public class DatabaseCity extends AbstractCity {
         creationDate = tCity.getCreationDate();
         description = tCity.getDescription();
         plotCredit = tCity.getPlotCredit();
-        maxRadius = tCity.getMaxRadius();
         exp = tCity.getExp();
         spawn = new Location(Bukkit.getWorld(tCity.getWorld()), (double) tCity.getX() / 1000D,
                 (double) tCity.getY() / 1000D, (double) tCity.getZ() / 1000D,
@@ -142,7 +141,6 @@ public class DatabaseCity extends AbstractCity {
             tCity.setYaw((int) getSpawn().getYaw() * 1000);
             tCity.setDescription(getDescription());
             tCity.setPlotCredit(getPlotCredit());
-            tCity.setMaxRadius(getMaxRadius());
             tCity.setExp(getExp());
             tCity.setMoney(getMoney());
             tCity.update();

@@ -23,7 +23,6 @@ import net.silthus.rccities.requirements.CityStaffRequirement;
 import net.silthus.rccities.requirements.CityUpgradeLevelRequirement;
 import net.silthus.rccities.rewards.CityFlagReward;
 import net.silthus.rccities.rewards.CityPlotsReward;
-import net.silthus.rccities.rewards.CityRadiusReward;
 import net.silthus.rccities.rewards.SubtractMoneyReward;
 import net.silthus.rccities.tables.*;
 import net.silthus.rccities.upgrades.RCUpgrades;
@@ -111,7 +110,7 @@ public class RCCitiesPlugin extends JavaPlugin {
         }
 
         loadConfig();
-        setupLanguageManager();
+        //setupLanguageManager();
         setupDatabase();
 
         upgrades = new RCUpgrades(this);
@@ -123,7 +122,6 @@ public class RCCitiesPlugin extends JavaPlugin {
 
         RewardManager.registerRewardType(CityFlagReward.class);
         RewardManager.registerRewardType(CityPlotsReward.class);
-        RewardManager.registerRewardType(CityRadiusReward.class);
         RewardManager.registerRewardType(SubtractMoneyReward.class);
 
         worldGuard = WorldGuard.getInstance();

@@ -266,7 +266,7 @@ public class TownCommands extends BaseCommand {
 
     @Subcommand("setspawn")
     @CommandCompletion("@cities")
-    @CommandPermission(CityPermissions.GROUP_USER + ".town.setspawn")
+    @CommandPermission(CityPermissions.GROUP_ADMIN + ".town.setspawn")
     public void setSpawn(Player player, City city) {
 
         CommandHelper.checkRolePermissions(player, city, RolePermission.SET_SPAWN);
@@ -276,6 +276,7 @@ public class TownCommands extends BaseCommand {
         }
 
         city.setSpawn(player.getLocation());
+        plugin.getDynmapManager().addCityMarker(city);
         player.sendMessage(ChatColor.GREEN + "Du hast den Stadt Spawn versetzt!");
         plugin.getResidentManager().broadcastCityMessage(city, "Der Spawn wurde versetzt!");
     }

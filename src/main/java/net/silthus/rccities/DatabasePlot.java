@@ -39,6 +39,7 @@ public class DatabasePlot extends AbstractPlot {
         }
 
         RCCitiesPlugin.getPlugin().getDynmapManager().addPlotAreaMarker(this);
+        RCCitiesPlugin.getPlugin().getDynmapManager().addCityMarker(getCity());
     }
 
     public DatabasePlot(TPlot tPlot) {

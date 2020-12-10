@@ -23,7 +23,6 @@ public abstract class AbstractCity implements City {
     protected Location spawn;
     protected String description;
     protected int plotCredit;
-    protected int maxRadius;
     protected int exp;
     protected UpgradeHolder<City> upgradeHolder;
     protected double money;
@@ -38,7 +37,6 @@ public abstract class AbstractCity implements City {
         this.creator = creator;
         this.creationDate = new Timestamp(System.currentTimeMillis());
         this.plotCredit = RCCitiesPlugin.getPlugin().getPluginConfig().getInitialPlotCredit();
-        this.maxRadius = RCCitiesPlugin.getPlugin().getPluginConfig().getDefaultTownRadius();
 
         save();
     }
@@ -109,16 +107,26 @@ public abstract class AbstractCity implements City {
     }
 
     @Override
-    public void setMaxRadius(int maxRadius) {
-
-        this.maxRadius = maxRadius;
-        save();
-    }
-
-    @Override
     public UpgradeHolder<City> getUpgrades() {
 
         return upgradeHolder;
+    }
+
+    @Override
+    public int getMaxRadius() {
+
+        // Calculate max radius by square root of number of available plots
+        // (claimed and credit).
+        // Add some extra space to allow some oval cities and not just
+        // perfect circles.
+
+        int additionalPlotLengths = RCCitiesPlugin.getPlugin().getPluginConfig().getAdditionalRadiusPlots();
+        additionalPlotLengths *= additionalPlotLengths;
+
+        int maxRadius = (int)Math.sqrt(getSize() + getPlotCredit()
+                + additionalPlotLengths) * 16;
+
+        return maxRadius;
     }
 
     @Override
