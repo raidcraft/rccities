@@ -1,3 +1,10 @@
+## [1.7.1](https://github.com/raidcraft/rccities/compare/v1.7.0...v1.7.1) (2020-12-10)
+
+
+### Bug Fixes
+
+* Improve Dynmap support ([15832c4](https://github.com/raidcraft/rccities/commit/15832c4cfdaf00bc0cf8c6128721edd843256157))
+
 # [1.7.0](https://github.com/raidcraft/rccities/compare/v1.6.0...v1.7.0) (2020-12-09)
 
 
