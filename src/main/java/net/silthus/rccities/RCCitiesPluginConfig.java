@@ -49,8 +49,8 @@ public class RCCitiesPluginConfig extends BukkitYamlConfiguration {
 
         private String username = "minecraft";
         private String password = "password";
-        private String driver = "h2";
-        private String url = "jdbc:h2:~/skills.db";
+        private String driver = "mariadb";
+        private String url = "jdbc:mariadb://db:3306/minecraft";
     }
 
     @ConfigurationElement
