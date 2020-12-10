@@ -147,7 +147,7 @@ public class ResidentManager {
 
     public List<Resident> getCitizenships(UUID playerId, boolean load) {
 
-        List<Resident> residents = cachedResidents.get(playerId);
+        List<Resident> residents = cachedResidents.getOrDefault(playerId, new ArrayList<>());
 
         if (!load) {
             return residents;
