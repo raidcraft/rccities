@@ -1,3 +1,10 @@
+# [1.7.0](https://github.com/raidcraft/rccities/compare/v1.6.0...v1.7.0) (2020-12-09)
+
+
+### Features
+
+* Add deletion of dynmap markers ([b285c7a](https://github.com/raidcraft/rccities/commit/b285c7a5a99f86e9645625ec197d82819437ac82))
+
 # [1.6.0](https://github.com/raidcraft/rccities/compare/v1.5.0...v1.6.0) (2020-12-09)
 
 
