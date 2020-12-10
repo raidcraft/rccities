@@ -1,3 +1,10 @@
+## [1.8.1](https://github.com/raidcraft/rccities/compare/v1.8.0...v1.8.1) (2020-12-10)
+
+
+### Bug Fixes
+
+* **residents:** npe when querying uncached resident ([04d04f2](https://github.com/raidcraft/rccities/commit/04d04f242f61a4695796a46e8d67031066c988ae))
+
 # [1.8.0](https://github.com/raidcraft/rccities/compare/v1.7.1...v1.8.0) (2020-12-10)
 
 
