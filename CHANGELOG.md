@@ -1,3 +1,10 @@
+## [1.8.2](https://github.com/raidcraft/rccities/compare/v1.8.1...v1.8.2) (2020-12-11)
+
+
+### Bug Fixes
+
+* fix npe when player is no resident in any town ([9012ec3](https://github.com/raidcraft/rccities/commit/9012ec38899058697f6a93f43097b29ceb662b1f))
+
 ## [1.8.1](https://github.com/raidcraft/rccities/compare/v1.8.0...v1.8.1) (2020-12-10)
 
 
