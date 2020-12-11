@@ -147,12 +147,13 @@ public class ResidentManager {
 
     public List<Resident> getCitizenships(UUID playerId, boolean load) {
 
-        List<Resident> residents = cachedResidents.getOrDefault(playerId, new ArrayList<>());
+        List<Resident> residents = cachedResidents.get(playerId);
 
         if (!load) {
             return residents;
         }
 
+        // If no residents was found try to load from database
         if (residents == null || residents.size() == 0) {
             List<TResident> tResidents = TResident.find.query()
                     .where().ieq("player_id", playerId.toString()).findList();
@@ -166,7 +167,13 @@ public class ResidentManager {
                 }
             }
         }
-        return cachedResidents.get(playerId);
+
+        // check if now residents exists otherwise return empty list
+        if(cachedResidents.containsKey(playerId)) {
+            return cachedResidents.get(playerId);
+        } else {
+            return new ArrayList<>();
+        }
     }
 
     public List<Resident> getCitizenships(UUID playerId, RolePermission permission) {
