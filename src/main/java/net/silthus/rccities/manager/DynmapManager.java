@@ -115,12 +115,14 @@ public class DynmapManager {
                 city.getMaxRadius(),
                 city.getMaxRadius(),
                 true /* persistent */);
-        circleMarker.setFillStyle(0, 0); // Set filling it transparent
-        circleMarker.setLineStyle(
-                plugin.getPluginConfig().getDynmap().getPlotMarkerLineWeight() /* Line weight */,
-                1.0 /* Opacity */,
-                plugin.getPluginConfig().getDynmap().getPlotMarkerRGBLineColor() /* Color in RGB */);
 
+        if(circleMarker != null) {
+            circleMarker.setFillStyle(0, 0); // Set filling it transparent
+            circleMarker.setLineStyle(
+                    plugin.getPluginConfig().getDynmap().getPlotMarkerLineWeight() /* Line weight */,
+                    1.0 /* Opacity */,
+                    plugin.getPluginConfig().getDynmap().getPlotMarkerRGBLineColor() /* Color in RGB */);
+        }
     }
 
     public void removeCityMarker(City city) {
@@ -164,13 +166,15 @@ public class DynmapManager {
                 corner_y,
                 true /* persistent */);
 
-        areaMarker.setFillStyle(
-                0.2 /* Opacity */,
-                plugin.getPluginConfig().getDynmap().getPlotMarkerRGBFillColor() /* Color in RGB */);
-        areaMarker.setLineStyle(
-                plugin.getPluginConfig().getDynmap().getPlotMarkerLineWeight() /* Line weight */,
-                1.0 /* Opacity */,
-                plugin.getPluginConfig().getDynmap().getPlotMarkerRGBLineColor() /* Color in RGB */);
+        if(areaMarker != null) {
+            areaMarker.setFillStyle(
+                    0.2 /* Opacity */,
+                    plugin.getPluginConfig().getDynmap().getPlotMarkerRGBFillColor() /* Color in RGB */);
+            areaMarker.setLineStyle(
+                    plugin.getPluginConfig().getDynmap().getPlotMarkerLineWeight() /* Line weight */,
+                    1.0 /* Opacity */,
+                    plugin.getPluginConfig().getDynmap().getPlotMarkerRGBLineColor() /* Color in RGB */);
+        }
     }
 
     public void removePlotAreaMarker(Plot plot) {
