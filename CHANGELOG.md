@@ -1,3 +1,12 @@
+## [1.8.3](https://github.com/raidcraft/rccities/compare/v1.8.2...v1.8.3) (2020-12-12)
+
+
+### Bug Fixes
+
+* Fix NPE when trying to recreate dynmap markers ([a64e5b5](https://github.com/raidcraft/rccities/commit/a64e5b5ed0b2373c858e85261a6423a7e5c03dc1))
+* Fix recreating plot area markers by first deleting existing marker ([722b13e](https://github.com/raidcraft/rccities/commit/722b13e9ea5e8361c44e62272bb06429702f09cf))
+* Fix region update behavior when none residents get promoted first time with build permissions ([8764531](https://github.com/raidcraft/rccities/commit/87645312b195d2789c8d75a84f75e595c9e7e6c4))
+
 ## [1.8.2](https://github.com/raidcraft/rccities/compare/v1.8.1...v1.8.2) (2020-12-11)
 
 

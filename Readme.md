@@ -74,9 +74,9 @@ Am einfachsten stellt man sich beim Ausführen der Befehle in die betroffene Sta
 ``/town flag <Flag> <Wert>``
 * Folgende Flags stehen zur Auswahl:
     * ``GREETINGS`` ``ON|OFF`` Schaltet die Begrüßung beim betreten von Plots ein oder aus
-    * ``LEAF_DECAY`` ``ON|OFF`` Verhindert/Erlaubt das verschwinden von Blättern ohne Stamm
-    * ``MOB_SPWANING`` ``ON|OFF`` Verhindert/Erlaubt das Spawnen von Mobs
-    * ``PVP`` ``ON|OFF`` Verbietet/Erlaubt PVP im Stadtgebiet
+    * ``LEAF_DECAY`` ``ON|OFF`` Erlaubt das verschwinden von Blättern ohne Stamm
+    * ``MOB_SPWANING`` ``ON|OFF`` Erlaubt das Spawnen von Mobs
+    * ``PVP`` ``ON|OFF`` Erlaubt PVP im Stadtgebiet
     * ``JOIN_COSTS`` ``Geldbetrag`` Legt den nötigen Betrag fest um Einwohner der Stadt werden zu können
 #### Plot
 ##### Info Anzeigen
@@ -108,6 +108,13 @@ Am einfachsten stellt man sich beim Ausführen der Befehle in die betroffene Sta
 ``/plot unmark``
 * Es werden alle Fakeln auf der Plot Begrenzung entfernt - unabhängig ob von Spielern oder ``/plot mark`` gesetzt
 * Das entfernen von Markierungen ist kostenlos
+#### Plot Eigenschaften verändern
+``/plot flag <Flag> <Wert>``
+* Folgende Flags stehen zur Auswahl:
+    * ``FARM`` ``ON|OFF`` Erlaubt allen Einwohnern in diesem Plot das Abbauen von Blöcken
+    * ``MOB_SPAWN`` ``ON|OFF`` Erlaubt das Spwanen von jeglichen Mobs in diesem Plot (sowohl friedliche Tiere als auch aggresive Monster)
+    * ``PVP`` ``ON|OFF`` Erlaubt das gegenseitige zufügen von Schaden zwischen Spielern
+    * ``TNT`` ``ON|OFF`` Erlaubt das plazieren und Zünden von TNT
 #### Einwohner
 ##### Info Anzeigen
 ``/resident`` oder ``/resident <Spielername>``
