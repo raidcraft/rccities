@@ -1,3 +1,10 @@
+## [1.8.4](https://github.com/raidcraft/rccities/compare/v1.8.3...v1.8.4) (2020-12-12)
+
+
+### Bug Fixes
+
+* Fix typo in resident command [#9](https://github.com/raidcraft/rccities/issues/9) ([3a6b766](https://github.com/raidcraft/rccities/commit/3a6b766e855388f6ab06cfc1055a44c1896e6127))
+
 ## [1.8.3](https://github.com/raidcraft/rccities/compare/v1.8.2...v1.8.3) (2020-12-12)
 
 
