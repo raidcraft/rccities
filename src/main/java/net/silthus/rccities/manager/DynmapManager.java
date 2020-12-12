@@ -154,6 +154,8 @@ public class DynmapManager {
             return;
         }
 
+        removePlotAreaMarker(plot);
+
         double[] corner_x = { plot.getLocation().getX() - 8, plot.getLocation().getX() + 8 };
         double[] corner_y = { plot.getLocation().getZ() - 8, plot.getLocation().getZ() + 8 };
 
