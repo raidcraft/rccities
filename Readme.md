@@ -60,9 +60,7 @@ Am einfachsten stellt man sich beim Ausführen der Befehle in die betroffene Sta
 ``/town kick <Spielername>``
 ##### An den Stadtspawn teleportieren
 ``/town spawn``
-##### Stadtspawn neu setzen
-``/town setspawn``
-* Es wird die aktuelle Position des Spielers übernommen
+* Der Stadtspawn kann nur von Admins versetzt werden
 ##### Beschreibung der Stadt ändern
 ``/town setdesc <Beschreibung>``
 * Die Beschreibung wird unter ``/town info`` angezeigt
@@ -138,6 +136,9 @@ Die Stadt selbst wird folgendermaßen gelöscht.
 ``/town delete <Stadtname>``
 * Das Löschen der Stadt muss nochmals bestätigt werden.
 * Ein Wiederherstellen der Stadt ist nicht möglich!
+##### Stadtspawn neu setzen
+``/town setspawn``
+* Es wird die aktuelle Position des Spielers übernommen
 #### Plot
 ##### Unlcaim
 ``/plot unlcaim [-ra]``
@@ -145,27 +146,6 @@ Die Stadt selbst wird folgendermaßen gelöscht.
 * ``-a`` Unclaimed ALLE Plots der Stadt
 ##### Teleport zu Plot
 ``/plot tp <Plotname>``
-## Config
-``ignored_regions``
-   
-Liste an Regionen welche beim Claimen von Plots ignoriert werden. Alle anderen Regionen verhindern ansonsten das Claimen an dieser Stelle.
-
-``default_town_radius``
-   
-Maximaler Stadtradius bis wohin Plots geclaimt werden dürfen. Die Position beim Erstellen der Stadt dient als Mittelpunkt der Berechnung.
-Diese Einstellung verhindert das Erstellen von 'Schlauchartigen' Städten.
-
-``initial_plot_credit``
-   
-Anzahl an Plots welche der Stadt bei der Erstellung als noch nicht geclaimte Plots gutgeschrieben werden. Bei der Erstellung wird außerdem der Erste Plot automatisch geclaimt. Die Stadt besitzt also ``initial_plot_credit + 1`` Plots.
-
-``flag_plot_mark_cost``
-   
-Betrag der beim Markieren der Plots abgezogen wird. Dies verhindert das kostenlose Generieren von Fakeln. Beim Claimen wird der Plot automatisch kostenlos markiert.
-
-``join_costs``
-   
-Initialer Betrag der von neuen Einwohnern automatisch in die Stadtkasse überwiesen wird. Bürgermeister können selbstständig diesen Betrag ändern.
 ## Permissions
 Es gibt zwei Hauptgruppen:  
 * ``rccities.user``
