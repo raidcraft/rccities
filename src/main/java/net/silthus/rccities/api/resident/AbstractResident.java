@@ -42,20 +42,21 @@ public abstract class AbstractResident implements Resident {
     @Override
     public void setRole(Role newRole) {
 
-        if(profession != null) {
-            // set owner on all city plots
-            if (!profession.hasPermission(RolePermission.BUILD_EVERYWHERE)
-                    && profession.hasPermission(RolePermission.BUILD_EVERYWHERE)) {
-                for (Plot plot : RCCitiesPlugin.getPlugin().getPlotManager().getPlots(city)) {
-                    plot.updateRegion(false);
-                }
-            }
-            // remove owner from all city plots
-            if (profession.hasPermission(RolePermission.BUILD_EVERYWHERE)
-                    && !newRole.hasPermission(RolePermission.BUILD_EVERYWHERE)) {
-                for (Plot plot : RCCitiesPlugin.getPlugin().getPlotManager().getPlots(city)) {
-                    plot.updateRegion(false);
-                }
+        boolean couldBuild = false;
+        boolean shouldBuild = false;
+
+        if(profession != null && profession.hasPermission(RolePermission.BUILD_EVERYWHERE)) {
+            couldBuild = true;
+        }
+
+        if(newRole.hasPermission(RolePermission.BUILD_EVERYWHERE)) {
+            shouldBuild = true;
+        }
+
+        // update region if build permissions changes
+        if (couldBuild != shouldBuild) {
+            for (Plot plot : RCCitiesPlugin.getPlugin().getPlotManager().getPlots(city)) {
+                plot.updateRegion(false);
             }
         }
 
