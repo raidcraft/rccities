@@ -27,4 +27,6 @@ public @interface FlagInformation {
     boolean adminOnly() default false;
 
     boolean needsRefresh() default true;
+
+    boolean commandFlag() default true;
 }

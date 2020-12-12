@@ -272,9 +272,15 @@ public class PlotCommands extends BaseCommand {
         if(Strings.isNullOrEmpty(flagName) || Strings.isNullOrEmpty(flagValue)) {
             String flagList = "";
             for(FlagInformation info : plugin.getFlagManager().getRegisteredPlotFlagInformationList()) {
+                if(!info.commandFlag()) continue;
                 flagList += info.name() + ", ";
             }
             throw new InvalidCommandArgument("Verfügbare Flags: " + flagList);
+        }
+
+        FlagInformation info = plugin.getFlagManager().getRegisteredCityFlagInformation(flagName);
+        if(info == null || !info.commandFlag()) {
+            throw new InvalidCommandArgument("Unbekannte Flag");
         }
 
         City city = plot.getCity();
