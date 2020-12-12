@@ -122,7 +122,7 @@ public class ResidentCommands extends BaseCommand {
         }
 
         if(targetResident.getRole() == role) {
-            throw new ConditionFailedException("Der Einwohner hat bereits diesen Bruf");
+            throw new ConditionFailedException("Der Einwohner hat bereits diesen Beruf");
         }
 
         targetResident.setRole(role);
