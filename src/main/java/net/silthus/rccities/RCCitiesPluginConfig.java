@@ -47,10 +47,10 @@ public class RCCitiesPluginConfig extends BukkitYamlConfiguration {
     @Setter
     public static class DatabaseConfig {
 
-        private String username = "minecraft";
-        private String password = "password";
-        private String driver = "mariadb";
-        private String url = "jdbc:mariadb://db:3306/minecraft";
+        private String username = "sa";
+        private String password = "sa";
+        private String driver = "h2";
+        private String url = "jdbc:h2:~/rccities.db";
     }
 
     @ConfigurationElement
