@@ -48,7 +48,7 @@ public class DatabaseCity extends AbstractCity {
     @Override
     public int getSize() {
 
-        return RCCitiesPlugin.getPlugin().getPlotManager().getPlots(this).size();
+        return RCCitiesPlugin.getPlugin().getPlotManager().getPlotCount(this);
     }
 
     @Override

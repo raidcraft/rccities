@@ -63,6 +63,10 @@ public class PlotManager {
         return plots;
     }
 
+    public int getPlotCount(City city) {
+        return TPlot.find.query().where().eq("city_id", city.getId()).findCount();
+    }
+
     public void removeFromCache(Plot plot) {
 
         cachedPlots.remove(plot.getLocation());
@@ -137,9 +141,11 @@ public class PlotManager {
 
         RCCitiesPluginConfig config = plugin.getPluginConfig();
         double cost = 0;
+        int citySize = city.getSize();
+        int cityPlotCredit = city.getPlotCredit();
+        double baseCost = config.getNewPlotCost();
         for(int i = 0; i < count; i++) {
-            cost += config.getNewPlotCost() + (config.getNewPlotCostPerOldPlot()
-                    * (city.getPlotCredit() + city.getSize() + i));
+            cost += baseCost + (config.getNewPlotCostPerOldPlot() * (cityPlotCredit + citySize + i));
         }
         return cost;
     }
