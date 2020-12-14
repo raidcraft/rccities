@@ -1,3 +1,10 @@
+## [1.8.7](https://github.com/raidcraft/rccities/compare/v1.8.6...v1.8.7) (2020-12-14)
+
+
+### Bug Fixes
+
+* Change order of city command context to use resident city first before looking for location cities. Fixes [#14](https://github.com/raidcraft/rccities/issues/14) ([4a30f87](https://github.com/raidcraft/rccities/commit/4a30f87316136f790f1d03927a8f7073a66e42de))
+
 ## [1.8.6](https://github.com/raidcraft/rccities/compare/v1.8.5...v1.8.6) (2020-12-14)
 
 
