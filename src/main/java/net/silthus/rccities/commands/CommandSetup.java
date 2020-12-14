@@ -88,16 +88,6 @@ public class CommandSetup {
                 }
             }
 
-            // If no city found, try to get city
-            // at current location
-            //----------------------------------------
-            if(city == null) {
-                Plot plot = plugin.getPlotManager().getPlot(c.getPlayer().getLocation().getChunk());
-                if(plot != null) {
-                    city = plot.getCity();
-                }
-            }
-
             // If still no city found, try to get city
             // of player if there is only one citizenship
             //-------------------------------------------
@@ -105,6 +95,16 @@ public class CommandSetup {
                 List<Resident> citizenships = plugin.getResidentManager().getCitizenships(c.getPlayer().getUniqueId());
                 if (citizenships != null && 1 == citizenships.size()) {
                     city = citizenships.get(0).getCity();
+                }
+            }
+
+            // If no city found, try to get city
+            // at current location
+            //----------------------------------------
+            if(city == null) {
+                Plot plot = plugin.getPlotManager().getPlot(c.getPlayer().getLocation().getChunk());
+                if(plot != null) {
+                    city = plot.getCity();
                 }
             }
 
