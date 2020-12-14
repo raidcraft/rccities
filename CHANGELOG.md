@@ -1,3 +1,10 @@
+## [1.8.5](https://github.com/raidcraft/rccities/compare/v1.8.4...v1.8.5) (2020-12-12)
+
+
+### Bug Fixes
+
+* Prevent usage of MARK_FREE flag via command. Close [#10](https://github.com/raidcraft/rccities/issues/10) ([bf8167f](https://github.com/raidcraft/rccities/commit/bf8167f0063592d927c7885ad00e0fce00d9d0b8))
+
 ## [1.8.4](https://github.com/raidcraft/rccities/compare/v1.8.3...v1.8.4) (2020-12-12)
 
 
