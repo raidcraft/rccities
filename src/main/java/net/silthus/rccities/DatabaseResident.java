@@ -32,7 +32,7 @@ public class DatabaseResident extends AbstractResident {
         this.playerId = tResident.getPlayerId();
         this.depositAmount = tResident.getDepositAmount();
         this.withdrawAmount = tResident.getWithdrawAmount();
-        setRole(Role.valueOf(tResident.getProfession()));
+        this.profession = Role.valueOf(tResident.getProfession());
     }
 
     @Override
