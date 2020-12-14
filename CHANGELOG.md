@@ -1,3 +1,10 @@
+## [1.8.6](https://github.com/raidcraft/rccities/compare/v1.8.5...v1.8.6) (2020-12-14)
+
+
+### Bug Fixes
+
+* Don't set resident role via setter when resident is load by database. Close [#12](https://github.com/raidcraft/rccities/issues/12) ([09e54db](https://github.com/raidcraft/rccities/commit/09e54dbb7abf152fbcb5fbce7931413de2344308))
+
 ## [1.8.5](https://github.com/raidcraft/rccities/compare/v1.8.4...v1.8.5) (2020-12-12)
 
 
