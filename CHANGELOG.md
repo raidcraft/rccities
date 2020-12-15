@@ -1,3 +1,10 @@
+## [1.8.9](https://github.com/raidcraft/rccities/compare/v1.8.8...v1.8.9) (2020-12-15)
+
+
+### Bug Fixes
+
+* Disable custom mob spawn listener. Fixes [#16](https://github.com/raidcraft/rccities/issues/16) ([7fb2a0d](https://github.com/raidcraft/rccities/commit/7fb2a0dfb8049e2911bef348e64732d779a541d0))
+
 ## [1.8.8](https://github.com/raidcraft/rccities/compare/v1.8.7...v1.8.8) (2020-12-14)
 
 
