@@ -21,7 +21,7 @@ public class EntityListener implements Listener {
         this.plugin = plugin;
     }
 
-    @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
+/*    @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
     public void onEntitySpwan(CreatureSpawnEvent event) {
 
         if (!(event.getEntity() instanceof Monster)) return;
@@ -35,5 +35,5 @@ public class EntityListener implements Listener {
 
         event.getEntity().remove();
         event.setCancelled(true);
-    }
+    }*/
 }
