@@ -1,3 +1,12 @@
+## [1.8.8](https://github.com/raidcraft/rccities/compare/v1.8.7...v1.8.8) (2020-12-14)
+
+
+### Bug Fixes
+
+* change default config to use h2 database to enable unit testing ([285728d](https://github.com/raidcraft/rccities/commit/285728d671f665f3cc7390298e6c312f9b31e08f))
+* Fix city size and plot cost calculation. Fixes [#15](https://github.com/raidcraft/rccities/issues/15) ([8eaa9cb](https://github.com/raidcraft/rccities/commit/8eaa9cb9006ce5be5590c114c9417dcbc7267575))
+* Fix command completion order ([5984299](https://github.com/raidcraft/rccities/commit/598429950590d4c80ac4786ffba6fa501bb6efc2))
+
 ## [1.8.7](https://github.com/raidcraft/rccities/compare/v1.8.6...v1.8.7) (2020-12-14)
 
 
