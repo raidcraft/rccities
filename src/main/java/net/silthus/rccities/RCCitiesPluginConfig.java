@@ -33,6 +33,11 @@ public class RCCitiesPluginConfig extends BukkitYamlConfiguration {
     private double spawnTeleportWarmup = 3;
     @Comment("Timeout in seconds between two teleport requests")
     private double spawnTeleportCooldown = 60;
+    @Comment("Timeout for foreign town teleport (86400s = 24h)")
+    private double foreignSpawnTeleportCooldown = 86400;
+    @Comment("Custom message if foreign spawn cooldown is active")
+    private String foreignSpawnTeleportCooldownMessage =
+            "Du kannst dich nur einmal am Tag in eine fremde Stadt teleportieren!";
 
     @Comment("Cooldown between a city can make requests to process their upgrade to a higher level")
     private int upgradeRequestCooldown = 5 * 24 * 60;// 5 days in minutes

@@ -230,7 +230,11 @@ public class TownCommands extends BaseCommand {
     @CommandPermission(CityPermissions.GROUP_USER + ".town.spawn")
     public void spawn(Player player, City city) {
 
-        CommandHelper.checkRolePermissions(player, city, RolePermission.SPAWN_TELEPORT);
+        boolean isResident = RCCitiesPlugin.getPlugin().getResidentManager().isResident(player.getUniqueId(), city);
+
+        if(isResident) {
+            CommandHelper.checkRolePermissions(player, city, RolePermission.SPAWN_TELEPORT);
+        }
 
         if (!city.getSpawn().getWorld().equals(player.getWorld())) {
             throw new ConditionFailedException("Du befindest dich auf der falschen Welt!");
@@ -238,6 +242,10 @@ public class TownCommands extends BaseCommand {
 
         double warmupTime = plugin.getPluginConfig().getSpawnTeleportWarmup();
         double cooldownTime = plugin.getPluginConfig().getSpawnTeleportCooldown();
+
+        if(!isResident) {
+            cooldownTime = plugin.getPluginConfig().getForeignSpawnTeleportCooldown();
+        }
 
         if(player.hasPermission(CityPermissions.GROUP_ADMIN)) {
             warmupTime = 0.5;
@@ -248,18 +256,23 @@ public class TownCommands extends BaseCommand {
                 System.currentTimeMillis() - lastTeleport.get(player.getUniqueId()) < cooldownTime * 1000.) {
             double remainingSeconds = (cooldownTime)
                     - ((double)(System.currentTimeMillis() - lastTeleport.get(player.getUniqueId())) / 1000.);
-            throw new ConditionFailedException(ChatColor.RED + "Warte noch "
-                    + ((double)Math.round(remainingSeconds*100.) / 100.) + "s bis zum nächsten Teleport.");
+            if(!isResident) {
+                throw new ConditionFailedException(ChatColor.RED +
+                        plugin.getPluginConfig().getForeignSpawnTeleportCooldownMessage());
+            } else {
+                throw new ConditionFailedException(ChatColor.RED + "Warte noch "
+                        + ((double) Math.round(remainingSeconds * 100.) / 100.) + "s bis zum nächsten Teleport.");
+            }
         }
 
         player.sendMessage(ChatColor.YELLOW + "Du wirst in "
-                + warmupTime + "s zum Stadt Spawn teleportiert...");
+                + warmupTime + "s nach " + city.getFriendlyName() + " teleportiert...");
         Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
             @Override
             public void run() {
                 player.teleport(city.getSpawn());
                 lastTeleport.put(player.getUniqueId(), System.currentTimeMillis());
-                player.sendMessage(ChatColor.YELLOW + "Willkommen am Stadt Spawn von " + city.getFriendlyName() + "!");
+                player.sendMessage(ChatColor.YELLOW + "Willkommen in " + city.getFriendlyName() + "!");
             }
         }, (long)(warmupTime * 20.));
     }

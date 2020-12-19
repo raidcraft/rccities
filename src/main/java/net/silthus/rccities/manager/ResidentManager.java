@@ -192,6 +192,12 @@ public class ResidentManager {
         return citizenships;
     }
 
+    public boolean isResident(UUID playerId, City city) {
+
+        return TResident.find.query().where().ieq("player_id", playerId.toString())
+                .eq("city_id", city.getId()).exists();
+    }
+
     public Resident getResident(UUID playerId, City city) {
 
         List<Resident> residents = getCitizenships(playerId);
