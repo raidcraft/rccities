@@ -1,3 +1,10 @@
+# [1.9.0](https://github.com/raidcraft/rccities/compare/v1.8.9...v1.9.0) (2020-12-27)
+
+
+### Features
+
+* Players can now teleport once a day to a foreign city. Closes [#20](https://github.com/raidcraft/rccities/issues/20) ([c83357d](https://github.com/raidcraft/rccities/commit/c83357d245c58edc52708777f6b24e5a11829ee1))
+
 ## [1.8.9](https://github.com/raidcraft/rccities/compare/v1.8.8...v1.8.9) (2020-12-15)
 
 
