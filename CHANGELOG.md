@@ -1,3 +1,15 @@
+# [1.10.0](https://github.com/raidcraft/rccities/compare/v1.9.0...v1.10.0) (2020-12-27)
+
+
+### Bug Fixes
+
+* Add RCEconomy as dependency ([8117a39](https://github.com/raidcraft/rccities/commit/8117a39b1827e50d487d86d7af35cc7d03fc5969))
+
+
+### Features
+
+* Use RCEconomy instead of plain Vault API and add description for deposit and withdraw transfers (City accounts still maintained by RCCities) ([44f9ac5](https://github.com/raidcraft/rccities/commit/44f9ac5b9fd1c5549f9886fceadb9cb9a0f9a23b))
+
 # [1.9.0](https://github.com/raidcraft/rccities/compare/v1.8.9...v1.9.0) (2020-12-27)
 
 
