@@ -75,7 +75,7 @@ Am einfachsten stellt man sich beim Ausführen der Befehle in die betroffene Sta
 * Folgende Flags stehen zur Auswahl:
     * ``GREETINGS`` ``ON|OFF`` Schaltet die Begrüßung beim betreten von Plots ein oder aus
     * ``LEAF_DECAY`` ``ON|OFF`` Erlaubt das verschwinden von Blättern ohne Stamm
-    * ``MOB_SPWANING`` ``ON|OFF`` Erlaubt das Spawnen von Mobs
+    * ``MOB_SPAWNING`` ``ON|OFF`` Erlaubt das Spawnen von Mobs
     * ``PVP`` ``ON|OFF`` Erlaubt PVP im Stadtgebiet
     * ``JOIN_COSTS`` ``Geldbetrag`` Legt den nötigen Betrag fest um Einwohner der Stadt werden zu können
 #### Plot
