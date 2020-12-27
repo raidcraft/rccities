@@ -1,6 +1,6 @@
 package net.silthus.rccities.manager;
 
-import net.milkbowl.vault.economy.Economy;
+import de.raidcraft.economy.wrapper.Economy;
 import net.silthus.rccities.DatabaseCity;
 import net.silthus.rccities.RCCitiesPlugin;
 import net.silthus.rccities.api.city.City;
@@ -84,7 +84,6 @@ public class CityManager {
             joinCosts = joinCostsCityFlag.getType().convertToMoney(joinCostsCityFlag.getValue());
         }
 
-        Economy economy = plugin.getEconomy();
         double balance = city.getMoney();
 
         sender.sendMessage("*********************************");
@@ -96,8 +95,8 @@ public class CityManager {
         sender.sendMessage(ChatColor.GOLD + "Unclaimed Plots: " + ChatColor.YELLOW + city.getPlotCredit());
         sender.sendMessage(ChatColor.GOLD + "Level: " + ChatColor.YELLOW + getCityLevel(city));
         sender.sendMessage(ChatColor.GOLD + "EXP: " + ChatColor.YELLOW + city.getExp());
-        sender.sendMessage(ChatColor.GOLD + "Stadtkasse: " + ChatColor.YELLOW + economy.format(balance));
-        sender.sendMessage(ChatColor.GOLD + "Beitrittskosten: " + ChatColor.YELLOW + economy.format(joinCosts));
+        sender.sendMessage(ChatColor.GOLD + "Stadtkasse: " + ChatColor.YELLOW + Economy.get().format(balance));
+        sender.sendMessage(ChatColor.GOLD + "Beitrittskosten: " + ChatColor.YELLOW + Economy.get().format(joinCosts));
         sender.sendMessage(ChatColor.GOLD + "Bürgermeister (" + mayorCount + "): " + ChatColor.YELLOW + mayorList);
         sender.sendMessage(ChatColor.GOLD + "Einwohner (" + residentCount + "): " + ChatColor.YELLOW + residentList);
         sender.sendMessage("*********************************");

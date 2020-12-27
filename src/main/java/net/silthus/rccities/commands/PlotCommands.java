@@ -5,6 +5,7 @@ import co.aikar.commands.ConditionFailedException;
 import co.aikar.commands.InvalidCommandArgument;
 import co.aikar.commands.annotation.*;
 import com.google.common.base.Strings;
+import de.raidcraft.economy.wrapper.Economy;
 import net.silthus.rccities.CityPermissions;
 import net.silthus.rccities.DatabasePlot;
 import net.silthus.rccities.RCCitiesPlugin;
@@ -343,12 +344,12 @@ public class PlotCommands extends BaseCommand {
         double requiredMoney = plugin.getPlotManager().getNewPlotCosts(city, count);
 
         if(!city.hasMoney(requiredMoney)) {
-            throw new ConditionFailedException("Es werden " + plugin.getEconomy().format(requiredMoney)
+            throw new ConditionFailedException("Es werden " + Economy.get().format(requiredMoney)
                     + " in der Stadtkasse benötigt");
         }
 
         player.sendMessage(ChatColor.YELLOW + "Info: " + count + " neue Plots kosten "
-                + ChatColor.DARK_RED + plugin.getEconomy().format(requiredMoney));
+                + ChatColor.DARK_RED + Economy.get().format(requiredMoney));
 
         try {
             new QueuedCommand(player, this, "buyPlots", player, city, count);
@@ -365,7 +366,7 @@ public class PlotCommands extends BaseCommand {
         double requiredMoney = plugin.getPlotManager().getNewPlotCosts(city, count);
 
         if(!city.hasMoney(requiredMoney)) {
-            throw new ConditionFailedException("Es werden " + plugin.getEconomy().format(requiredMoney)
+            throw new ConditionFailedException("Es werden " + Economy.get().format(requiredMoney)
                     + " in der Stadtkasse benötigt");
         }
 
@@ -374,7 +375,7 @@ public class PlotCommands extends BaseCommand {
 
         plugin.getResidentManager().broadcastCityMessage(city, ChatColor.GOLD + "Es wurden "
                 + ChatColor.DARK_GREEN + count + " neue Plots " + ChatColor.GOLD + "für "
-                + ChatColor.DARK_RED + plugin.getEconomy().format(requiredMoney) + ChatColor.GOLD + " gekauft!");
+                + ChatColor.DARK_RED + Economy.get().format(requiredMoney) + ChatColor.GOLD + " gekauft!");
     }
 
     public void unclaimPlot(CommandSender sender, Plot plot, boolean restoreSchematics) {

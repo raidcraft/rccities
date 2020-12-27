@@ -1,9 +1,8 @@
 package net.silthus.rccities.api.resident;
 
-import co.aikar.commands.ConditionFailedException;
 import lombok.Getter;
 import lombok.Setter;
-import net.milkbowl.vault.economy.Economy;
+import de.raidcraft.economy.wrapper.Economy;
 import net.silthus.rccities.RCCitiesPlugin;
 import net.silthus.rccities.api.city.City;
 import net.silthus.rccities.api.plot.Plot;
@@ -73,13 +72,11 @@ public abstract class AbstractResident implements Resident {
     @Override
     public boolean depositCity(double amount) {
 
-        Economy economy = RCCitiesPlugin.getPlugin().getEconomy();
-
-        if(!economy.has(getPlayer(), amount)) {
+        if(!Economy.get().has(getPlayer(), amount)) {
             return false;
         }
 
-        economy.withdrawPlayer(getPlayer(), amount);
+        Economy.get().withdrawPlayer(getPlayer(), amount, "Einzahlung an " + city.getFriendlyName());
         city.depositMoney(amount);
         depositAmount += amount;
         save();
@@ -88,14 +85,13 @@ public abstract class AbstractResident implements Resident {
 
     @Override
     public boolean withdrawCity(double amount) {
-        Economy economy = RCCitiesPlugin.getPlugin().getEconomy();
 
         if(!city.hasMoney(amount)) {
             return false;
         }
 
         city.withdrawMoney(amount);
-        economy.depositPlayer(getPlayer(), amount);
+        Economy.get().depositPlayer(getPlayer(), amount, "Auszahlung von " + city.getFriendlyName());
         withdrawAmount += amount;
         save();
         return true;

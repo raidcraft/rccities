@@ -52,7 +52,6 @@ import java.util.*;
 public class RCCitiesPlugin extends JavaPlugin {
 
     private final Map<String, QueuedCommand> queuedCommands = new HashMap<>();
-    private Economy economy;
     private Permission permission;
     private Database database;
     @Setter
@@ -64,7 +63,6 @@ public class RCCitiesPlugin extends JavaPlugin {
     private CityManager cityManager;
     private PlotManager plotManager;
     private ResidentManager residentManager;
-    private AssignmentManager assignmentManager;
     private FlagManager flagManager;
     private WorldGuardManager worldGuardManager;
     private UpgradeRequestManager upgradeRequestManager;
@@ -131,7 +129,6 @@ public class RCCitiesPlugin extends JavaPlugin {
         cityManager = new CityManager(this);
         plotManager = new PlotManager(this);
         residentManager = new ResidentManager(this);
-        assignmentManager = new AssignmentManager(this);
         flagManager = new FlagManager(this);
         worldGuardManager = new WorldGuardManager(this);
         upgradeRequestManager = new UpgradeRequestManager(this);
@@ -184,12 +181,6 @@ public class RCCitiesPlugin extends JavaPlugin {
         if (getServer().getPluginManager().getPlugin("Vault") == null) {
             return false;
         }
-
-        RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
-        if (rsp == null) {
-            return false;
-        }
-        economy = rsp.getProvider();
 
         RegisteredServiceProvider<Permission> registration = getServer().getServicesManager()
                 .getRegistration(Permission.class);

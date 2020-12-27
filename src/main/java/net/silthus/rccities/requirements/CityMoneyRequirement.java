@@ -24,7 +24,6 @@ public class CityMoneyRequirement extends AbstractRequirement<City> {
 
     protected CityMoneyRequirement() {
         super();
-        Economy economy = RCCitiesPlugin.getPlugin().getEconomy();
     }
 
     public boolean test(City city) {

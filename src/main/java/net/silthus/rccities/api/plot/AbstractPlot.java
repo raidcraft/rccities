@@ -83,8 +83,6 @@ public abstract class AbstractPlot implements Plot {
         // update flags, owner and settings (plot flags)
         if (region != null) {
 
-            //TODO maybe we have to set other regions as parent
-
             // flags
             region.setFlag(Flags.MOB_DAMAGE, StateFlag.State.ALLOW);
             region.setFlag(Flags.MOB_SPAWNING, StateFlag.State.DENY);

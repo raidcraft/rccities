@@ -2,7 +2,7 @@ package net.silthus.rccities.flags.plot;
 
 import com.sk89q.worldguard.protection.flags.Flags;
 import com.sk89q.worldguard.protection.flags.StateFlag;
-import net.milkbowl.vault.economy.Economy;
+import de.raidcraft.economy.wrapper.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
 import net.silthus.rccities.RCCitiesPlugin;
 import net.silthus.rccities.api.flags.AbstractPlotFlag;
@@ -43,7 +43,6 @@ public class MarkPlotFlag extends MarkPlotBaseFlag {
 
         if (currentValue) {
 
-            Economy economy = RCCitiesPlugin.getPlugin().getEconomy();
             if (!getPlot().getCity().hasMoney(markCost)) {
                 throw new RaidCraftException("Es ist nicht genug Geld in der Stadtkasse!");
             }
@@ -52,7 +51,7 @@ public class MarkPlotFlag extends MarkPlotBaseFlag {
             getPlot().getCity().withdrawMoney(markCost);
             RCCitiesPlugin.getPlugin().getResidentManager()
                     .broadcastCityMessage(getPlot().getCity(), "Plot Markierung: "
-                            + economy.format(markCost) + ChatColor.GOLD + " abgezogen!");
+                            + Economy.get().format(markCost) + ChatColor.GOLD + " abgezogen!");
         }
 
         super.refresh();

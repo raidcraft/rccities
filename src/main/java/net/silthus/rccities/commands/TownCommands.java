@@ -7,7 +7,7 @@ import co.aikar.commands.annotation.*;
 import co.aikar.commands.annotation.Optional;
 import com.google.common.base.Strings;
 import com.sk89q.minecraft.util.commands.Command;
-import net.milkbowl.vault.economy.Economy;
+import de.raidcraft.economy.wrapper.Economy;
 import net.silthus.rccities.CityPermissions;
 import net.silthus.rccities.DatabasePlot;
 import net.silthus.rccities.RCCitiesPlugin;
@@ -415,9 +415,9 @@ public class TownCommands extends BaseCommand {
 
         JoinCostsCityFlag flag = (JoinCostsCityFlag)plugin.getFlagManager().getCityFlag(city, JoinCostsCityFlag.class);
         if(flag != null) {
-            if(!plugin.getEconomy().has(player, flag.getAmount())) {
+            if(!de.raidcraft.economy.wrapper.Economy.get().has(player, flag.getAmount())) {
                 throw  new ConditionFailedException("Du benötigst "
-                        + plugin.getEconomy().format(flag.getAmount()) + " um der Stadt beizutreten");
+                        + de.raidcraft.economy.wrapper.Economy.get().format(flag.getAmount()) + " um der Stadt beizutreten");
             }
         }
 
@@ -507,13 +507,11 @@ public class TownCommands extends BaseCommand {
     @CommandPermission(CityPermissions.GROUP_USER + ".town.deposit")
     public void deposit(Player player, City city, double amount) {
 
-        Economy economy = plugin.getEconomy();
-
         if(amount < 0) {
             throw new ConditionFailedException("Der Betrag muss größer als 0 sein");
         }
 
-        if(!economy.has(player, amount)) {
+        if(!Economy.get().has(player, amount)) {
             throw new ConditionFailedException("Du hast nicht genügend Geld auf dem Konto");
         }
 
@@ -527,7 +525,7 @@ public class TownCommands extends BaseCommand {
         resident.depositCity(amount);
 
         plugin.getResidentManager().broadcastCityMessage(city, ChatColor.GOLD
-                + player.getName() + " hat " + ChatColor.DARK_GREEN + economy.format(amount)
+                + player.getName() + " hat " + ChatColor.DARK_GREEN + Economy.get().format(amount)
                 + ChatColor.GOLD + " in die Stadtkasse eingezahlt!");
     }
 
@@ -535,8 +533,6 @@ public class TownCommands extends BaseCommand {
     @CommandCompletion("@cities")
     @CommandPermission(CityPermissions.GROUP_USER + ".town.withdraw")
     public void withdraw(Player player, City city, double amount) {
-
-        Economy economy = plugin.getEconomy();
 
         if(amount < 0) {
             throw new ConditionFailedException("Der Betrag muss größer als 0 sein");
@@ -556,7 +552,7 @@ public class TownCommands extends BaseCommand {
         resident.withdrawCity(amount);
 
         plugin.getResidentManager().broadcastCityMessage(city, ChatColor.GOLD
-                + player.getName() + " hat " + ChatColor.RED + economy.format(amount)
+                + player.getName() + " hat " + ChatColor.RED + Economy.get().format(amount)
                 + ChatColor.GOLD + " aus der Stadtkasse genommen!");
     }
 
