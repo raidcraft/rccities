@@ -63,6 +63,9 @@ public abstract class AbstractCity implements City {
     public boolean withdrawMoney(double amount) {
 
         initBankAccount();
+
+        if(amount <= 0) return false;
+
         if(!hasMoney(amount)) return false;
 
         money -= amount;
@@ -74,9 +77,12 @@ public abstract class AbstractCity implements City {
     public boolean depositMoney(double amount) {
 
         initBankAccount();
+
+        if(amount <= 0) return false;
+
         money += amount;
         save();
-        return false;
+        return true;
     }
 
     @Override
