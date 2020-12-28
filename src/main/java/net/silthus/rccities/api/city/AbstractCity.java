@@ -49,8 +49,12 @@ public abstract class AbstractCity implements City {
             if(Economy.get().createBank(bankAccountName, Bukkit.getOfflinePlayer(ownerUUID)).type
                     == EconomyResponse.ResponseType.SUCCESS) {
                 Economy.get().bankDeposit(bankAccountName, money);
-                money = BANK_ACCOUNT_CONVERTED_PATTERN; // Mark this city bank account as converted
-                save();
+                // Validate
+                EconomyResponse response = Economy.get().bankBalance(bankAccountName);
+                if(response.type == EconomyResponse.ResponseType.SUCCESS && response.balance == money) {
+                    money = BANK_ACCOUNT_CONVERTED_PATTERN; // Mark this city bank account as converted
+                    save();
+                }
             }
         }
     }
