@@ -4,7 +4,6 @@ import net.silthus.rccities.api.city.City;
 import net.silthus.rccities.api.request.AbstractUpgradeRequest;
 import net.silthus.rccities.tables.TUpgradeRequest;
 import net.silthus.rccities.upgrades.api.level.UpgradeLevel;
-import net.silthus.rccities.upgrades.tables.TUpgrade;
 
 import java.sql.Timestamp;
 

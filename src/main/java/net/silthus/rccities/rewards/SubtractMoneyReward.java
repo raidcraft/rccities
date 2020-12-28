@@ -1,7 +1,5 @@
 package net.silthus.rccities.rewards;
 
-import net.milkbowl.vault.economy.Economy;
-import net.silthus.rccities.RCCitiesPlugin;
 import net.silthus.rccities.api.city.City;
 import net.silthus.rccities.upgrades.api.reward.AbstractReward;
 import net.silthus.rccities.upgrades.api.reward.RewardInformation;

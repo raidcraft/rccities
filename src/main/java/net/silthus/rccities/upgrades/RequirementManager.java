@@ -8,7 +8,6 @@ import net.silthus.rccities.util.CaseInsensitiveMap;
 import net.silthus.rccities.util.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.MemoryConfiguration;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;

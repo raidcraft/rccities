@@ -6,7 +6,6 @@ import lombok.Setter;
 import net.silthus.ebean.BaseEntity;
 
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import java.util.UUID;

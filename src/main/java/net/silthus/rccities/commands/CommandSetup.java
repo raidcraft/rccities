@@ -1,6 +1,5 @@
 package net.silthus.rccities.commands;
 
-import co.aikar.commands.ConditionFailedException;
 import co.aikar.commands.InvalidCommandArgument;
 import co.aikar.commands.PaperCommandManager;
 import com.google.common.base.Strings;

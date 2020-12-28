@@ -1,14 +1,7 @@
 package net.silthus.rccities.listener;
 
 import net.silthus.rccities.RCCitiesPlugin;
-import org.bukkit.entity.IronGolem;
-import org.bukkit.entity.Monster;
-import org.bukkit.entity.Snowman;
-import org.bukkit.entity.Wither;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.CreatureSpawnEvent;
 
 /**
  * @author Philip Urban

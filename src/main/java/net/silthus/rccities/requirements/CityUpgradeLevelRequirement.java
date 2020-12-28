@@ -5,9 +5,6 @@ import net.silthus.rccities.upgrades.api.level.UpgradeLevel;
 import net.silthus.rccities.upgrades.api.requirement.AbstractRequirement;
 import net.silthus.rccities.upgrades.api.requirement.RequirementInformation;
 import net.silthus.rccities.upgrades.api.upgrade.Upgrade;
-import org.bukkit.configuration.ConfigurationSection;
-
-import java.util.Optional;
 
 @RequirementInformation(
         value = "CITY_UNLOCKED",

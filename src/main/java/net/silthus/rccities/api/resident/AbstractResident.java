@@ -1,8 +1,8 @@
 package net.silthus.rccities.api.resident;
 
+import de.raidcraft.economy.wrapper.Economy;
 import lombok.Getter;
 import lombok.Setter;
-import de.raidcraft.economy.wrapper.Economy;
 import net.silthus.rccities.RCCitiesPlugin;
 import net.silthus.rccities.api.city.City;
 import net.silthus.rccities.api.plot.Plot;

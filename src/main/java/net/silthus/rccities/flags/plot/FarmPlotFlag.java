@@ -1,8 +1,6 @@
 package net.silthus.rccities.flags.plot;
 
 import com.sk89q.worldguard.domains.DefaultDomain;
-import com.sk89q.worldguard.protection.flags.Flags;
-import com.sk89q.worldguard.protection.flags.StateFlag;
 import net.silthus.rccities.RCCitiesPlugin;
 import net.silthus.rccities.api.flags.AbstractPlotFlag;
 import net.silthus.rccities.api.flags.FlagInformation;
@@ -28,7 +26,7 @@ public class FarmPlotFlag extends AbstractPlotFlag {
     }
 
     @Override
-    public void refresh() throws RaidCraftException {
+    public void refresh() {
 
         if (getPlot() == null) return;
 

@@ -16,12 +16,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPistonExtendEvent;
-import org.bukkit.util.BlockVector;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 /**
@@ -98,11 +95,7 @@ public class WorldGuardManager implements Listener {
         regionName = regionName.replace(cityName.toLowerCase() + "_", "");
 
         // Check if only id is left
-        if(!StringUtils.isNumeric(regionName)) {
-            return false;
-        }
-
-        return true;
+        return StringUtils.isNumeric(regionName);
     }
 
     public boolean isOldPlot(String cityName, Location location) {
@@ -122,7 +115,7 @@ public class WorldGuardManager implements Listener {
     public Map<String, Location> getAllOldPlots(String cityName, World world) {
 
         if(!plugin.getPluginConfig().isMigrateOldPlots()) {
-            return new HashMap<String, Location>();
+            return new HashMap<>();
         }
 
         String regionName = cityName.toLowerCase() + "_";
@@ -152,7 +145,7 @@ public class WorldGuardManager implements Listener {
         return false;
     }
 
-    @EventHandler(ignoreCancelled = false, priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR)
     public void onPistonExtend(BlockPistonExtendEvent event) {
 
         // allow pistons

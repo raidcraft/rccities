@@ -1,10 +1,8 @@
 package net.silthus.rccities.api.city;
 
 import lombok.Getter;
-import net.milkbowl.vault.economy.EconomyResponse;
 import net.silthus.rccities.RCCitiesPlugin;
 import net.silthus.rccities.upgrades.api.holder.UpgradeHolder;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 
 import java.sql.Timestamp;
@@ -51,6 +49,7 @@ public abstract class AbstractCity implements City {
 
     @Override
     public boolean hasMoney(double amount) {
+
         return money >= amount;
     }
 

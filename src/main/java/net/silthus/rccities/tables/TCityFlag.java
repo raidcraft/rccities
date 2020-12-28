@@ -7,7 +7,6 @@ import net.silthus.ebean.BaseEntity;
 import net.silthus.rccities.api.city.City;
 
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import java.util.UUID;

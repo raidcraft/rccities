@@ -1,6 +1,5 @@
 package net.silthus.rccities;
 
-import net.milkbowl.vault.economy.Economy;
 import net.silthus.rccities.api.city.AbstractCity;
 import net.silthus.rccities.api.city.City;
 import net.silthus.rccities.api.plot.Plot;

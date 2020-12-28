@@ -2,26 +2,19 @@ package net.silthus.rccities.commands;
 
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.ConditionFailedException;
-import co.aikar.commands.InvalidCommandArgument;
 import co.aikar.commands.annotation.*;
-import com.google.common.base.Strings;
 import net.silthus.rccities.CityPermissions;
 import net.silthus.rccities.RCCitiesPlugin;
 import net.silthus.rccities.api.city.City;
-import net.silthus.rccities.api.plot.Plot;
 import net.silthus.rccities.api.resident.Resident;
 import net.silthus.rccities.api.resident.Role;
 import net.silthus.rccities.api.resident.RolePermission;
-import net.silthus.rccities.util.RaidCraftException;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.Arrays;
-import java.util.List;
 
 /**
  * @author Philip Urban

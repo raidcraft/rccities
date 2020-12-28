@@ -10,7 +10,6 @@ import net.silthus.rccities.upgrades.api.requirement.RequirementInformation;
 import net.silthus.rccities.upgrades.api.upgrade.Upgrade;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
 @RequirementInformation(

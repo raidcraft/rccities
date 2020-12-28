@@ -7,9 +7,6 @@ import net.silthus.ebean.EbeanWrapper;
 import net.silthus.rccities.RCCitiesPlugin;
 import net.silthus.rccities.upgrades.tables.*;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * @author Philip Urban
  */

@@ -1,12 +1,12 @@
 package net.silthus.rccities.upgrades.api.holder;
 
 import net.silthus.rccities.RCCitiesPlugin;
-import net.silthus.rccities.upgrades.api.reward.Reward;
-import net.silthus.rccities.upgrades.api.reward.RewardManager;
 import net.silthus.rccities.upgrades.RequirementManager;
 import net.silthus.rccities.upgrades.api.level.SimpleUpgradeLevel;
 import net.silthus.rccities.upgrades.api.level.UpgradeLevel;
 import net.silthus.rccities.upgrades.api.requirement.Requirement;
+import net.silthus.rccities.upgrades.api.reward.Reward;
+import net.silthus.rccities.upgrades.api.reward.RewardManager;
 import net.silthus.rccities.upgrades.api.upgrade.SimpleUpgrade;
 import net.silthus.rccities.upgrades.api.upgrade.Upgrade;
 import org.bukkit.configuration.ConfigurationSection;
@@ -35,6 +35,7 @@ public abstract class ConfigurationUpgradeHolder<T> extends AbstractUpgradeHolde
 
         for(String key : upgradesSection.getKeys(false)) {
             ConfigurationSection upgradeSection = upgradesSection.getConfigurationSection(key);
+            if(upgradeSection == null) continue;
             String name = upgradeSection.getString("name");
             String description = upgradeSection.getString("description");
 
@@ -45,6 +46,7 @@ public abstract class ConfigurationUpgradeHolder<T> extends AbstractUpgradeHolde
             if(levels != null) {
                 for(String levelIdentifier : levels.getKeys(false)) {
                     ConfigurationSection level = levels.getConfigurationSection(levelIdentifier);
+                    if(level == null) continue;
                     String levelName = level.getString("name");
                     boolean stored = level.getBoolean("stored", true);
                     int levelNumber = level.getInt("level", 0);

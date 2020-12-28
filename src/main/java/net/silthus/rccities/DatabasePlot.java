@@ -1,24 +1,17 @@
 package net.silthus.rccities;
 
-import co.aikar.commands.InvalidCommandArgument;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import net.silthus.rccities.api.city.City;
 import net.silthus.rccities.api.flags.FlagInformation;
-import net.silthus.rccities.api.flags.PlotFlag;
 import net.silthus.rccities.api.plot.AbstractPlot;
 import net.silthus.rccities.api.resident.Resident;
-import net.silthus.rccities.flags.plot.MarkPlotBaseFlag;
 import net.silthus.rccities.tables.TAssignment;
 import net.silthus.rccities.tables.TPlot;
 import net.silthus.rccities.util.RaidCraftException;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * @author Philip Urban

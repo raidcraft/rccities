@@ -1,20 +1,12 @@
 package net.silthus.rccities.flags.plot;
 
-import com.sk89q.worldguard.protection.flags.Flags;
-import com.sk89q.worldguard.protection.flags.StateFlag;
 import de.raidcraft.economy.wrapper.Economy;
-import net.milkbowl.vault.economy.EconomyResponse;
 import net.silthus.rccities.RCCitiesPlugin;
-import net.silthus.rccities.api.flags.AbstractPlotFlag;
 import net.silthus.rccities.api.flags.FlagInformation;
 import net.silthus.rccities.api.flags.FlagType;
 import net.silthus.rccities.api.plot.Plot;
 import net.silthus.rccities.util.RaidCraftException;
 import org.bukkit.ChatColor;
-import org.bukkit.Chunk;
-import org.bukkit.ChunkSnapshot;
-import org.bukkit.Material;
-import org.bukkit.block.Block;
 
 /**
  * @author Philip Urban

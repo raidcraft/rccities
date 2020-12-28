@@ -1,15 +1,19 @@
 package net.silthus.rccities;
 
+import co.aikar.commands.PaperCommandManager;
 import com.sk89q.worldguard.WorldGuard;
+import io.ebean.Database;
 import kr.entree.spigradle.annotations.PluginMain;
 import lombok.Getter;
 import lombok.Setter;
-import net.milkbowl.vault.economy.Economy;
+import me.wiefferink.interactivemessenger.source.LanguageManager;
+import net.milkbowl.vault.permission.Permission;
 import net.silthus.ebean.Config;
 import net.silthus.ebean.EbeanWrapper;
 import net.silthus.rccities.api.city.City;
 import net.silthus.rccities.api.plot.Plot;
 import net.silthus.rccities.commands.CommandSetup;
+import net.silthus.rccities.commands.QueuedCommand;
 import net.silthus.rccities.flags.city.*;
 import net.silthus.rccities.flags.city.admin.InviteCityFlag;
 import net.silthus.rccities.flags.plot.*;
@@ -28,7 +32,6 @@ import net.silthus.rccities.tables.*;
 import net.silthus.rccities.upgrades.RCUpgrades;
 import net.silthus.rccities.upgrades.RequirementManager;
 import net.silthus.rccities.upgrades.api.reward.RewardManager;
-import net.silthus.rccities.commands.QueuedCommand;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -36,13 +39,10 @@ import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.java.JavaPluginLoader;
-import co.aikar.commands.PaperCommandManager;
-import io.ebean.Database;
-import me.wiefferink.interactivemessenger.source.LanguageManager;
-import net.milkbowl.vault.permission.Permission;
 
 import java.io.File;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Philip Urban

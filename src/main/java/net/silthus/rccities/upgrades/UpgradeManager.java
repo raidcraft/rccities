@@ -1,7 +1,7 @@
 package net.silthus.rccities.upgrades;
 
 import com.google.common.base.Joiner;
-import net.silthus.rccities.RCCitiesPlugin;
+import io.ebean.Model;
 import net.silthus.rccities.upgrades.api.holder.UpgradeHolder;
 import net.silthus.rccities.upgrades.api.level.UpgradeLevel;
 import net.silthus.rccities.upgrades.api.upgrade.Upgrade;
@@ -30,7 +30,7 @@ public class UpgradeManager {
      */
     public <O> UpgradeHolder<O> loadDatabaseUpgradeHolder(O object, ConfigurationSection holderConfig, UUID id, Class<O> clazz) {
 
-        UpgradeHolder<O> upgradeHolder = new DatabaseUpgradeHolder<O>(object, holderConfig, id, clazz);
+        UpgradeHolder<O> upgradeHolder = new DatabaseUpgradeHolder<>(object, holderConfig, id, clazz);
         createDatabaseUpgradeInfo(upgradeHolder);
         return upgradeHolder;
     }
@@ -41,7 +41,7 @@ public class UpgradeManager {
      */
     public <O> UpgradeHolder createDatabaseUpgradeHolder(O object, ConfigurationSection holderConfig, Class<O> clazz) {
 
-        UpgradeHolder<O> upgradeHolder = new DatabaseUpgradeHolder<O>(object, holderConfig, clazz);
+        UpgradeHolder<O> upgradeHolder = new DatabaseUpgradeHolder<>(object, holderConfig, clazz);
         upgradeHolder.save();
         return upgradeHolder;
     }
@@ -62,8 +62,7 @@ public class UpgradeManager {
 
         // delete existing
         List<TUpgradeInfo> tUpgradeInfos = TUpgradeInfo.find.query().where().ieq("holder_id", StringUtils.formatName(upgradeHolder.getName())).findList();
-        tUpgradeInfos.forEach((tUpgradeInfo ->
-                tUpgradeInfo.delete()));
+        tUpgradeInfos.forEach((Model::delete));
 
         // create new
         for(Upgrade upgrade : upgradeHolder.getUpgrades()) {

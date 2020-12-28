@@ -1,15 +1,9 @@
 package net.silthus.rccities.requirements;
 
 import net.milkbowl.vault.economy.Economy;
-import net.milkbowl.vault.economy.EconomyResponse;
-import net.silthus.rccities.RCCitiesPlugin;
 import net.silthus.rccities.api.city.City;
 import net.silthus.rccities.upgrades.api.requirement.AbstractRequirement;
-import net.silthus.rccities.upgrades.api.requirement.Requirement;
 import net.silthus.rccities.upgrades.api.requirement.RequirementInformation;
-import org.bukkit.configuration.ConfigurationSection;
-
-import java.util.Optional;
 
 /**
  * @author Silthus
