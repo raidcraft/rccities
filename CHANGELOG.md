@@ -1,3 +1,15 @@
+# [1.11.0](https://github.com/raidcraft/rccities/compare/v1.10.0...v1.11.0) (2020-12-28)
+
+
+### Bug Fixes
+
+* Fix minor checks for city bank transfers ([78fba42](https://github.com/raidcraft/rccities/commit/78fba4278ca2889f5d2537a93a29fda58a818d89))
+
+
+### Features
+
+* Migrate city bank accounts into Economy wrapper. Closes [#13](https://github.com/raidcraft/rccities/issues/13) ([98ec2e2](https://github.com/raidcraft/rccities/commit/98ec2e2af088b076f1eec4e42fbac4a3c9f08ee9))
+
 # [1.10.0](https://github.com/raidcraft/rccities/compare/v1.9.0...v1.10.0) (2020-12-27)
 
 
