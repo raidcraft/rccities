@@ -1,3 +1,10 @@
+## [1.11.1](https://github.com/raidcraft/rccities/compare/v1.11.0...v1.11.1) (2020-12-28)
+
+
+### Bug Fixes
+
+* Improve stability when converting city bank accounts into economy system ([9ecc640](https://github.com/raidcraft/rccities/commit/9ecc6409bd228643628556e83cd182be0005c2fe))
+
 # [1.11.0](https://github.com/raidcraft/rccities/compare/v1.10.0...v1.11.0) (2020-12-28)
 
 
