@@ -7,7 +7,6 @@ import kr.entree.spigradle.annotations.PluginMain;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
-import me.wiefferink.interactivemessenger.source.LanguageManager;
 import net.milkbowl.vault.permission.Permission;
 import net.silthus.ebean.Config;
 import net.silthus.ebean.EbeanWrapper;
@@ -49,39 +48,45 @@ import java.util.Map;
  * @author Philip Urban
  */
 @PluginMain
-@Getter
 public class RCCitiesPlugin extends JavaPlugin {
+
+    private Database database;
 
     @Getter
     @Accessors(fluent = true)
     private static RCCitiesPlugin instance;
-
+    @Getter
     private final Map<String, QueuedCommand> queuedCommands = new HashMap<>();
+    @Getter
     private Permission permission;
-    private Database database;
+    @Getter
     @Setter
     private PaperCommandManager commandManager;
-    private LanguageManager languageManager;
-
+    @Getter
     private WorldGuard worldGuard;
-
+    @Getter
     private CityManager cityManager;
+    @Getter
     private PlotManager plotManager;
+    @Getter
     private ResidentManager residentManager;
+    @Getter
     private FlagManager flagManager;
+    @Getter
     private WorldGuardManager worldGuardManager;
+    @Getter
     private UpgradeRequestManager upgradeRequestManager;
+    @Getter
     private SchematicManager schematicManager;
+    @Getter
     private DynmapManager dynmapManager;
-
-    private EntityListener entityListener;
-    private ResidentListener residentListener;
-    private UpgradeListener upgradeListener;
+    @Getter
     private RCUpgrades upgrades;
-
+    @Getter
     private RCCitiesPluginConfig pluginConfig;
+    @Getter
     private YamlConfiguration upgradeConfiguration;
-
+    @Getter
     private boolean testing = false;
 
     public RCCitiesPlugin() {
@@ -227,26 +232,15 @@ public class RCCitiesPlugin extends JavaPlugin {
                 .build()).connect();
     }
 
-    private void setupLanguageManager() {
-
-        languageManager = new LanguageManager(
-                this,                                  // The plugin (used to get the languages bundled in the jar file)
-                "lang",                           // Folder where the languages are stored
-                getConfig().getString("language"),     // The language to use indicated by the plugin user
-                "EN",                                  // The default language, expected to be shipped with the plugin and should be complete, fills in gaps in the user-selected language
-                getConfig().getStringList("chatPrefix") // Chat prefix to use with Message#prefix(), could of course come from the config file
-        );
-    }
-
     private void setupListeners() {
 
-        entityListener = new EntityListener(this);
+        EntityListener entityListener = new EntityListener(this);
         Bukkit.getPluginManager().registerEvents(entityListener, this);
 
-        residentListener = new ResidentListener(this);
+        ResidentListener residentListener = new ResidentListener(this);
         Bukkit.getPluginManager().registerEvents(residentListener, this);
 
-        upgradeListener = new UpgradeListener(this);
+        UpgradeListener upgradeListener = new UpgradeListener(this);
         Bukkit.getPluginManager().registerEvents(upgradeListener, this);
     }
 
