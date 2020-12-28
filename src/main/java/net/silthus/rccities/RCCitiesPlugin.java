@@ -103,10 +103,6 @@ public class RCCitiesPlugin extends JavaPlugin {
     @Override
     public void onEnable() {
 
-        if (isTesting()) {
-            getLogger().info("RCCities is running in test mode!");
-        }
-
         if (!isTesting() && !setupVault()) {
             getLogger().severe(String.format("[%s] - No Vault dependency found!", getDescription().getName()));
             getLogger().severe("*** This plugin will be disabled. ***");
