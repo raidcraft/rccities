@@ -32,6 +32,7 @@ import net.silthus.rccities.tables.*;
 import net.silthus.rccities.upgrades.RCUpgrades;
 import net.silthus.rccities.upgrades.RequirementManager;
 import net.silthus.rccities.upgrades.api.reward.RewardManager;
+import net.silthus.rccities.upgrades.tables.*;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -111,7 +112,6 @@ public class RCCitiesPlugin extends JavaPlugin {
         }
 
         loadConfig();
-        //setupLanguageManager();
         setupDatabase();
 
         upgrades = new RCUpgrades(this);
@@ -223,7 +223,12 @@ public class RCCitiesPlugin extends JavaPlugin {
                         TPlot.class,
                         TPlotFlag.class,
                         TResident.class,
-                        TUpgradeRequest.class
+                        TUpgradeRequest.class,
+                        TUpgrade.class,
+                        TUpgradeLevel.class,
+                        TUpgradeHolder.class,
+                        TUpgradeInfo.class,
+                        TLevelInfo.class
                 )
                 .build()).connect();
     }

@@ -45,7 +45,7 @@ public class CityTests {
             assertThat(city.getMoney() == 100D).isTrue();
 
             city.depositMoney(123D);
-            assertThat(city.getMoney() == 123D).isTrue();
+            assertThat(city.getMoney() == 100D + 123D).isTrue();
         }
 
         @Test

@@ -15,24 +15,9 @@ public class RCUpgrades {
 
     private final UpgradeManager upgradeManager;
     private final RCCitiesPlugin plugin;
-    private Database database;
 
     public RCUpgrades(RCCitiesPlugin plugin) {
         this.plugin = plugin;
         upgradeManager = new UpgradeManager();
-
-        setupDatabase();
-    }
-
-    private void setupDatabase() {
-        this.database = new EbeanWrapper(Config.builder(plugin)
-                .entities(
-                        TUpgrade.class,
-                        TUpgradeLevel.class,
-                        TUpgradeHolder.class,
-                        TUpgradeInfo.class,
-                        TLevelInfo.class
-                )
-                .build()).connect();
     }
 }
