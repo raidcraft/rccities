@@ -104,11 +104,13 @@ shadowJar {
         include(dependency('co.aikar:acf-paper:'))
         include(dependency('net.silthus.configlib:configlib-bukkit:'))
         include(dependency('com.fasterxml.jackson.core::'))
+        include(dependency('de.raidcraft.economy:wrapper:'))
         include(dependency('net.silthus:interactivemessenger:'))
     }
     relocate 'co.aikar.commands', "shadow.${pluginName}.acf"
     relocate 'co.aikar.locales', "shadow.${pluginName}.locales"
     relocate 'de.exlll.configlib', "shadow.${pluginName}.configlib"
+    relocate 'de.raidcraft.economy.wrapper', "de.raidcraft.skills.economy"
     relocate 'me.wiefferink.interactivemessenger', "shadow.${pluginName}.interactivemessenger"
 }
 
