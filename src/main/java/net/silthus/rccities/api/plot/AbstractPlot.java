@@ -46,9 +46,7 @@ public abstract class AbstractPlot implements Plot {
     @Override
     public final String getRegionName() {
 
-        String fixedCityName = city.getName().toLowerCase();
-        fixedCityName = StringUtils.replaceUmlaut(fixedCityName);
-        return fixedCityName + "_" + location.getChunk().getX() + "_" + location.getChunk().getZ();
+        return city.getTechnicalName() + "_" + location.getChunk().getX() + "_" + location.getChunk().getZ();
     }
 
     @Override

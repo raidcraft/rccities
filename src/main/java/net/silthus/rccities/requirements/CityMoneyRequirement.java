@@ -28,7 +28,7 @@ public class CityMoneyRequirement extends AbstractRequirement<City> {
     @Override
     public String getDescription(City entity) {
 
-        return "Die Stadt '" + entity.getName() + "' muss mindestens " + economy.format(config.getDouble("money")) + " Geld besitzen";
+        return "Die Stadt '" + entity.getFriendlyName() + "' muss mindestens " + economy.format(config.getDouble("money")) + " Geld besitzen";
     }
 
     @Override

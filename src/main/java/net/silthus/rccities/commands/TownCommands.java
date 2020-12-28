@@ -221,7 +221,7 @@ public class TownCommands extends BaseCommand {
             player.sendMessage(ChatColor.GREEN + "Grund: " + ChatColor.GRAY + upgradeRequest.getRejectReason());
         }
         player.sendMessage(ChatColor.GREEN + "-->" + ChatColor.YELLOW + "/town upgrades "
-                + city.getName() + " <accept/reject>");
+                + city.getFriendlyName() + " <accept/reject>");
     }
 
     @Subcommand("spawn|tp|warp")

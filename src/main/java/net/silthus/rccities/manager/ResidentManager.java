@@ -124,7 +124,7 @@ public class ResidentManager {
         if (!resident.getRole().hasPermission(RolePermission.PREFIX_SKILL)) return;
         if (resident.getPlayer() == null || !resident.getPlayer().isOnline()) return;
 
-        plugin.getPermission().playerAdd(resident.getPlayer(), "group.c-" + resident.getCity().getName().toLowerCase());
+        plugin.getPermission().playerAdd(resident.getPlayer(), "group.c-" + resident.getCity().getTechnicalName().toLowerCase());
     }
 
     public void removePrefixSkill(Resident resident) {
@@ -133,7 +133,7 @@ public class ResidentManager {
             return;
         }
 
-        plugin.getPermission().playerRemove(resident.getPlayer(), "group.c-" + resident.getCity().getName().toLowerCase());
+        plugin.getPermission().playerRemove(resident.getPlayer(), "group.c-" + resident.getCity().getTechnicalName().toLowerCase());
     }
 
     public List<Resident> getCitizenships(UUID playerId) {

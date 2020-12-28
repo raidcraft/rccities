@@ -1,8 +1,12 @@
 package net.silthus.rccities.api.city;
 
+import de.raidcraft.economy.wrapper.Economy;
 import lombok.Getter;
+import net.milkbowl.vault.economy.EconomyResponse;
 import net.silthus.rccities.RCCitiesPlugin;
 import net.silthus.rccities.upgrades.api.holder.UpgradeHolder;
+import net.silthus.rccities.util.StringUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 
 import java.sql.Timestamp;
@@ -24,10 +28,31 @@ public abstract class AbstractCity implements City {
     protected int exp;
     protected UpgradeHolder<City> upgradeHolder;
     protected double money;
+    private boolean bankInitialized = false;
+    private String bankAccountName;
+    private final static double BANK_ACCOUNT_CONVERTED_PATTERN = -1337.1337;
 
     private void initBankAccount() {
+        if(bankInitialized) return;
 
+        bankInitialized = true;
 
+        bankAccountName = "city_" + getTechnicalName();
+
+        // Check if bank account does no exists
+        if(Economy.get().bankBalance(bankAccountName).type == EconomyResponse.ResponseType.FAILURE) {
+
+            // There is no API to create bank account without any player assignment.
+            // Therefore take Strasse36 (my) user account as bank owner to avoid triggering
+            // web request to search for not existing user by "getOfflinePlayer" method.
+            UUID ownerUUID = UUID.fromString("78e15490-cfb7-4d9c-84ea-78390aac7952");
+            if(Economy.get().createBank(bankAccountName, Bukkit.getOfflinePlayer(ownerUUID)).type
+                    == EconomyResponse.ResponseType.SUCCESS) {
+                Economy.get().bankDeposit(bankAccountName, money);
+                money = BANK_ACCOUNT_CONVERTED_PATTERN; // Mark this city bank account as converted
+                save();
+            }
+        }
     }
 
     protected AbstractCity() {
@@ -50,13 +75,30 @@ public abstract class AbstractCity implements City {
         return name.replace('_', ' ');
     }
 
+    @Override
+    public String getTechnicalName() {
 
+        String fixedCityName = getFriendlyName().toLowerCase();
+        fixedCityName = fixedCityName.replace(" ", "_");
+        fixedCityName = StringUtils.replaceUmlaut(fixedCityName);
+
+        return fixedCityName;
+    }
 
     @Override
     public boolean hasMoney(double amount) {
 
         initBankAccount();
-        return money >= amount;
+
+        if(money != BANK_ACCOUNT_CONVERTED_PATTERN) {
+            return money >= amount;
+        } else {
+            if(Economy.get().bankHas(bankAccountName, amount).type == EconomyResponse.ResponseType.SUCCESS) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     @Override
@@ -68,9 +110,17 @@ public abstract class AbstractCity implements City {
 
         if(!hasMoney(amount)) return false;
 
-        money -= amount;
-        save();
-        return true;
+        if(money != BANK_ACCOUNT_CONVERTED_PATTERN) {
+            money -= amount;
+            save();
+            return true;
+        } else {
+            EconomyResponse response = Economy.get().bankWithdraw(bankAccountName, amount);
+            if(response.type == EconomyResponse.ResponseType.SUCCESS) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
@@ -80,16 +130,34 @@ public abstract class AbstractCity implements City {
 
         if(amount <= 0) return false;
 
-        money += amount;
-        save();
-        return true;
+        if(money != BANK_ACCOUNT_CONVERTED_PATTERN) {
+            money += amount;
+            save();
+            return true;
+        } else {
+            EconomyResponse response = Economy.get().bankDeposit(bankAccountName, amount);
+            if(response.type == EconomyResponse.ResponseType.SUCCESS) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
     public double getMoney() {
 
         initBankAccount();
-        return money;
+
+        if(money != BANK_ACCOUNT_CONVERTED_PATTERN) {
+            return money;
+        } else {
+            EconomyResponse response = Economy.get().bankBalance(bankAccountName);
+            if(response.type == EconomyResponse.ResponseType.SUCCESS) {
+                return response.balance;
+            }
+        }
+
+        return 0;
     }
 
     @Override

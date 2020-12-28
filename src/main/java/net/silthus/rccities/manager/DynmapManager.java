@@ -72,7 +72,7 @@ public class DynmapManager {
     }
 
     private String getCityMarkerId(City city) {
-        return city.getName().toLowerCase().replace(" ", "_");
+        return city.getTechnicalName();
     }
 
     private String getCityCircleId(City city) {

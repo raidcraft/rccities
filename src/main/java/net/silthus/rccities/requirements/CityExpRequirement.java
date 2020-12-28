@@ -25,7 +25,7 @@ public class CityExpRequirement extends AbstractRequirement<City> {
 
     public String getDescription(City entity) {
 
-        return "Die Stadt '" + entity.getName() + "' muss mindestens " + config.getInt("exp") + " EXP besitzen";
+        return "Die Stadt '" + entity.getFriendlyName() + "' muss mindestens " + config.getInt("exp") + " EXP besitzen";
     }
 
     public String getReason(City entity) {

@@ -173,7 +173,7 @@ public class PlotCommands extends BaseCommand {
         }
 
         // check if here is a wrong region
-        if (!plugin.getWorldGuardManager().claimable(city.getName(), player.getLocation())) {
+        if (!plugin.getWorldGuardManager().claimable(city.getFriendlyName(), player.getLocation())) {
             throw new ConditionFailedException("Hier befindet sich bereits eine andere Region!");
         }
 
@@ -426,8 +426,8 @@ public class PlotCommands extends BaseCommand {
             List<Plot> plots = RCCitiesPlugin.instance().getPlotManager().getPlots(city);
             if (plots.isEmpty()) {
                 plugin.getLogger().info("[RCCities - Unclaim all] Done: Unclaimed all plots of city + '"
-                        + city.getName() + "'!");
-                sender.sendMessage(ChatColor.GREEN + "Done: Unclaimed all plots of city + '" + city.getName() + "'!");
+                        + city.getFriendlyName() + "'!");
+                sender.sendMessage(ChatColor.GREEN + "Done: Unclaimed all plots of city + '" + city.getFriendlyName() + "'!");
                 Bukkit.getScheduler().cancelTask(unclaimTask);
                 return;
             }
@@ -436,9 +436,9 @@ public class PlotCommands extends BaseCommand {
             Plot plot = plots.get(0);
 
             plugin.getLogger().info("[RCCities - Unclaim all] Start unclaiming all plots ("
-                    + plots.size() + ") of city + '" + city.getName() + "'!");
+                    + plots.size() + ") of city + '" + city.getFriendlyName() + "'!");
             sender.sendMessage(ChatColor.GREEN + "Start unclaiming all plots (" + plots.size() + ") of city + '"
-                    + city.getName() + "'!");
+                    + city.getFriendlyName() + "'!");
 
             int totalCount = plots.size();
             plugin.getLogger().info("[RCCities - Unclaim all] Der Plot '" + plot.getRegionName()

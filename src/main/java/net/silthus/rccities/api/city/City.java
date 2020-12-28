@@ -18,9 +18,9 @@ public interface City {
 
     UUID getId();
 
-    String getName();
-
     String getFriendlyName();
+
+    String getTechnicalName();
 
     double getMoney();
 

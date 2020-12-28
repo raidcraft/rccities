@@ -69,16 +69,16 @@ public class FlagManager {
             if (tCityFlag != null) {
                 tCityFlag.delete();
             }
-            if (cachedCityFlags.containsKey(city.getName())) {
-                cachedCityFlags.get(city.getName()).remove(flagName);
+            if (cachedCityFlags.containsKey(city.getFriendlyName())) {
+                cachedCityFlags.get(city.getFriendlyName()).remove(flagName);
             }
             return;
         }
 
         CityFlag flag;
         // load cached flag
-        if (cachedCityFlags.containsKey(city.getName()) && cachedCityFlags.get(city.getName()).containsKey(flagName)) {
-            flag = cachedCityFlags.get(city.getName()).get(flagName);
+        if (cachedCityFlags.containsKey(city.getFriendlyName()) && cachedCityFlags.get(city.getFriendlyName()).containsKey(flagName)) {
+            flag = cachedCityFlags.get(city.getFriendlyName()).get(flagName);
         }
         // create new
         else {
@@ -101,10 +101,10 @@ public class FlagManager {
         flag.refresh();
 
         // save in cache
-        if (!cachedCityFlags.containsKey(city.getName())) {
-            cachedCityFlags.put(city.getName(), new CaseInsensitiveMap<CityFlag>());
+        if (!cachedCityFlags.containsKey(city.getFriendlyName())) {
+            cachedCityFlags.put(city.getFriendlyName(), new CaseInsensitiveMap<CityFlag>());
         }
-        cachedCityFlags.get(city.getName()).put(flag.getName(), flag);
+        cachedCityFlags.get(city.getFriendlyName()).put(flag.getName(), flag);
 
         flagName = flagName.toLowerCase();
         TCityFlag tFlag = TCityFlag.find.query().where().eq("city_id", city.getId()).eq("name", flagName).findOne();
@@ -125,8 +125,8 @@ public class FlagManager {
         TCityFlag flag = TCityFlag.find.query().where().eq("city_id", city.getId()).ieq("name", flagName).findOne();
         flag.delete();
 
-        if (!cachedCityFlags.containsKey(city.getName())) return;
-        cachedCityFlags.get(city.getName()).remove(flagName);
+        if (!cachedCityFlags.containsKey(city.getFriendlyName())) return;
+        cachedCityFlags.get(city.getFriendlyName()).remove(flagName);
     }
 
     public void setPlotFlag(Plot plot, String flagName, String flagValue) throws RaidCraftException {
@@ -224,8 +224,8 @@ public class FlagManager {
 
     public void refreshCityFlags(City city) {
 
-        if (!cachedCityFlags.containsKey(city.getName())) return;
-        for (Flag flag : cachedCityFlags.get(city.getName()).values()) {
+        if (!cachedCityFlags.containsKey(city.getFriendlyName())) return;
+        for (Flag flag : cachedCityFlags.get(city.getFriendlyName()).values()) {
             try {
                 FlagInformation annotation = flag.getClass().getAnnotation(FlagInformation.class);
                 if (annotation.needsRefresh()) {
@@ -311,10 +311,10 @@ public class FlagManager {
             e.printStackTrace();
             throw new RaidCraftException("Interner Fehler aufgetreten: " + e.getMessage());
         }
-        if (!cachedCityFlags.containsKey(city.getName())) {
-            cachedCityFlags.put(city.getName(), new CaseInsensitiveMap<CityFlag>());
+        if (!cachedCityFlags.containsKey(city.getFriendlyName())) {
+            cachedCityFlags.put(city.getFriendlyName(), new CaseInsensitiveMap<CityFlag>());
         }
-        cachedCityFlags.get(city.getName()).put(flag.getName(), flag);
+        cachedCityFlags.get(city.getFriendlyName()).put(flag.getName(), flag);
         return flag;
     }
 
@@ -340,8 +340,8 @@ public class FlagManager {
 
     public CityFlag getCityFlag(City city, String flagName) {
 
-        if (!cachedCityFlags.containsKey(city.getName())) return null;
-        return cachedCityFlags.get(city.getName()).get(flagName);
+        if (!cachedCityFlags.containsKey(city.getFriendlyName())) return null;
+        return cachedCityFlags.get(city.getFriendlyName()).get(flagName);
     }
 
     public PlotFlag getPlotFlag(Plot plot, String flagName) {

@@ -113,7 +113,7 @@ public class DatabaseCity extends AbstractCity {
             TCity tCity = new TCity();
             tCity.setCreationDate(new Timestamp(System.currentTimeMillis()));
             tCity.setCreatorId(getCreator());
-            tCity.setName(getName());
+            tCity.setName(getFriendlyName());
             tCity.setWorld(getSpawn().getWorld().getName());
             tCity.setX((int) getSpawn().getX() * 1000);
             tCity.setY((int) getSpawn().getY() * 1000);

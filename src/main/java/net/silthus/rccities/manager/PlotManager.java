@@ -158,12 +158,12 @@ public class PlotManager {
     public boolean migrateOldPlot(City city, Location location) {
 
         // Delete old plot region
-        if(!plugin.getWorldGuardManager().deleteOldPlotRegion(city.getName(), location)) {
+        if(!plugin.getWorldGuardManager().deleteOldPlotRegion(city.getFriendlyName(), location)) {
             return false;
         }
 
         plugin.getLogger().info("Ein alter Plot (" + location.getChunk().getX()
-                + "/" + location.getChunk().getZ() + ") von " + city.getName() + " wurde migriert!");
+                + "/" + location.getChunk().getZ() + ") von " + city.getFriendlyName() + " wurde migriert!");
 
         // Create new plot
         Plot plot = new DatabasePlot(location, city);
@@ -174,7 +174,7 @@ public class PlotManager {
     public void migrateAllPlots(City city) {
 
         Map<String, Location> oldPlotMap = plugin.getWorldGuardManager()
-                .getAllOldPlots(city.getName(), city.getSpawn().getWorld());
+                .getAllOldPlots(city.getFriendlyName(), city.getSpawn().getWorld());
 
         if(oldPlotMap.size() == 0) return;
 

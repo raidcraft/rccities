@@ -57,7 +57,7 @@ public class CityManager {
 
     public void removeFromCache(City city) {
 
-        cachedCities.remove(city.getName());
+        cachedCities.remove(city.getFriendlyName());
     }
 
     public void printCityInfo(City city, CommandSender sender) {

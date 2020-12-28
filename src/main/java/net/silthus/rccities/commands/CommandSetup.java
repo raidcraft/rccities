@@ -40,7 +40,7 @@ public class CommandSetup {
     private void registerCityCompletion(PaperCommandManager commandManager) {
 
         commandManager.getCommandCompletions().registerAsyncCompletion("cities", context ->
-                plugin.getCityManager().getCities().stream().map(City::getName).collect(Collectors.toSet()));
+                plugin.getCityManager().getCities().stream().map(City::getFriendlyName).collect(Collectors.toSet()));
     }
 
     private void registerFlagContext(PaperCommandManager commandManager) {
