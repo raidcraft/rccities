@@ -6,6 +6,6 @@ package net.silthus.rccities.api.flags;
 public enum FlagRefreshType {
 
     ON_CHANGE,
-    ON_START,
+    ON_LOAD,
     PERIODICALLY
 }

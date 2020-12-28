@@ -19,12 +19,17 @@ import java.util.*;
 @Table(name = "rccities_plots")
 public class TPlot extends BaseEntity {
 
-    public static final Finder<UUID, TPlot> find = new Finder<>(TPlot.class);
-
     @ManyToOne
     private TCity city;
     private int x;
     private int z;
+
+    public static final Finder<UUID, TPlot> find = new Finder<>(TPlot.class);
+
+    public TPlot(City city) {
+
+        setCity(city);
+    }
 
     @OneToMany(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "plot_id")

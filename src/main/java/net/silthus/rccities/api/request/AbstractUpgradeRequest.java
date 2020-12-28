@@ -33,7 +33,7 @@ public abstract class AbstractUpgradeRequest extends AbstractRequest implements 
     @Override
     public long getRejectExpirationDate() {
 
-        return rejectDate + RCCitiesPlugin.getPlugin().getPluginConfig().getUpgradeRequestCooldown() * 60 * 1000;
+        return rejectDate + RCCitiesPlugin.instance().getPluginConfig().getUpgradeRequestCooldown() * 60 * 1000;
     }
 
     @Override

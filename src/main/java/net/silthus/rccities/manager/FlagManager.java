@@ -264,7 +264,7 @@ public class FlagManager {
             try {
                 CityFlag flag = loadCityFlag(clazz, city);
                 flag.setValue(tCityFlag.getValue());
-                if (annotation.refreshType() == FlagRefreshType.ON_START) {
+                if (annotation.refreshType() == FlagRefreshType.ON_LOAD) {
                     flag.refresh();
                 }
                 if (annotation.refreshType() == FlagRefreshType.PERIODICALLY) {
@@ -286,7 +286,7 @@ public class FlagManager {
             try {
                 PlotFlag flag = loadPlotFlag(clazz, plot);
                 flag.setValue(tPlotFlag.getValue());
-                if (annotation.refreshType() == FlagRefreshType.ON_START) {
+                if (annotation.refreshType() == FlagRefreshType.ON_LOAD) {
                     flag.refresh();
                 }
                 if (annotation.refreshType() == FlagRefreshType.PERIODICALLY) {

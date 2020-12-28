@@ -18,7 +18,7 @@ public class DatabaseResident extends AbstractResident {
 
         super(playerId, profession, city);
 
-        RCCitiesPlugin.getPlugin().getResidentManager().addPrefixSkill(this);
+        RCCitiesPlugin.instance().getResidentManager().addPrefixSkill(this);
     }
 
     public DatabaseResident(TResident tResident) {
@@ -26,7 +26,7 @@ public class DatabaseResident extends AbstractResident {
         //XXX setter call order is important!!!
         this.id = tResident.id();
 
-        City city = RCCitiesPlugin.getPlugin().getCityManager().getCity(tResident.getCity().getName());
+        City city = RCCitiesPlugin.instance().getCityManager().getCity(tResident.getCity().getName());
         assert city != null : "City of resident is null!";
         this.city = city;
         this.playerId = tResident.getPlayerId();
@@ -63,7 +63,7 @@ public class DatabaseResident extends AbstractResident {
     @Override
     public void delete() {
 
-        RCCitiesPlugin plugin = RCCitiesPlugin.getPlugin();
+        RCCitiesPlugin plugin = RCCitiesPlugin.instance();
 
         // remove prefix skill
         plugin.getResidentManager().removePrefixSkill(this);

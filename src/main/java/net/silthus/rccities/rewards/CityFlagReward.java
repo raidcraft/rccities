@@ -32,7 +32,7 @@ public class CityFlagReward extends AbstractReward<City> {
     public void reward(City city) {
 
         try {
-            RCCitiesPlugin.getPlugin().getFlagManager().setCityFlag(city, null, flagName, flagValue);
+            RCCitiesPlugin.instance().getFlagManager().setCityFlag(city, null, flagName, flagValue);
         } catch (RaidCraftException e) {
         }
     }

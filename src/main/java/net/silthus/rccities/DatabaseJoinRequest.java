@@ -23,7 +23,7 @@ public class DatabaseJoinRequest extends AbstractJoinRequest {
     public void accept() {
 
         try {
-            RCCitiesPlugin.getPlugin().getResidentManager().addResident(getCity(), getPlayer());
+            RCCitiesPlugin.instance().getResidentManager().addResident(getCity(), getPlayer());
             Bukkit.broadcastMessage(ChatColor.GOLD + Bukkit.getOfflinePlayer(getPlayer()).getName()
                     + " ist nun Einwohner von '" + getCity().getFriendlyName() + "'!");
         } catch (RaidCraftException e) {

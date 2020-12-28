@@ -210,7 +210,7 @@ public class PlotCommands extends BaseCommand {
             try {
                 plot.setFlag(MarkPlotBaseFlag.class, true);
             } catch (RaidCraftException e) {
-                RCCitiesPlugin.getPlugin().getLogger().warning(e.getMessage());
+                RCCitiesPlugin.instance().getLogger().warning(e.getMessage());
             }
         }
 
@@ -405,7 +405,7 @@ public class PlotCommands extends BaseCommand {
 
         UnclaimAllTask unclaimAllTask = new UnclaimAllTask(sender, city, restoreSchematics);
         unclaimTask = Bukkit.getScheduler()
-                .runTaskTimer(RCCitiesPlugin.getPlugin(), unclaimAllTask, 0, 2 * 20).getTaskId();
+                .runTaskTimer(RCCitiesPlugin.instance(), unclaimAllTask, 0, 2 * 20).getTaskId();
     }
 
     private class UnclaimAllTask implements Runnable {
@@ -423,7 +423,7 @@ public class PlotCommands extends BaseCommand {
         @Override
         public void run() {
 
-            List<Plot> plots = RCCitiesPlugin.getPlugin().getPlotManager().getPlots(city);
+            List<Plot> plots = RCCitiesPlugin.instance().getPlotManager().getPlots(city);
             if (plots.isEmpty()) {
                 plugin.getLogger().info("[RCCities - Unclaim all] Done: Unclaimed all plots of city + '"
                         + city.getName() + "'!");

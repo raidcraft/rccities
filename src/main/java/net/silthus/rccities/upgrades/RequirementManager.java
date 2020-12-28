@@ -49,29 +49,29 @@ public class RequirementManager {
                     try {
                         final ConfigurationSection section = config.getConfigurationSection(reqName);
                         if (section == null) {
-                            RCCitiesPlugin.getPlugin().getLogger().warning("Requirement '" + reqName + "' must be a section");
+                            RCCitiesPlugin.instance().getLogger().warning("Requirement '" + reqName + "' must be a section");
                             continue;
                         }
                         ConfigurationSection args = section.getConfigurationSection("args");
                         if(args == null) {
-                            RCCitiesPlugin.getPlugin().getLogger().warning("No arguments for '" + reqName + "' found");
+                            RCCitiesPlugin.instance().getLogger().warning("No arguments for '" + reqName + "' found");
                             continue;
                         }
                         final Requirement<O> requirement = (Requirement<O>) constructors.get(rClass).newInstance();
                         if (requirement instanceof AbstractRequirement) {
                             // load the config one tick later to allow all processing to take place
                             // this helps to avoid stack overflow errors when a skill requires itself
-                            Bukkit.getScheduler().runTaskLater(RCCitiesPlugin.getPlugin(),
+                            Bukkit.getScheduler().runTaskLater(RCCitiesPlugin.instance(),
                                     () -> ((AbstractRequirement) requirement).load(args), 1L);
                         }
                         requirements.add(requirement);
                     } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
-                        RCCitiesPlugin.getPlugin().getLogger().warning(e.getMessage());
+                        RCCitiesPlugin.instance().getLogger().warning(e.getMessage());
                         e.printStackTrace();
                     }
             } else {
-                RCCitiesPlugin.getPlugin().getLogger().warning("There are no requirement types defined for the type " + reqName);
-                RCCitiesPlugin.getPlugin().getLogger().warning("Available Requirement Types are: " + String.join(", ", new ArrayList<>(requirementClasses.keySet())));
+                RCCitiesPlugin.instance().getLogger().warning("There are no requirement types defined for the type " + reqName);
+                RCCitiesPlugin.instance().getLogger().warning("Available Requirement Types are: " + String.join(", ", new ArrayList<>(requirementClasses.keySet())));
             }
         }
         return requirements;
@@ -81,7 +81,7 @@ public class RequirementManager {
     public static <T extends Requirement<?>> void registerRequirementType(Class<T> rClass) {
 
         if (!rClass.isAnnotationPresent(RequirementInformation.class)) {
-            RCCitiesPlugin.getPlugin().getLogger().warning("Cannot register " + rClass.getCanonicalName() + " as Requirement because it has no Information tag!");
+            RCCitiesPlugin.instance().getLogger().warning("Cannot register " + rClass.getCanonicalName() + " as Requirement because it has no Information tag!");
             return;
         }
         for (Constructor<?> constructor : rClass.getDeclaredConstructors()) {
@@ -90,7 +90,7 @@ public class RequirementManager {
             // get the displayName for aliasing
             String name = StringUtils.formatName(rClass.getAnnotation(RequirementInformation.class).value());
             requirementClasses.put(name, rClass);
-            //RCCitiesPlugin.getPlugin().getLogger().info("Registered Requirement Type: " + name);
+            //RCCitiesPlugin.instance().getLogger().info("Registered Requirement Type: " + name);
             break;
         }
     }

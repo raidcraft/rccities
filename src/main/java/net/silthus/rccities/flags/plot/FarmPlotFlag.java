@@ -34,7 +34,7 @@ public class FarmPlotFlag extends AbstractPlotFlag {
 
         if (currentValue) {
             DefaultDomain defaultDomain = new DefaultDomain();
-            for (Resident resident : RCCitiesPlugin.getPlugin().getResidentManager().getResidents(getPlot().getCity())) {
+            for (Resident resident : RCCitiesPlugin.instance().getResidentManager().getResidents(getPlot().getCity())) {
                 defaultDomain.addPlayer(resident.getName());
             }
             getPlot().getRegion().setMembers(defaultDomain);

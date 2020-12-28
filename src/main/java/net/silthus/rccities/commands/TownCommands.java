@@ -127,7 +127,7 @@ public class TownCommands extends BaseCommand {
                 try {
                     plot.setFlag(MarkPlotBaseFlag.class, true);
                 } catch (RaidCraftException e) {
-                    RCCitiesPlugin.getPlugin().getLogger().warning(e.getMessage());
+                    RCCitiesPlugin.instance().getLogger().warning(e.getMessage());
                 }
             }
 
@@ -229,7 +229,7 @@ public class TownCommands extends BaseCommand {
     @CommandPermission(CityPermissions.GROUP_USER + ".town.spawn")
     public void spawn(Player player, City city) {
 
-        boolean isResident = RCCitiesPlugin.getPlugin().getResidentManager().isResident(player.getUniqueId(), city);
+        boolean isResident = RCCitiesPlugin.instance().getResidentManager().isResident(player.getUniqueId(), city);
 
         if(isResident) {
             CommandHelper.checkRolePermissions(player, city, RolePermission.SPAWN_TELEPORT);

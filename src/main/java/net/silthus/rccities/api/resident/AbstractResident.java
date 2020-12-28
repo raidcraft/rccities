@@ -54,7 +54,7 @@ public abstract class AbstractResident implements Resident {
 
         // update region if build permissions changes
         if (couldBuild != shouldBuild) {
-            for (Plot plot : RCCitiesPlugin.getPlugin().getPlotManager().getPlots(city)) {
+            for (Plot plot : RCCitiesPlugin.instance().getPlotManager().getPlots(city)) {
                 plot.updateRegion(false);
             }
         }

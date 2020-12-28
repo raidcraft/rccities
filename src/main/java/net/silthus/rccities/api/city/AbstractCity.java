@@ -25,6 +25,11 @@ public abstract class AbstractCity implements City {
     protected UpgradeHolder<City> upgradeHolder;
     protected double money;
 
+    private void initBankAccount() {
+
+
+    }
+
     protected AbstractCity() {
     }
 
@@ -34,7 +39,7 @@ public abstract class AbstractCity implements City {
         this.spawn = spawn;
         this.creator = creator;
         this.creationDate = new Timestamp(System.currentTimeMillis());
-        this.plotCredit = RCCitiesPlugin.getPlugin().getPluginConfig().getInitialPlotCredit();
+        this.plotCredit = RCCitiesPlugin.instance().getPluginConfig().getInitialPlotCredit();
 
         save();
     }
@@ -50,11 +55,14 @@ public abstract class AbstractCity implements City {
     @Override
     public boolean hasMoney(double amount) {
 
+        initBankAccount();
         return money >= amount;
     }
 
     @Override
     public boolean withdrawMoney(double amount) {
+
+        initBankAccount();
         if(!hasMoney(amount)) return false;
 
         money -= amount;
@@ -65,9 +73,17 @@ public abstract class AbstractCity implements City {
     @Override
     public boolean depositMoney(double amount) {
 
+        initBankAccount();
         money += amount;
         save();
         return false;
+    }
+
+    @Override
+    public double getMoney() {
+
+        initBankAccount();
+        return money;
     }
 
     @Override
@@ -119,7 +135,7 @@ public abstract class AbstractCity implements City {
         // Add some extra space to allow some oval cities and not just
         // perfect circles.
 
-        int additionalPlotLengths = RCCitiesPlugin.getPlugin().getPluginConfig().getAdditionalRadiusPlots();
+        int additionalPlotLengths = RCCitiesPlugin.instance().getPluginConfig().getAdditionalRadiusPlots();
         additionalPlotLengths *= additionalPlotLengths;
 
         int maxRadius = (int)Math.sqrt(getSize() + getPlotCredit()

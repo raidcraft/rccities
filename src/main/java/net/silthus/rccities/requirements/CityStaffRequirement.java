@@ -24,7 +24,7 @@ public class CityStaffRequirement extends AbstractRequirement<City> {
 
     public boolean test(City city) {
 
-        RCCitiesPlugin plugin = RCCitiesPlugin.getPlugin();
+        RCCitiesPlugin plugin = RCCitiesPlugin.instance();
         if(city == null) return false;
         Upgrade upgrade = city.getUpgrades().getUpgrade(config.getString("upgrade-id"));
         if (upgrade == null) return false;

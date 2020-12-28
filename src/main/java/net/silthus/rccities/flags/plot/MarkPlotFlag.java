@@ -31,7 +31,7 @@ public class MarkPlotFlag extends MarkPlotBaseFlag {
         if (getPlot() == null) return;
 
         boolean currentValue = getType().convertToBoolean(getValue());
-        double markCost = RCCitiesPlugin.getPlugin().getPluginConfig().getFlagPlotMarkCost();
+        double markCost = RCCitiesPlugin.instance().getPluginConfig().getFlagPlotMarkCost();
 
         if (currentValue) {
 
@@ -41,7 +41,7 @@ public class MarkPlotFlag extends MarkPlotBaseFlag {
 
             // withdraw
             getPlot().getCity().withdrawMoney(markCost);
-            RCCitiesPlugin.getPlugin().getResidentManager()
+            RCCitiesPlugin.instance().getResidentManager()
                     .broadcastCityMessage(getPlot().getCity(), "Plot Markierung: "
                             + Economy.get().format(markCost) + ChatColor.GOLD + " abgezogen!");
         }

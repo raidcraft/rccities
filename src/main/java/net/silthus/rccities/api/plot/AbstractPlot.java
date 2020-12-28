@@ -56,7 +56,7 @@ public abstract class AbstractPlot implements Plot {
 
         // force create region
         if (create) {
-            RegionManager regionManager = RCCitiesPlugin.getPlugin().getWorldGuard().getPlatform().getRegionContainer()
+            RegionManager regionManager = RCCitiesPlugin.instance().getWorldGuard().getPlatform().getRegionContainer()
                     .get(BukkitAdapter.adapt(location.getWorld()));
             if (regionManager.getRegion(getRegionName()) != null) {
                 regionManager.removeRegion(getRegionName());
@@ -118,7 +118,7 @@ public abstract class AbstractPlot implements Plot {
             for (Resident resident : getCity().getResidents()) {
                 if (!resident.getRole().hasPermission(RolePermission.BUILD_EVERYWHERE)) continue;
                 if(resident.getName() == null) {
-                    RCCitiesPlugin.getPlugin().getLogger()
+                    RCCitiesPlugin.instance().getLogger()
                             .info("name of resident is null: " + resident.getId());
                     continue;
                 }
@@ -130,7 +130,7 @@ public abstract class AbstractPlot implements Plot {
 
     @Override
     public void delete() {
-        RCCitiesPlugin.getPlugin().getWorldGuard().getPlatform().getRegionContainer()
+        RCCitiesPlugin.instance().getWorldGuard().getPlatform().getRegionContainer()
                 .get(BukkitAdapter.adapt(location.getWorld())).removeRegion(getRegionName());
     }
 }

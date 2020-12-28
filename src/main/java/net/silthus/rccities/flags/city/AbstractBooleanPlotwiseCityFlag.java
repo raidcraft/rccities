@@ -25,7 +25,7 @@ public abstract class AbstractBooleanPlotwiseCityFlag extends AbstractCityFlag {
         boolean currentValue = getType().convertToBoolean(getValue());
         announce(currentValue);
 
-        for (Plot plot : RCCitiesPlugin.getPlugin().getPlotManager().getPlots(getCity())) {
+        for (Plot plot : RCCitiesPlugin.instance().getPlotManager().getPlots(getCity())) {
             if (currentValue) {
                 allow(plot);
             } else {

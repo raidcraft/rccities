@@ -23,7 +23,7 @@ public abstract class ConfigurationUpgradeHolder<T> extends AbstractUpgradeHolde
 
         super(object, clazz);
 
-        Logger logger = RCCitiesPlugin.getPlugin().getLogger();
+        Logger logger = RCCitiesPlugin.instance().getLogger();
 
         this.name = config.getString("name");
         this.description = config.getString("description");

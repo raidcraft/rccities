@@ -34,9 +34,9 @@ public class CityPlotsReward extends AbstractReward<City> {
 
         if (broadcast) {
             if (plotAmount > 1) {
-                RCCitiesPlugin.getPlugin().getResidentManager().broadcastCityMessage(city, "Die Stadt hat " + plotAmount + " neue Plots erhalten!");
+                RCCitiesPlugin.instance().getResidentManager().broadcastCityMessage(city, "Die Stadt hat " + plotAmount + " neue Plots erhalten!");
             } else {
-                RCCitiesPlugin.getPlugin().getResidentManager().broadcastCityMessage(city, "Die Stadt hat einen neuen Plot erhalten!");
+                RCCitiesPlugin.instance().getResidentManager().broadcastCityMessage(city, "Die Stadt hat einen neuen Plot erhalten!");
             }
         }
     }

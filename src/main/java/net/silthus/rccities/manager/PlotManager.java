@@ -182,7 +182,7 @@ public class PlotManager {
         plugin.getLogger().info("Es werden nun " + oldPlotMap.size() + " Plots von "
                 + city.getFriendlyName() + " migriert...");
         int taskId = Bukkit.getScheduler()
-                .runTaskTimer(RCCitiesPlugin.getPlugin(), oldPlotMigrationTask, 0, 10).getTaskId();
+                .runTaskTimer(RCCitiesPlugin.instance(), oldPlotMigrationTask, 0, 10).getTaskId();
         oldPlotMigrationTask.setTaskId(taskId);
     }
 

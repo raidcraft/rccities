@@ -30,9 +30,9 @@ public class PvpCityFlag extends AbstractBooleanPlotwiseCityFlag {
     public void announce(boolean state) {
 
         if (state) {
-            RCCitiesPlugin.getPlugin().getResidentManager().broadcastCityMessage(getCity(), "PvP ist im Stadtgebiet erlaubt!");
+            RCCitiesPlugin.instance().getResidentManager().broadcastCityMessage(getCity(), "PvP ist im Stadtgebiet erlaubt!");
         } else {
-            RCCitiesPlugin.getPlugin().getResidentManager().broadcastCityMessage(getCity(), "PvP ist im Stadtgebiet verboten!");
+            RCCitiesPlugin.instance().getResidentManager().broadcastCityMessage(getCity(), "PvP ist im Stadtgebiet verboten!");
         }
     }
 
@@ -40,7 +40,7 @@ public class PvpCityFlag extends AbstractBooleanPlotwiseCityFlag {
     public void allow(Plot plot) {
 
         // check if plot has its own pvp setting -> skip
-        PlotFlag existingFlag = RCCitiesPlugin.getPlugin().getFlagManager().getPlotFlag(plot, PvpPlotFlag.class);
+        PlotFlag existingFlag = RCCitiesPlugin.instance().getFlagManager().getPlotFlag(plot, PvpPlotFlag.class);
         if (existingFlag != null && !existingFlag.getType().convertToBoolean(existingFlag.getValue())) return;
 
         plot.getRegion().setFlag(Flags.PVP, StateFlag.State.ALLOW);
@@ -50,7 +50,7 @@ public class PvpCityFlag extends AbstractBooleanPlotwiseCityFlag {
     public void deny(Plot plot) {
 
         // check if plot has its own pvp setting -> skip
-        PlotFlag existingFlag = RCCitiesPlugin.getPlugin().getFlagManager().getPlotFlag(plot, PvpPlotFlag.class);
+        PlotFlag existingFlag = RCCitiesPlugin.instance().getFlagManager().getPlotFlag(plot, PvpPlotFlag.class);
         if (existingFlag != null && existingFlag.getType().convertToBoolean(existingFlag.getValue())) return;
 
         plot.getRegion().setFlag(Flags.PVP, StateFlag.State.DENY);

@@ -6,6 +6,7 @@ import io.ebean.Database;
 import kr.entree.spigradle.annotations.PluginMain;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 import me.wiefferink.interactivemessenger.source.LanguageManager;
 import net.milkbowl.vault.permission.Permission;
 import net.silthus.ebean.Config;
@@ -51,6 +52,10 @@ import java.util.Map;
 @Getter
 public class RCCitiesPlugin extends JavaPlugin {
 
+    @Getter
+    @Accessors(fluent = true)
+    private static RCCitiesPlugin instance;
+
     private final Map<String, QueuedCommand> queuedCommands = new HashMap<>();
     private Permission permission;
     private Database database;
@@ -79,17 +84,14 @@ public class RCCitiesPlugin extends JavaPlugin {
 
     private boolean testing = false;
 
-    public static RCCitiesPlugin getPlugin() {
-        return (RCCitiesPlugin) Bukkit.getPluginManager().getPlugin("RCCities");
-    }
-
     public RCCitiesPlugin() {
-        super();
+        instance = this;
     }
 
     public RCCitiesPlugin(
             JavaPluginLoader loader, PluginDescriptionFile description, File dataFolder, File file) {
         super(loader, description, dataFolder, file);
+        instance = this;
         testing = true;
     }
 
@@ -123,9 +125,6 @@ public class RCCitiesPlugin extends JavaPlugin {
         RewardManager.registerRewardType(SubtractMoneyReward.class);
 
         worldGuard = WorldGuard.getInstance();
-
-        reload();
-
         cityManager = new CityManager(this);
         plotManager = new PlotManager(this);
         residentManager = new ResidentManager(this);
@@ -151,18 +150,26 @@ public class RCCitiesPlugin extends JavaPlugin {
         flagManager.registerPlotFlag(MobSpawnPlotFlag.class);
         flagManager.registerPlotFlag(FarmPlotFlag.class);
 
-        flagManager.loadExistingFlags();
+        // Load existing cities and process
+        // required tasks like refreshing city flags
+        //
+        // Execute this delayed to be sure server is running
+        //--------------------------------------------------
+        Bukkit.getScheduler().runTaskLater(this, () -> {
 
-        residentManager.reload();
+            flagManager.loadExistingFlags();
 
-        // create regions if they don't exist
-        for (City city : cityManager.getCities()) {
-            for (Plot plot : plotManager.getPlots(city)) {
-                if (plot.getRegion() == null) {
-                    plot.updateRegion(true);
+            residentManager.reload();
+
+            // create regions if they don't exist
+            for (City city : cityManager.getCities()) {
+                for (Plot plot : plotManager.getPlots(city)) {
+                    if (plot.getRegion() == null) {
+                        plot.updateRegion(true);
+                    }
                 }
             }
-        }
+        }, 20);
 
         if (!isTesting()) {
             setupListeners();

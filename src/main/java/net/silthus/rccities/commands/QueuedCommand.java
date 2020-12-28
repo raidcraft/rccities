@@ -24,7 +24,7 @@ public class QueuedCommand {
         this.object = object;
         this.method = ReflectionUtil.getMethod(object, methodName, args);
         this.args = args;
-        RCCitiesPlugin.getPlugin().queueCommand(this);
+        RCCitiesPlugin.instance().queueCommand(this);
         if (!(this instanceof QueuedCaptchaCommand)) {
             sender.sendMessage(ChatColor.RED + "Bitte bestätige den Befehl mit: " + ChatColor.GREEN + "/town confirm");
         }

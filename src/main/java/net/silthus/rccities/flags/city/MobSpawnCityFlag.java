@@ -27,9 +27,9 @@ public class MobSpawnCityFlag extends AbstractBooleanPlotwiseCityFlag {
     public void announce(boolean state) {
 
         if (state) {
-            RCCitiesPlugin.getPlugin().getResidentManager().broadcastCityMessage(getCity(), "Es spawnen nun Mobs im Stadtgebiet!");
+            RCCitiesPlugin.instance().getResidentManager().broadcastCityMessage(getCity(), "Es spawnen nun Mobs im Stadtgebiet!");
         } else {
-            RCCitiesPlugin.getPlugin().getResidentManager().broadcastCityMessage(getCity(), "Es spawnen nicht länger Mobs im Stadtgebiet!");
+            RCCitiesPlugin.instance().getResidentManager().broadcastCityMessage(getCity(), "Es spawnen nicht länger Mobs im Stadtgebiet!");
         }
     }
 

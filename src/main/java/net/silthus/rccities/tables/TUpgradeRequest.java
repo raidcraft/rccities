@@ -38,7 +38,7 @@ public class TUpgradeRequest extends BaseEntity {
 
     public City getRCCity() {
 
-        return RCCitiesPlugin.getPlugin().getCityManager().getCity(city.getName());
+        return RCCitiesPlugin.instance().getCityManager().getCity(city.getName());
     }
 
     public void setCity(City city) {

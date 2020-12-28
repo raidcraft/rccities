@@ -37,8 +37,8 @@ public class RewardManager {
 
             Class<? extends Reward<?>> rClass = rewardClasses.get(rewardType);
             if (rClass == null) {
-                RCCitiesPlugin.getPlugin().getLogger().warning("There are no reward types defined for the type " + rewardType);
-                RCCitiesPlugin.getPlugin().getLogger().warning("Available Reward Types are: " + String.join(", ", new ArrayList<>(rewardClasses.keySet())));
+                RCCitiesPlugin.instance().getLogger().warning("There are no reward types defined for the type " + rewardType);
+                RCCitiesPlugin.instance().getLogger().warning("Available Reward Types are: " + String.join(", ", new ArrayList<>(rewardClasses.keySet())));
                 return rewards;
             }
             try {
@@ -48,7 +48,7 @@ public class RewardManager {
                 }
                 rewards.add(reward);
             } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
-                RCCitiesPlugin.getPlugin().getLogger().warning(e.getMessage());
+                RCCitiesPlugin.instance().getLogger().warning(e.getMessage());
                 e.printStackTrace();
             }
         }
@@ -58,7 +58,7 @@ public class RewardManager {
     public static <T extends Reward<?>> void registerRewardType(Class<T> rClass) {
 
         if (!rClass.isAnnotationPresent(RewardInformation.class)) {
-            RCCitiesPlugin.getPlugin().getLogger().warning("Cannot register " + rClass.getCanonicalName() + " as Reward because it has no Information tag!");
+            RCCitiesPlugin.instance().getLogger().warning("Cannot register " + rClass.getCanonicalName() + " as Reward because it has no Information tag!");
             return;
         }
         for (Constructor<?> constructor : rClass.getDeclaredConstructors()) {
@@ -68,7 +68,7 @@ public class RewardManager {
                 // get the displayName for aliasing
                 String name = StringUtils.formatName(rClass.getAnnotation(RewardInformation.class).value());
                 rewardClasses.put(name, rClass);
-                //RCCitiesPlugin.getPlugin().getLogger().info("Registered Reward Type: " + name);
+                //RCCitiesPlugin.instance().getLogger().info("Registered Reward Type: " + name);
                 break;
             }
         }
