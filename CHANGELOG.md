@@ -1,3 +1,11 @@
+## [1.11.2](https://github.com/raidcraft/rccities/compare/v1.11.1...v1.11.2) (2020-12-30)
+
+
+### Bug Fixes
+
+* Fixes region update after promote resident to a new role with build permissions. Fixes [#30](https://github.com/raidcraft/rccities/issues/30) ([c243db3](https://github.com/raidcraft/rccities/commit/c243db3eaac6b5fd04a39c6bc8270d34de95c99b))
+* Minor improvement to prevent errors during migration of city bank accounts ([2d7c3d6](https://github.com/raidcraft/rccities/commit/2d7c3d62c3bfa35654cfe646865a9dc1bd91c1d5))
+
 ## [1.11.1](https://github.com/raidcraft/rccities/compare/v1.11.0...v1.11.1) (2020-12-28)
 
 
