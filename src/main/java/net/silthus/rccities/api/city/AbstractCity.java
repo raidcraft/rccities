@@ -40,7 +40,8 @@ public abstract class AbstractCity implements City {
         bankAccountName = "city_" + getTechnicalName();
 
         // Check if bank account does no exists
-        if(Economy.get().bankBalance(bankAccountName).type == EconomyResponse.ResponseType.FAILURE) {
+        if(money != BANK_ACCOUNT_CONVERTED_PATTERN &&
+                Economy.get().bankBalance(bankAccountName).type == EconomyResponse.ResponseType.FAILURE) {
 
             // There is no API to create bank account without any player assignment.
             // Therefore take Strasse36 (my) user account as bank owner to avoid triggering
