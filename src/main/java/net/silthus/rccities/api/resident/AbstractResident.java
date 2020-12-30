@@ -52,15 +52,15 @@ public abstract class AbstractResident implements Resident {
             shouldBuild = true;
         }
 
+        this.profession = newRole;
+        save();
+
         // update region if build permissions changes
         if (couldBuild != shouldBuild) {
             for (Plot plot : RCCitiesPlugin.instance().getPlotManager().getPlots(city)) {
                 plot.updateRegion(false);
             }
         }
-
-        this.profession = newRole;
-        save();
     }
 
     @Override
