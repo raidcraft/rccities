@@ -243,6 +243,8 @@ public class RCCitiesPlugin extends JavaPlugin {
 
         UpgradeListener upgradeListener = new UpgradeListener(this);
         Bukkit.getPluginManager().registerEvents(upgradeListener, this);
+
+        Bukkit.getPluginManager().registerEvents(worldGuardManager, this);
     }
 
     public final void queueCommand(final QueuedCommand command) {

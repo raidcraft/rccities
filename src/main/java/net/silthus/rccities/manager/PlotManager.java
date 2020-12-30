@@ -137,6 +137,13 @@ public class PlotManager {
         return plot;
     }
 
+    public boolean isInsidePlot(Chunk chunk) {
+
+        Location simpleLocation = new Location(chunk.getWorld(), chunk.getX() * 16 + 8, 0,
+                chunk.getZ() * 16 + 8);
+        return cachedPlots.containsKey(simpleLocation);
+    }
+
     public double getNewPlotCosts(City city, int count) {
 
         RCCitiesPluginConfig config = plugin.getPluginConfig();
