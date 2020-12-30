@@ -39,6 +39,11 @@ public abstract class AbstractCity implements City {
 
         bankAccountName = "city_" + getTechnicalName();
 
+        // Check if usage of external economy plugin is disabled
+        if(!RCCitiesPlugin.instance().getPluginConfig().isUseExternalEconomyPlugin()) {
+            return;
+        }
+
         // Check if bank account does no exists
         if(money != BANK_ACCOUNT_CONVERTED_PATTERN &&
                 Economy.get().bankBalance(bankAccountName).type == EconomyResponse.ResponseType.FAILURE) {

@@ -20,6 +20,8 @@ public class RCCitiesPluginConfig extends BukkitYamlConfiguration {
     private List<String> ignoredRegions = new ArrayList<>();
     @Comment("Enable it to automatically migrate old plot regions into new city plots")
     private boolean migrateOldPlots = true;
+    @Comment("Enable usage of external economy plugin instead of own balance tracking")
+    private boolean useExternalEconomyPlugin = false;
     private int initialPlotCredit = 3;
     private double flagPlotMarkCost = 20.0;
     private double joinCosts = 100.0;
