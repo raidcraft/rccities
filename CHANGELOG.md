@@ -1,3 +1,12 @@
+## [1.11.3](https://github.com/raidcraft/rccities/compare/v1.11.2...v1.11.3) (2020-12-30)
+
+
+### Bug Fixes
+
+* Added workaround to allow pistons to move across world guard regions which are used for plot protection. Fixes [#31](https://github.com/raidcraft/rccities/issues/31) ([0c63f11](https://github.com/raidcraft/rccities/commit/0c63f11cc89151ba64b778500a87cfaed0be55fe))
+* Fix exception type if command execution fails ([6c00862](https://github.com/raidcraft/rccities/commit/6c00862c1a2f2923ee8a3acbd16f476cf9c3b679))
+* Make usage of external economy plugin configurable to still support servers without RCEconomy ([ad2c4c1](https://github.com/raidcraft/rccities/commit/ad2c4c11bb69cc6843c6d6417424cad36b9fc7c4))
+
 ## [1.11.2](https://github.com/raidcraft/rccities/compare/v1.11.1...v1.11.2) (2020-12-30)
 
 
