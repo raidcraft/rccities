@@ -516,7 +516,7 @@ public class TownCommands extends BaseCommand {
 
         Resident resident = plugin.getResidentManager().getResident(player.getUniqueId(), city);
         if(resident == null) {
-            throw new InvalidCommandArgument("Nur Einwohner können Geld in die Stadtkasse einzahlen!");
+            throw new ConditionFailedException("Nur Einwohner können Geld in die Stadtkasse einzahlen!");
         }
 
         CommandHelper.checkRolePermissions(player, city, RolePermission.DEPOSIT);
