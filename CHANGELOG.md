@@ -1,3 +1,10 @@
+## [1.11.4](https://github.com/raidcraft/rccities/compare/v1.11.3...v1.11.4) (2020-12-31)
+
+
+### Bug Fixes
+
+* Fix pistons across regions again. Closes [#31](https://github.com/raidcraft/rccities/issues/31) ([2bfd576](https://github.com/raidcraft/rccities/commit/2bfd5761167c61024520252a56616e97f031f3f1))
+
 ## [1.11.3](https://github.com/raidcraft/rccities/compare/v1.11.2...v1.11.3) (2020-12-30)
 
 
