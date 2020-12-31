@@ -7,7 +7,6 @@ import com.sk89q.worldguard.protection.managers.storage.StorageException;
 import com.sk89q.worldguard.protection.regions.ProtectedCuboidRegion;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import net.silthus.rccities.RCCitiesPlugin;
-import net.silthus.rccities.api.plot.Plot;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
@@ -16,7 +15,7 @@ import org.bukkit.World;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.BlockPistonExtendEvent;
+import org.bukkit.event.block.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -146,8 +145,20 @@ public class WorldGuardManager implements Listener {
         return false;
     }
 
-    @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
+    @EventHandler(ignoreCancelled = false, priority = EventPriority.HIGHEST)
     public void onPistonExtend(BlockPistonExtendEvent event) {
+
+        // Check if here is a city plot
+        if(!plugin.getPlotManager().isInsidePlot(event.getBlock().getChunk())) {
+            return;
+        }
+
+        // allow pistons
+        event.setCancelled(false);
+    }
+
+    @EventHandler(ignoreCancelled = false, priority = EventPriority.HIGHEST)
+    public void onPistonRetract(BlockPistonRetractEvent event) {
 
         // Check if here is a city plot
         if(!plugin.getPlotManager().isInsidePlot(event.getBlock().getChunk())) {
