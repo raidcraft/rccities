@@ -45,6 +45,7 @@ public class TownCommands extends BaseCommand {
     private final RCCitiesPlugin plugin;
     private final Map<String, City> invites = new CaseInsensitiveMap<>();
     private final Map<UUID, Long> lastTeleport = new HashMap<>();
+    private final Map<UUID, Long> lastForeignTeleport = new HashMap<>();
 
     public TownCommands(RCCitiesPlugin plugin) {
 
@@ -251,10 +252,15 @@ public class TownCommands extends BaseCommand {
             cooldownTime = 0;
         }
 
-        if(lastTeleport.get(player.getUniqueId()) != null &&
-                System.currentTimeMillis() - lastTeleport.get(player.getUniqueId()) < cooldownTime * 1000.) {
+        Map<UUID, Long> lastTeleportCache = lastTeleport;
+        if(!isResident) {
+            lastTeleportCache = lastForeignTeleport;
+        }
+
+        if(lastTeleportCache.get(player.getUniqueId()) != null &&
+                System.currentTimeMillis() - lastTeleportCache.get(player.getUniqueId()) < cooldownTime * 1000.) {
             double remainingSeconds = (cooldownTime)
-                    - ((double)(System.currentTimeMillis() - lastTeleport.get(player.getUniqueId())) / 1000.);
+                    - ((double)(System.currentTimeMillis() - lastTeleportCache.get(player.getUniqueId())) / 1000.);
             if(!isResident) {
                 throw new ConditionFailedException(ChatColor.RED +
                         plugin.getPluginConfig().getForeignSpawnTeleportCooldownMessage());
@@ -266,11 +272,11 @@ public class TownCommands extends BaseCommand {
 
         player.sendMessage(ChatColor.YELLOW + "Du wirst in "
                 + warmupTime + "s nach " + city.getFriendlyName() + " teleportiert...");
+        lastTeleportCache.put(player.getUniqueId(), System.currentTimeMillis());
         Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
             @Override
             public void run() {
                 player.teleport(city.getSpawn());
-                lastTeleport.put(player.getUniqueId(), System.currentTimeMillis());
                 player.sendMessage(ChatColor.YELLOW + "Willkommen in " + city.getFriendlyName() + "!");
             }
         }, (long)(warmupTime * 20.));
