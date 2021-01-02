@@ -1,7 +1,7 @@
 package net.silthus.rccities.requirements;
 
 import net.silthus.rccities.DatabaseUpgradeRequest;
-import net.silthus.rccities.RCCitiesPlugin;
+import net.silthus.rccities.RCCities;
 import net.silthus.rccities.api.city.City;
 import net.silthus.rccities.api.request.UpgradeRequest;
 import net.silthus.rccities.upgrades.api.level.UpgradeLevel;
@@ -24,7 +24,7 @@ public class CityStaffRequirement extends AbstractRequirement<City> {
 
     public boolean test(City city) {
 
-        RCCitiesPlugin plugin = RCCitiesPlugin.instance();
+        RCCities plugin = RCCities.instance();
         if(city == null) return false;
         Upgrade upgrade = city.getUpgrades().getUpgrade(config.getString("upgrade-id"));
         if (upgrade == null) return false;

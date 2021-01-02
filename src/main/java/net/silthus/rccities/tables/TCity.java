@@ -54,6 +54,10 @@ public class TCity extends BaseEntity {
     @JoinColumn(name = "city_id")
     private Set<TJoinRequest> requests;
 
+    @OneToMany(cascade = CascadeType.REMOVE)
+    @JoinColumn(name = "city_id")
+    private Set<TPlaces> places;
+
     public void loadChildren() {
 
         plots = TPlot.find.query().where().eq("city_id", id()).findSet();

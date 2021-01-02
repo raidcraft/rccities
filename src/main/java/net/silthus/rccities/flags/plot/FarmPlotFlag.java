@@ -1,13 +1,12 @@
 package net.silthus.rccities.flags.plot;
 
 import com.sk89q.worldguard.domains.DefaultDomain;
-import net.silthus.rccities.RCCitiesPlugin;
+import net.silthus.rccities.RCCities;
 import net.silthus.rccities.api.flags.AbstractPlotFlag;
 import net.silthus.rccities.api.flags.FlagInformation;
 import net.silthus.rccities.api.flags.FlagType;
 import net.silthus.rccities.api.plot.Plot;
 import net.silthus.rccities.api.resident.Resident;
-import net.silthus.rccities.util.RaidCraftException;
 
 /**
  * @author Philip Urban
@@ -34,7 +33,7 @@ public class FarmPlotFlag extends AbstractPlotFlag {
 
         if (currentValue) {
             DefaultDomain defaultDomain = new DefaultDomain();
-            for (Resident resident : RCCitiesPlugin.instance().getResidentManager().getResidents(getPlot().getCity())) {
+            for (Resident resident : RCCities.instance().getResidentManager().getResidents(getPlot().getCity())) {
                 defaultDomain.addPlayer(resident.getName());
             }
             getPlot().getRegion().setMembers(defaultDomain);

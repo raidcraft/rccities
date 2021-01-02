@@ -2,7 +2,7 @@ package net.silthus.rccities.manager;
 
 import lombok.Setter;
 import net.silthus.rccities.DatabasePlot;
-import net.silthus.rccities.RCCitiesPlugin;
+import net.silthus.rccities.RCCities;
 import net.silthus.rccities.RCCitiesPluginConfig;
 import net.silthus.rccities.api.city.City;
 import net.silthus.rccities.api.plot.Plot;
@@ -21,10 +21,10 @@ import java.util.*;
  */
 public class PlotManager {
 
-    private final RCCitiesPlugin plugin;
+    private final RCCities plugin;
     private final Map<Location, Plot> cachedPlots = new HashMap<>();
 
-    public PlotManager(RCCitiesPlugin plugin) {
+    public PlotManager(RCCities plugin) {
 
         this.plugin = plugin;
     }
@@ -189,7 +189,7 @@ public class PlotManager {
         plugin.getLogger().info("Es werden nun " + oldPlotMap.size() + " Plots von "
                 + city.getFriendlyName() + " migriert...");
         int taskId = Bukkit.getScheduler()
-                .runTaskTimer(RCCitiesPlugin.instance(), oldPlotMigrationTask, 0, 10).getTaskId();
+                .runTaskTimer(RCCities.instance(), oldPlotMigrationTask, 0, 10).getTaskId();
         oldPlotMigrationTask.setTaskId(taskId);
     }
 

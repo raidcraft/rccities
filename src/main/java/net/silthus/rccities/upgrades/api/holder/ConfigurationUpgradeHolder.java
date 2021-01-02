@@ -1,6 +1,6 @@
 package net.silthus.rccities.upgrades.api.holder;
 
-import net.silthus.rccities.RCCitiesPlugin;
+import net.silthus.rccities.RCCities;
 import net.silthus.rccities.upgrades.RequirementManager;
 import net.silthus.rccities.upgrades.api.level.SimpleUpgradeLevel;
 import net.silthus.rccities.upgrades.api.level.UpgradeLevel;
@@ -23,7 +23,7 @@ public abstract class ConfigurationUpgradeHolder<T> extends AbstractUpgradeHolde
 
         super(object, clazz);
 
-        Logger logger = RCCitiesPlugin.instance().getLogger();
+        Logger logger = RCCities.instance().getLogger();
 
         this.name = config.getString("name");
         this.description = config.getString("description");

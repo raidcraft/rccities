@@ -1,7 +1,7 @@
 package net.silthus.rccities.manager;
 
 import net.silthus.rccities.DatabaseUpgradeRequest;
-import net.silthus.rccities.RCCitiesPlugin;
+import net.silthus.rccities.RCCities;
 import net.silthus.rccities.api.city.City;
 import net.silthus.rccities.api.request.UpgradeRequest;
 import net.silthus.rccities.tables.TUpgradeRequest;
@@ -18,10 +18,10 @@ import java.util.List;
  */
 public class UpgradeRequestManager {
 
-    private final RCCitiesPlugin plugin;
+    private final RCCities plugin;
     private final UpgradeRequestInformTask informTask;
 
-    public UpgradeRequestManager(RCCitiesPlugin plugin) {
+    public UpgradeRequestManager(RCCities plugin) {
 
         this.plugin = plugin;
 

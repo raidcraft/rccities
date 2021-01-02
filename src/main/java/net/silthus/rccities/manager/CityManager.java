@@ -1,14 +1,19 @@
 package net.silthus.rccities.manager;
 
 import de.raidcraft.economy.wrapper.Economy;
+import io.ebean.Database;
 import net.silthus.rccities.DatabaseCity;
-import net.silthus.rccities.RCCitiesPlugin;
+import net.silthus.rccities.DatabasePlace;
+import net.silthus.rccities.RCCities;
 import net.silthus.rccities.api.city.City;
 import net.silthus.rccities.api.flags.CityFlag;
+import net.silthus.rccities.api.place.Place;
 import net.silthus.rccities.api.resident.Resident;
 import net.silthus.rccities.api.resident.Role;
 import net.silthus.rccities.flags.city.JoinCostsCityFlag;
 import net.silthus.rccities.tables.TCity;
+import net.silthus.rccities.tables.TPlaces;
+import net.silthus.rccities.tables.TResident;
 import net.silthus.rccities.upgrades.api.level.UpgradeLevel;
 import net.silthus.rccities.upgrades.api.upgrade.Upgrade;
 import net.silthus.rccities.util.CaseInsensitiveMap;
@@ -18,19 +23,18 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 
-import java.util.Collection;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * @author Philip Urban
  */
 public class CityManager {
 
-    private final RCCitiesPlugin plugin;
+    private final RCCities plugin;
     private final Map<String, City> cachedCities = new CaseInsensitiveMap<>();
+    private final Map<City, Map<String, Place>> cachedPlaces = new HashMap<>();
 
-    public CityManager(RCCitiesPlugin plugin) {
+    public CityManager(RCCities plugin) {
 
         this.plugin = plugin;
     }
@@ -58,6 +62,9 @@ public class CityManager {
     public void removeFromCache(City city) {
 
         cachedCities.remove(city.getFriendlyName());
+
+        Map<String, Place> cache = getPlacesCache(city);
+        cache.clear();
     }
 
     public void printCityInfo(City city, CommandSender sender) {
@@ -170,6 +177,58 @@ public class CityManager {
             }
         }
         return cachedCities.values();
+    }
+
+    private Map<String, Place> getPlacesCache(City city) {
+        if(!cachedPlaces.containsKey(city)) {
+            cachedPlaces.put(city, new HashMap<>());
+        }
+
+        return cachedPlaces.get(city);
+    }
+
+    public List<Place> getPlaces(City city) {
+
+        Map<String, Place> cache = getPlacesCache(city);
+
+
+        // Load all places into cache
+        if(cache.size() == 0) {
+            List<Place> foundPlaces = new ArrayList<>();
+            List<TPlaces> tPlacesList = TPlaces.find.query()
+                    .where().eq("city_id", city.getId()).findList();
+            for (TPlaces tPlaces : tPlacesList) {
+                if (!cache.containsKey(tPlaces.getName())) {
+                    Location placeLocation =
+                            new Location(city.getSpawn().getWorld(), tPlaces.getX(), tPlaces.getY(), tPlaces.getZ());
+                    Place place = new DatabasePlace(city, tPlaces.getName(), placeLocation);
+                    cache.put(tPlaces.getName(), place);
+                }
+                foundPlaces.add(cache.get(tPlaces.getName()));
+            }
+            return foundPlaces;
+        }
+
+        // Return cache if already loaded
+        return new ArrayList<>(cache.values());
+    }
+
+    public void addPlace(City city, String name, Location location) {
+
+        Map<String, Place> cache = getPlacesCache(city);
+        Place place = new DatabasePlace(city, name, location);
+        place.save();
+        cache.put(place.getFriendlyName(), place);
+    }
+
+    public void removePlace(Place place) {
+
+        Map<String, Place> cache = getPlacesCache(place.getCity());
+
+        cache.remove(place.getFriendlyName());
+        place.delete();
+
+        plugin.getDynmapManager().addCityMarker(place.getCity());
     }
 
     public void clearCache() {

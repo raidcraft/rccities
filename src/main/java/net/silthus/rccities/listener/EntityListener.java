@@ -1,6 +1,6 @@
 package net.silthus.rccities.listener;
 
-import net.silthus.rccities.RCCitiesPlugin;
+import net.silthus.rccities.RCCities;
 import org.bukkit.event.Listener;
 
 /**
@@ -8,9 +8,9 @@ import org.bukkit.event.Listener;
  */
 public class EntityListener implements Listener {
 
-    private final RCCitiesPlugin plugin;
+    private final RCCities plugin;
 
-    public EntityListener(RCCitiesPlugin plugin) {
+    public EntityListener(RCCities plugin) {
         this.plugin = plugin;
     }
 

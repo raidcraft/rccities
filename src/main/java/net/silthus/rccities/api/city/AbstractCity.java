@@ -3,7 +3,7 @@ package net.silthus.rccities.api.city;
 import de.raidcraft.economy.wrapper.Economy;
 import lombok.Getter;
 import net.milkbowl.vault.economy.EconomyResponse;
-import net.silthus.rccities.RCCitiesPlugin;
+import net.silthus.rccities.RCCities;
 import net.silthus.rccities.upgrades.api.holder.UpgradeHolder;
 import net.silthus.rccities.util.StringUtils;
 import org.bukkit.Bukkit;
@@ -40,7 +40,7 @@ public abstract class AbstractCity implements City {
         bankAccountName = "city_" + getTechnicalName();
 
         // Check if usage of external economy plugin is disabled
-        if(!RCCitiesPlugin.instance().getPluginConfig().isUseExternalEconomyPlugin()) {
+        if(!RCCities.instance().getPluginConfig().isUseExternalEconomyPlugin()) {
             return;
         }
 
@@ -74,7 +74,7 @@ public abstract class AbstractCity implements City {
         this.spawn = spawn;
         this.creator = creator;
         this.creationDate = new Timestamp(System.currentTimeMillis());
-        this.plotCredit = RCCitiesPlugin.instance().getPluginConfig().getInitialPlotCredit();
+        this.plotCredit = RCCities.instance().getPluginConfig().getInitialPlotCredit();
 
         save();
     }
@@ -219,7 +219,7 @@ public abstract class AbstractCity implements City {
         // Add some extra space to allow some oval cities and not just
         // perfect circles.
 
-        int additionalPlotLengths = RCCitiesPlugin.instance().getPluginConfig().getAdditionalRadiusPlots();
+        int additionalPlotLengths = RCCities.instance().getPluginConfig().getAdditionalRadiusPlots();
         additionalPlotLengths *= additionalPlotLengths;
 
         int maxRadius = (int)Math.sqrt(getSize() + getPlotCredit()

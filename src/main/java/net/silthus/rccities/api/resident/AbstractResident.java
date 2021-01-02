@@ -3,7 +3,7 @@ package net.silthus.rccities.api.resident;
 import de.raidcraft.economy.wrapper.Economy;
 import lombok.Getter;
 import lombok.Setter;
-import net.silthus.rccities.RCCitiesPlugin;
+import net.silthus.rccities.RCCities;
 import net.silthus.rccities.api.city.City;
 import net.silthus.rccities.api.plot.Plot;
 import org.bukkit.Bukkit;
@@ -57,7 +57,7 @@ public abstract class AbstractResident implements Resident {
 
         // update region if build permissions changes
         if (couldBuild != shouldBuild) {
-            for (Plot plot : RCCitiesPlugin.instance().getPlotManager().getPlots(city)) {
+            for (Plot plot : RCCities.instance().getPlotManager().getPlots(city)) {
                 plot.updateRegion(false);
             }
         }

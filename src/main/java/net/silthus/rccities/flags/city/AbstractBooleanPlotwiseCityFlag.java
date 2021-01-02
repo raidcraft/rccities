@@ -1,7 +1,7 @@
 package net.silthus.rccities.flags.city;
 
 
-import net.silthus.rccities.RCCitiesPlugin;
+import net.silthus.rccities.RCCities;
 import net.silthus.rccities.api.city.City;
 import net.silthus.rccities.api.flags.AbstractCityFlag;
 import net.silthus.rccities.api.plot.Plot;
@@ -25,7 +25,7 @@ public abstract class AbstractBooleanPlotwiseCityFlag extends AbstractCityFlag {
         boolean currentValue = getType().convertToBoolean(getValue());
         announce(currentValue);
 
-        for (Plot plot : RCCitiesPlugin.instance().getPlotManager().getPlots(getCity())) {
+        for (Plot plot : RCCities.instance().getPlotManager().getPlots(getCity())) {
             if (currentValue) {
                 allow(plot);
             } else {

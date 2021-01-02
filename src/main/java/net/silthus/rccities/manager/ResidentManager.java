@@ -2,7 +2,7 @@ package net.silthus.rccities.manager;
 
 import io.ebean.Model;
 import net.silthus.rccities.DatabaseResident;
-import net.silthus.rccities.RCCitiesPlugin;
+import net.silthus.rccities.RCCities;
 import net.silthus.rccities.api.city.City;
 import net.silthus.rccities.api.resident.Resident;
 import net.silthus.rccities.api.resident.Role;
@@ -23,10 +23,10 @@ import java.util.*;
  */
 public class ResidentManager {
 
-    private final RCCitiesPlugin plugin;
+    private final RCCities plugin;
     private final Map<UUID, List<Resident>> cachedResidents = new HashMap<>();
 
-    public ResidentManager(RCCitiesPlugin plugin) {
+    public ResidentManager(RCCities plugin) {
 
         this.plugin = plugin;
     }

@@ -1,7 +1,7 @@
 package net.silthus.rccities.api.request;
 
 
-import net.silthus.rccities.RCCitiesPlugin;
+import net.silthus.rccities.RCCities;
 import net.silthus.rccities.api.city.City;
 import net.silthus.rccities.upgrades.api.level.UpgradeLevel;
 
@@ -10,7 +10,7 @@ import net.silthus.rccities.upgrades.api.level.UpgradeLevel;
  */
 public abstract class AbstractUpgradeRequest extends AbstractRequest implements UpgradeRequest {
 
-    protected RCCitiesPlugin plugin;
+    protected RCCities plugin;
     protected City city;
     protected UpgradeLevel<City> upgradeLevel;
     protected String info;
@@ -33,7 +33,7 @@ public abstract class AbstractUpgradeRequest extends AbstractRequest implements 
     @Override
     public long getRejectExpirationDate() {
 
-        return rejectDate + RCCitiesPlugin.instance().getPluginConfig().getUpgradeRequestCooldown() * 60 * 1000;
+        return rejectDate + RCCities.instance().getPluginConfig().getUpgradeRequestCooldown() * 60 * 1000;
     }
 
     @Override

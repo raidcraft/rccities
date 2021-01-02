@@ -3,7 +3,7 @@ package net.silthus.rccities.commands.plot;
 import be.seeseemelk.mockbukkit.MockBukkit;
 import be.seeseemelk.mockbukkit.ServerMock;
 import co.aikar.commands.InvalidCommandArgument;
-import net.silthus.rccities.RCCitiesPlugin;
+import net.silthus.rccities.RCCities;
 import net.silthus.rccities.api.flags.FlagInformation;
 import org.junit.jupiter.api.*;
 
@@ -12,13 +12,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 class PlotCommandsTest {
 
     private ServerMock server;
-    private RCCitiesPlugin plugin;
+    private RCCities plugin;
 
     @BeforeEach
     void setUp() {
 
         server = MockBukkit.mock();
-        plugin = MockBukkit.load(RCCitiesPlugin.class);
+        plugin = MockBukkit.load(RCCities.class);
     }
 
     @AfterEach

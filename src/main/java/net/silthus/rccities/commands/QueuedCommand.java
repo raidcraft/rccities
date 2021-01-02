@@ -1,6 +1,6 @@
 package net.silthus.rccities.commands;
 
-import net.silthus.rccities.RCCitiesPlugin;
+import net.silthus.rccities.RCCities;
 import net.silthus.rccities.util.ReflectionUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -24,7 +24,7 @@ public class QueuedCommand {
         this.object = object;
         this.method = ReflectionUtil.getMethod(object, methodName, args);
         this.args = args;
-        RCCitiesPlugin.instance().queueCommand(this);
+        RCCities.instance().queueCommand(this);
         if (!(this instanceof QueuedCaptchaCommand)) {
             sender.sendMessage(ChatColor.RED + "Bitte bestätige den Befehl mit: " + ChatColor.GREEN + "/town confirm");
         }

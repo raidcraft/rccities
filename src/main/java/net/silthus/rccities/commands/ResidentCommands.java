@@ -4,7 +4,7 @@ import co.aikar.commands.BaseCommand;
 import co.aikar.commands.ConditionFailedException;
 import co.aikar.commands.annotation.*;
 import net.silthus.rccities.CityPermissions;
-import net.silthus.rccities.RCCitiesPlugin;
+import net.silthus.rccities.RCCities;
 import net.silthus.rccities.api.city.City;
 import net.silthus.rccities.api.resident.Resident;
 import net.silthus.rccities.api.resident.Role;
@@ -22,9 +22,9 @@ import java.util.Arrays;
 @CommandAlias("resident")
 public class ResidentCommands extends BaseCommand {
 
-    private final RCCitiesPlugin plugin;
+    private final RCCities plugin;
 
-    public ResidentCommands(RCCitiesPlugin plugin) {
+    public ResidentCommands(RCCities plugin) {
 
         this.plugin = plugin;
     }

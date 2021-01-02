@@ -1,6 +1,6 @@
 package net.silthus.rccities.listener;
 
-import net.silthus.rccities.RCCitiesPlugin;
+import net.silthus.rccities.RCCities;
 import net.silthus.rccities.api.city.City;
 import net.silthus.rccities.upgrades.api.upgrade.Upgrade;
 import net.silthus.rccities.upgrades.events.UpgradeUnlockEvent;
@@ -14,9 +14,9 @@ import org.bukkit.event.Listener;
  */
 public class UpgradeListener implements Listener {
 
-    private final RCCitiesPlugin plugin;
+    private final RCCities plugin;
 
-    public UpgradeListener(RCCitiesPlugin plugin) {
+    public UpgradeListener(RCCities plugin) {
         this.plugin = plugin;
     }
 

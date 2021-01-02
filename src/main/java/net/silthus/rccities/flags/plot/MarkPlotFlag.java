@@ -1,7 +1,7 @@
 package net.silthus.rccities.flags.plot;
 
 import de.raidcraft.economy.wrapper.Economy;
-import net.silthus.rccities.RCCitiesPlugin;
+import net.silthus.rccities.RCCities;
 import net.silthus.rccities.api.flags.FlagInformation;
 import net.silthus.rccities.api.flags.FlagType;
 import net.silthus.rccities.api.plot.Plot;
@@ -31,7 +31,7 @@ public class MarkPlotFlag extends MarkPlotBaseFlag {
         if (getPlot() == null) return;
 
         boolean currentValue = getType().convertToBoolean(getValue());
-        double markCost = RCCitiesPlugin.instance().getPluginConfig().getFlagPlotMarkCost();
+        double markCost = RCCities.instance().getPluginConfig().getFlagPlotMarkCost();
 
         if (currentValue) {
 
@@ -41,7 +41,7 @@ public class MarkPlotFlag extends MarkPlotBaseFlag {
 
             // withdraw
             getPlot().getCity().withdrawMoney(markCost);
-            RCCitiesPlugin.instance().getResidentManager()
+            RCCities.instance().getResidentManager()
                     .broadcastCityMessage(getPlot().getCity(), "Plot Markierung: "
                             + Economy.get().format(markCost) + ChatColor.GOLD + " abgezogen!");
         }

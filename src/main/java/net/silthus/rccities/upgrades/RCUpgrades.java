@@ -1,11 +1,7 @@
 package net.silthus.rccities.upgrades;
 
-import io.ebean.Database;
 import lombok.Getter;
-import net.silthus.ebean.Config;
-import net.silthus.ebean.EbeanWrapper;
-import net.silthus.rccities.RCCitiesPlugin;
-import net.silthus.rccities.upgrades.tables.*;
+import net.silthus.rccities.RCCities;
 
 /**
  * @author Philip Urban
@@ -14,9 +10,9 @@ import net.silthus.rccities.upgrades.tables.*;
 public class RCUpgrades {
 
     private final UpgradeManager upgradeManager;
-    private final RCCitiesPlugin plugin;
+    private final RCCities plugin;
 
-    public RCUpgrades(RCCitiesPlugin plugin) {
+    public RCUpgrades(RCCities plugin) {
         this.plugin = plugin;
         upgradeManager = new UpgradeManager();
     }

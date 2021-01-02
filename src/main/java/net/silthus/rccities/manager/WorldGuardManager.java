@@ -6,7 +6,7 @@ import com.sk89q.worldguard.protection.ApplicableRegionSet;
 import com.sk89q.worldguard.protection.managers.storage.StorageException;
 import com.sk89q.worldguard.protection.regions.ProtectedCuboidRegion;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
-import net.silthus.rccities.RCCitiesPlugin;
+import net.silthus.rccities.RCCities;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
@@ -26,9 +26,9 @@ import java.util.stream.Collectors;
  */
 public class WorldGuardManager implements Listener {
 
-    private final RCCitiesPlugin plugin;
+    private final RCCities plugin;
 
-    public WorldGuardManager(RCCitiesPlugin plugin) {
+    public WorldGuardManager(RCCities plugin) {
 
         this.plugin = plugin;
     }

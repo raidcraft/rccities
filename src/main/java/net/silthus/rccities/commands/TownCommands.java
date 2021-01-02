@@ -9,7 +9,7 @@ import com.google.common.base.Strings;
 import de.raidcraft.economy.wrapper.Economy;
 import net.silthus.rccities.CityPermissions;
 import net.silthus.rccities.DatabasePlot;
-import net.silthus.rccities.RCCitiesPlugin;
+import net.silthus.rccities.RCCities;
 import net.silthus.rccities.api.city.City;
 import net.silthus.rccities.api.flags.CityFlag;
 import net.silthus.rccities.api.flags.FlagInformation;
@@ -42,12 +42,12 @@ import java.util.*;
 @CommandAlias("town|stadt|rccities|towns|city|gilde")
 public class TownCommands extends BaseCommand {
 
-    private final RCCitiesPlugin plugin;
+    private final RCCities plugin;
     private final Map<String, City> invites = new CaseInsensitiveMap<>();
     private final Map<UUID, Long> lastTeleport = new HashMap<>();
     private final Map<UUID, Long> lastForeignTeleport = new HashMap<>();
 
-    public TownCommands(RCCitiesPlugin plugin) {
+    public TownCommands(RCCities plugin) {
 
         this.plugin = plugin;
     }
@@ -128,7 +128,7 @@ public class TownCommands extends BaseCommand {
                 try {
                     plot.setFlag(MarkPlotBaseFlag.class, true);
                 } catch (RaidCraftException e) {
-                    RCCitiesPlugin.instance().getLogger().warning(e.getMessage());
+                    RCCities.instance().getLogger().warning(e.getMessage());
                 }
             }
 
@@ -230,7 +230,7 @@ public class TownCommands extends BaseCommand {
     @CommandPermission(CityPermissions.GROUP_USER + ".town.spawn")
     public void spawn(Player player, City city) {
 
-        boolean isResident = RCCitiesPlugin.instance().getResidentManager().isResident(player.getUniqueId(), city);
+        boolean isResident = RCCities.instance().getResidentManager().isResident(player.getUniqueId(), city);
 
         if(isResident) {
             CommandHelper.checkRolePermissions(player, city, RolePermission.SPAWN_TELEPORT);
@@ -310,7 +310,6 @@ public class TownCommands extends BaseCommand {
         player.sendMessage(ChatColor.GREEN + "Du hast die Beschreibung der Stadt geändert!");
         plugin.getResidentManager().broadcastCityMessage(city, "Die Beschreibung der Stadt wurde geändert!");
     }
-
 
     @Subcommand("list")
     @CommandPermission(CityPermissions.GROUP_USER + ".town.list")
@@ -559,6 +558,27 @@ public class TownCommands extends BaseCommand {
         plugin.getResidentManager().broadcastCityMessage(city, ChatColor.GOLD
                 + player.getName() + " hat " + ChatColor.RED + Economy.get().format(amount)
                 + ChatColor.GOLD + " aus der Stadtkasse genommen!");
+    }
+
+    @Subcommand("places")
+    @CommandCompletion("@cities")
+    @CommandPermission(CityPermissions.GROUP_USER + ".town.places")
+    public void listPlaces(Player player, City city) {
+        // TODO
+    }
+
+    @Subcommand("addplace")
+    @CommandCompletion("@cities")
+    @CommandPermission(CityPermissions.GROUP_ADMIN + ".town.addplace")
+    public void addPlace(Player player, City city, String place) {
+        // TODO
+    }
+
+    @Subcommand("deleteplace")
+    @CommandCompletion("@cities")
+    @CommandPermission(CityPermissions.GROUP_ADMIN + ".town.deleteplace")
+    public void deletePlace(Player player, City city, String place) {
+        // TODO
     }
 
     /*

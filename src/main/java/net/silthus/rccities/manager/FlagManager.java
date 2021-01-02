@@ -1,6 +1,6 @@
 package net.silthus.rccities.manager;
 
-import net.silthus.rccities.RCCitiesPlugin;
+import net.silthus.rccities.RCCities;
 import net.silthus.rccities.api.city.City;
 import net.silthus.rccities.api.flags.*;
 import net.silthus.rccities.api.plot.Plot;
@@ -21,7 +21,7 @@ import java.util.*;
  */
 public class FlagManager {
 
-    private final RCCitiesPlugin plugin;
+    private final RCCities plugin;
     private final Map<String, Class<? extends CityFlag>> registeredCityFlags = new CaseInsensitiveMap<>();
     private final Map<String, Class<? extends PlotFlag>> registeredPlotFlags = new CaseInsensitiveMap<>();
 
@@ -32,7 +32,7 @@ public class FlagManager {
 
     private final FlagRefreshTask refreshTask;
 
-    public FlagManager(RCCitiesPlugin plugin) {
+    public FlagManager(RCCities plugin) {
 
         this.plugin = plugin;
 

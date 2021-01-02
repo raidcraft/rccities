@@ -9,11 +9,10 @@ import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedCuboidRegion;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import lombok.Getter;
-import net.silthus.rccities.RCCitiesPlugin;
+import net.silthus.rccities.RCCities;
 import net.silthus.rccities.api.city.City;
 import net.silthus.rccities.api.resident.Resident;
 import net.silthus.rccities.api.resident.RolePermission;
-import net.silthus.rccities.util.StringUtils;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 
@@ -54,7 +53,7 @@ public abstract class AbstractPlot implements Plot {
 
         // force create region
         if (create) {
-            RegionManager regionManager = RCCitiesPlugin.instance().getWorldGuard().getPlatform().getRegionContainer()
+            RegionManager regionManager = RCCities.instance().getWorldGuard().getPlatform().getRegionContainer()
                     .get(BukkitAdapter.adapt(location.getWorld()));
             if (regionManager.getRegion(getRegionName()) != null) {
                 regionManager.removeRegion(getRegionName());
@@ -116,7 +115,7 @@ public abstract class AbstractPlot implements Plot {
             for (Resident resident : getCity().getResidents()) {
                 if (!resident.getRole().hasPermission(RolePermission.BUILD_EVERYWHERE)) continue;
                 if(resident.getName() == null) {
-                    RCCitiesPlugin.instance().getLogger()
+                    RCCities.instance().getLogger()
                             .info("name of resident is null: " + resident.getId());
                     continue;
                 }
@@ -128,7 +127,7 @@ public abstract class AbstractPlot implements Plot {
 
     @Override
     public void delete() {
-        RCCitiesPlugin.instance().getWorldGuard().getPlatform().getRegionContainer()
+        RCCities.instance().getWorldGuard().getPlatform().getRegionContainer()
                 .get(BukkitAdapter.adapt(location.getWorld())).removeRegion(getRegionName());
     }
 }

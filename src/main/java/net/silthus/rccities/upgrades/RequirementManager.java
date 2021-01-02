@@ -1,6 +1,6 @@
 package net.silthus.rccities.upgrades;
 
-import net.silthus.rccities.RCCitiesPlugin;
+import net.silthus.rccities.RCCities;
 import net.silthus.rccities.upgrades.api.requirement.AbstractRequirement;
 import net.silthus.rccities.upgrades.api.requirement.Requirement;
 import net.silthus.rccities.upgrades.api.requirement.RequirementInformation;
@@ -49,29 +49,29 @@ public class RequirementManager {
                     try {
                         final ConfigurationSection section = config.getConfigurationSection(reqName);
                         if (section == null) {
-                            RCCitiesPlugin.instance().getLogger().warning("Requirement '" + reqName + "' must be a section");
+                            RCCities.instance().getLogger().warning("Requirement '" + reqName + "' must be a section");
                             continue;
                         }
                         ConfigurationSection args = section.getConfigurationSection("args");
                         if(args == null) {
-                            RCCitiesPlugin.instance().getLogger().warning("No arguments for '" + reqName + "' found");
+                            RCCities.instance().getLogger().warning("No arguments for '" + reqName + "' found");
                             continue;
                         }
                         final Requirement<O> requirement = (Requirement<O>) constructors.get(rClass).newInstance();
                         if (requirement instanceof AbstractRequirement) {
                             // load the config one tick later to allow all processing to take place
                             // this helps to avoid stack overflow errors when a skill requires itself
-                            Bukkit.getScheduler().runTaskLater(RCCitiesPlugin.instance(),
+                            Bukkit.getScheduler().runTaskLater(RCCities.instance(),
                                     () -> ((AbstractRequirement) requirement).load(args), 1L);
                         }
                         requirements.add(requirement);
                     } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
-                        RCCitiesPlugin.instance().getLogger().warning(e.getMessage());
+                        RCCities.instance().getLogger().warning(e.getMessage());
                         e.printStackTrace();
                     }
             } else {
-                RCCitiesPlugin.instance().getLogger().warning("There are no requirement types defined for the type " + reqName);
-                RCCitiesPlugin.instance().getLogger().warning("Available Requirement Types are: " + String.join(", ", new ArrayList<>(requirementClasses.keySet())));
+                RCCities.instance().getLogger().warning("There are no requirement types defined for the type " + reqName);
+                RCCities.instance().getLogger().warning("Available Requirement Types are: " + String.join(", ", new ArrayList<>(requirementClasses.keySet())));
             }
         }
         return requirements;
@@ -81,7 +81,7 @@ public class RequirementManager {
     public static <T extends Requirement<?>> void registerRequirementType(Class<T> rClass) {
 
         if (!rClass.isAnnotationPresent(RequirementInformation.class)) {
-            RCCitiesPlugin.instance().getLogger().warning("Cannot register " + rClass.getCanonicalName() + " as Requirement because it has no Information tag!");
+            RCCities.instance().getLogger().warning("Cannot register " + rClass.getCanonicalName() + " as Requirement because it has no Information tag!");
             return;
         }
         for (Constructor<?> constructor : rClass.getDeclaredConstructors()) {

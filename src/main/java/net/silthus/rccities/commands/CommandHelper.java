@@ -3,7 +3,7 @@ package net.silthus.rccities.commands;
 import co.aikar.commands.ConditionFailedException;
 import co.aikar.commands.InvalidCommandArgument;
 import net.silthus.rccities.CityPermissions;
-import net.silthus.rccities.RCCitiesPlugin;
+import net.silthus.rccities.RCCities;
 import net.silthus.rccities.api.city.City;
 import net.silthus.rccities.api.resident.Resident;
 import net.silthus.rccities.api.resident.Role;
@@ -17,7 +17,7 @@ public class CommandHelper {
     public static void checkRolePermissions(Player player, City city, RolePermission rolePermission)
             throws ConditionFailedException {
 
-        Resident resident = RCCitiesPlugin.instance().getResidentManager().getResident(player.getUniqueId(), city);
+        Resident resident = RCCities.instance().getResidentManager().getResident(player.getUniqueId(), city);
         if (!player.hasPermission(CityPermissions.GROUP_ADMIN) &&
                 (resident == null || !resident.getRole().hasPermission(rolePermission))) {
             throw new ConditionFailedException("Du hast in der Stadt nicht die nötigen Rechte!");
@@ -27,12 +27,12 @@ public class CommandHelper {
     public static Resident getResident(OfflinePlayer residentPlayer, City city, boolean force)
             throws InvalidCommandArgument {
 
-        Resident resident = RCCitiesPlugin.instance().getResidentManager()
+        Resident resident = RCCities.instance().getResidentManager()
                 .getResident(residentPlayer.getUniqueId(), city);
         if (resident == null) {
             if (force) {
                 try {
-                    resident = RCCitiesPlugin.instance().getResidentManager().addResident(city, residentPlayer);
+                    resident = RCCities.instance().getResidentManager().addResident(city, residentPlayer);
                     resident.setRole(Role.RESIDENT);
                 } catch (RaidCraftException e) {
                     throw new InvalidCommandArgument(e.getMessage());

@@ -2,6 +2,7 @@ package net.silthus.rccities;
 
 import de.exlll.configlib.annotation.Comment;
 import de.exlll.configlib.annotation.ConfigurationElement;
+import de.exlll.configlib.annotation.ElementType;
 import de.exlll.configlib.configs.yaml.BukkitYamlConfiguration;
 import de.exlll.configlib.format.FieldNameFormatters;
 import lombok.Getter;
@@ -9,7 +10,9 @@ import lombok.Setter;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Getter
 @Setter
@@ -69,5 +72,53 @@ public class RCCitiesPluginConfig extends BukkitYamlConfiguration {
         private int plotMarkerRGBFillColor = 0x73a9ff;
         private int plotMarkerRGBLineColor = 0x454eff;
         private int plotMarkerLineWeight = 1;
+        private String defaultPlacesIcon = "pin";
+
+        @ElementType(PlacesConfig.class)
+        @Comment("Places marker configuration")
+        private Map<String, PlacesConfig> places = initPlacesConfig();
+
+        private Map<String, PlacesConfig> initPlacesConfig() {
+            Map<String, PlacesConfig> places = new HashMap<>();
+            List<String> aliases = new ArrayList<>();
+            aliases.add("town_hall");
+            aliases.add("rathaus");
+            places.put("town_hall", new PlacesConfig(aliases, "temple"));
+
+            return places;
+        }
+
+        public String getPlaceIcon(String placeName) {
+
+            for(Map.Entry<String, PlacesConfig> entry : places.entrySet()) {
+
+                for(String alias : entry.getValue().getAliases()) {
+                    if(alias.equalsIgnoreCase(placeName)) {
+                        return entry.getValue().getIcon();
+                    }
+
+                    // Check wildcard
+                    if(alias.endsWith("*") && placeName.startsWith(alias.substring(0, alias.length() - 2))) {
+                        return entry.getValue().getIcon();
+                    }
+                }
+            }
+
+            return defaultPlacesIcon;
+        }
+
+        @ConfigurationElement
+        @Getter
+        @Setter
+        public static class PlacesConfig {
+
+            private List<String> aliases;
+            private String icon;
+
+            public PlacesConfig(List<String> aliases, String icon) {
+                this.aliases = aliases;
+                this.icon = icon;
+            }
+        }
     }
 }

@@ -13,7 +13,7 @@ import com.sk89q.worldedit.function.operation.Operations;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.regions.CuboidRegion;
 import com.sk89q.worldedit.session.ClipboardHolder;
-import net.silthus.rccities.RCCitiesPlugin;
+import net.silthus.rccities.RCCities;
 import net.silthus.rccities.api.city.City;
 import net.silthus.rccities.api.plot.Plot;
 import net.silthus.rccities.util.RaidCraftException;
@@ -34,9 +34,9 @@ public class SchematicManager {
 
     private final static String SCHEMATIC_PREFIX = "plot_";
 
-    private final RCCitiesPlugin plugin;
+    private final RCCities plugin;
 
-    public SchematicManager(RCCitiesPlugin plugin) {
+    public SchematicManager(RCCities plugin) {
 
         this.plugin = plugin;
     }

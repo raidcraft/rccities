@@ -2,7 +2,7 @@ package net.silthus.rccities.flags.city;
 
 import com.sk89q.worldguard.protection.flags.Flags;
 import com.sk89q.worldguard.protection.flags.StateFlag;
-import net.silthus.rccities.RCCitiesPlugin;
+import net.silthus.rccities.RCCities;
 import net.silthus.rccities.api.city.City;
 import net.silthus.rccities.api.flags.FlagInformation;
 import net.silthus.rccities.api.flags.FlagType;
@@ -30,9 +30,9 @@ public class PvpCityFlag extends AbstractBooleanPlotwiseCityFlag {
     public void announce(boolean state) {
 
         if (state) {
-            RCCitiesPlugin.instance().getResidentManager().broadcastCityMessage(getCity(), "PvP ist im Stadtgebiet erlaubt!");
+            RCCities.instance().getResidentManager().broadcastCityMessage(getCity(), "PvP ist im Stadtgebiet erlaubt!");
         } else {
-            RCCitiesPlugin.instance().getResidentManager().broadcastCityMessage(getCity(), "PvP ist im Stadtgebiet verboten!");
+            RCCities.instance().getResidentManager().broadcastCityMessage(getCity(), "PvP ist im Stadtgebiet verboten!");
         }
     }
 
@@ -40,7 +40,7 @@ public class PvpCityFlag extends AbstractBooleanPlotwiseCityFlag {
     public void allow(Plot plot) {
 
         // check if plot has its own pvp setting -> skip
-        PlotFlag existingFlag = RCCitiesPlugin.instance().getFlagManager().getPlotFlag(plot, PvpPlotFlag.class);
+        PlotFlag existingFlag = RCCities.instance().getFlagManager().getPlotFlag(plot, PvpPlotFlag.class);
         if (existingFlag != null && !existingFlag.getType().convertToBoolean(existingFlag.getValue())) return;
 
         plot.getRegion().setFlag(Flags.PVP, StateFlag.State.ALLOW);
@@ -50,7 +50,7 @@ public class PvpCityFlag extends AbstractBooleanPlotwiseCityFlag {
     public void deny(Plot plot) {
 
         // check if plot has its own pvp setting -> skip
-        PlotFlag existingFlag = RCCitiesPlugin.instance().getFlagManager().getPlotFlag(plot, PvpPlotFlag.class);
+        PlotFlag existingFlag = RCCities.instance().getFlagManager().getPlotFlag(plot, PvpPlotFlag.class);
         if (existingFlag != null && existingFlag.getType().convertToBoolean(existingFlag.getValue())) return;
 
         plot.getRegion().setFlag(Flags.PVP, StateFlag.State.DENY);

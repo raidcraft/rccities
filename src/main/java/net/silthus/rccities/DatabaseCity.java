@@ -40,38 +40,38 @@ public class DatabaseCity extends AbstractCity {
         spawn = new Location(Bukkit.getWorld(tCity.getWorld()), (double) tCity.getX() / 1000D,
                 (double) tCity.getY() / 1000D, (double) tCity.getZ() / 1000D,
                 (float) tCity.getYaw() / 1000F, (float) tCity.getPitch() / 1000F);
-        upgradeHolder = RCCitiesPlugin.instance().getUpgrades().getUpgradeManager()
-                .loadDatabaseUpgradeHolder(this, RCCitiesPlugin.instance().getUpgradeConfiguration(), id, City.class);
+        upgradeHolder = RCCities.instance().getUpgrades().getUpgradeManager()
+                .loadDatabaseUpgradeHolder(this, RCCities.instance().getUpgradeConfiguration(), id, City.class);
     }
 
     @Override
     public int getSize() {
 
-        return RCCitiesPlugin.instance().getPlotManager().getPlotCount(this);
+        return RCCities.instance().getPlotManager().getPlotCount(this);
     }
 
     @Override
     public void setFlag(Player player, String flagName, String flagValue) throws RaidCraftException {
 
-        RCCitiesPlugin.instance().getFlagManager().setCityFlag(this, player, flagName, flagValue);
+        RCCities.instance().getFlagManager().setCityFlag(this, player, flagName, flagValue);
     }
 
     @Override
     public void removeFlag(String flagName) {
 
-        RCCitiesPlugin.instance().getFlagManager().removeCityFlag(this, flagName);
+        RCCities.instance().getFlagManager().removeCityFlag(this, flagName);
     }
 
     @Override
     public void refreshFlags() {
 
-        RCCitiesPlugin.instance().getFlagManager().refreshCityFlags(this);
+        RCCities.instance().getFlagManager().refreshCityFlags(this);
     }
 
     @Override
     public List<Resident> getResidents() {
 
-        return RCCitiesPlugin.instance().getResidentManager().getResidents(this);
+        return RCCities.instance().getResidentManager().getResidents(this);
     }
 
     @Override
@@ -122,8 +122,8 @@ public class DatabaseCity extends AbstractCity {
             tCity.setYaw((int) getSpawn().getYaw() * 1000);
             tCity.setMaxRadius(getMaxRadius());
             tCity.setPlotCredit(getPlotCredit());
-            upgradeHolder = RCCitiesPlugin.instance().getUpgrades().getUpgradeManager()
-                    .createDatabaseUpgradeHolder(this, RCCitiesPlugin.instance().getUpgradeConfiguration(), City.class);
+            upgradeHolder = RCCities.instance().getUpgrades().getUpgradeManager()
+                    .createDatabaseUpgradeHolder(this, RCCities.instance().getUpgradeConfiguration(), City.class);
             tCity.setUpgradeId(upgradeHolder.getId());
             tCity.setMoney(getMoney());
             tCity.save();
@@ -149,7 +149,7 @@ public class DatabaseCity extends AbstractCity {
     @Override
     public void delete() {
 
-        RCCitiesPlugin plugin = RCCitiesPlugin.instance();
+        RCCities plugin = RCCities.instance();
         for (Plot plot : plugin.getPlotManager().getPlots(this)) {
             plot.delete();
         }
@@ -157,7 +157,7 @@ public class DatabaseCity extends AbstractCity {
             resident.delete();
         }
         
-        RCCitiesPlugin.instance().getUpgrades().getUpgradeManager().deleteUpgradeHolder(getUpgrades().getId());
+        RCCities.instance().getUpgrades().getUpgradeManager().deleteUpgradeHolder(getUpgrades().getId());
 
         plugin.getDynmapManager().removeCityMarker(this);
 

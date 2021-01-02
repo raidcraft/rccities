@@ -3,7 +3,7 @@ package net.silthus.rccities.api.city;
 import be.seeseemelk.mockbukkit.MockBukkit;
 import be.seeseemelk.mockbukkit.ServerMock;
 import net.silthus.rccities.DatabaseCity;
-import net.silthus.rccities.RCCitiesPlugin;
+import net.silthus.rccities.RCCities;
 import org.bukkit.entity.Player;
 import org.junit.jupiter.api.*;
 
@@ -13,12 +13,12 @@ public class CityTests {
 
     private ServerMock server;
     private Player player;
-    private RCCitiesPlugin plugin;
+    private RCCities plugin;
 
     @BeforeEach
     void setUp() {
         this.server = MockBukkit.mock();
-        this.plugin = MockBukkit.load(RCCitiesPlugin.class);
+        this.plugin = MockBukkit.load(RCCities.class);
         this.player = server.addPlayer();
     }
 

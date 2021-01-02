@@ -3,7 +3,7 @@ package net.silthus.rccities.commands;
 import co.aikar.commands.InvalidCommandArgument;
 import co.aikar.commands.PaperCommandManager;
 import com.google.common.base.Strings;
-import net.silthus.rccities.RCCitiesPlugin;
+import net.silthus.rccities.RCCities;
 import net.silthus.rccities.api.city.City;
 import net.silthus.rccities.api.plot.Plot;
 import net.silthus.rccities.api.resident.Resident;
@@ -15,9 +15,9 @@ import java.util.stream.Collectors;
 
 public class CommandSetup {
 
-    private final RCCitiesPlugin plugin;
+    private final RCCities plugin;
 
-    public CommandSetup(RCCitiesPlugin plugin) {
+    public CommandSetup(RCCities plugin) {
         this.plugin = plugin;
     }
 

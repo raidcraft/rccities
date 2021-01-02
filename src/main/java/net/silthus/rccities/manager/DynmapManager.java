@@ -1,8 +1,9 @@
 package net.silthus.rccities.manager;
 
 import lombok.Getter;
-import net.silthus.rccities.RCCitiesPlugin;
+import net.silthus.rccities.RCCities;
 import net.silthus.rccities.api.city.City;
+import net.silthus.rccities.api.place.Place;
 import net.silthus.rccities.api.plot.Plot;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
@@ -18,7 +19,7 @@ public class DynmapManager {
 
     private final static String CITY_MARKER_SET = "rccities_cities";
     private final static String PLOT_MARKER_SET = "rccities_plots";
-    private final RCCitiesPlugin plugin;
+    private final RCCities plugin;
     private DynmapAPI dynmap;
 
     @Getter
@@ -35,7 +36,7 @@ public class DynmapManager {
         }
     }
 
-    public DynmapManager(RCCitiesPlugin plugin) {
+    public DynmapManager(RCCities plugin) {
 
         this.plugin = plugin;
 
@@ -79,6 +80,10 @@ public class DynmapManager {
         return getCityMarkerId(city) + "_radius";
     }
 
+    private String getCityPlaceMarkerId(City city, Place place) {
+        return city.getTechnicalName() + "_" + place.getTechnicalName();
+    }
+
     private String getPlotAreaMarkerId(Plot plot) {
         return plot.getRegionName().replace("-", "m");
     }
@@ -96,6 +101,7 @@ public class DynmapManager {
 
         removeCityMarker(city);
 
+        // Main town marker
         api.getCityMarkerSet().createMarker(getCityMarkerId(city),
                 city.getFriendlyName(),
                 city.getSpawn().getWorld().getName(),
@@ -105,6 +111,7 @@ public class DynmapManager {
                 api.getMarkerAPI().getMarkerIcon("bighouse"),
                 true /* persistent */);
 
+        // Circle radius marker
         CircleMarker circleMarker = api.getCityMarkerSet().createCircleMarker(getCityCircleId(city),
                 city.getFriendlyName(),
                 false,
@@ -123,6 +130,19 @@ public class DynmapManager {
                     1.0 /* Opacity */,
                     plugin.getPluginConfig().getDynmap().getPlotMarkerRGBLineColor() /* Color in RGB */);
         }
+
+        // Places marker
+        for(Place place : plugin.getCityManager().getPlaces(city)) {
+            api.getCityMarkerSet().createMarker(getCityPlaceMarkerId(city, place),
+                    place.getFriendlyName(),
+                    city.getSpawn().getWorld().getName(),
+                    place.getLocation().getBlockX(),
+                    place.getLocation().getBlockY(),
+                    place.getLocation().getBlockZ(),
+                    api.getMarkerAPI().getMarkerIcon(
+                            plugin.getPluginConfig().getDynmap().getPlaceIcon(place.getTechnicalName())),
+                    true /* persistent */);
+        }
     }
 
     public void removeCityMarker(City city) {
@@ -132,14 +152,24 @@ public class DynmapManager {
             return;
         }
 
+        // Main town marker
         Marker marker = api.getCityMarkerSet().findMarker(getCityMarkerId(city));
         if(marker != null) {
             marker.deleteMarker();
         }
 
+        // Circle radius marker
         CircleMarker circleMarker = api.getCityMarkerSet().findCircleMarker(getCityCircleId(city));
         if(circleMarker != null) {
             circleMarker.deleteMarker();
+        }
+
+        // Places marker
+        for(Place place : plugin.getCityManager().getPlaces(city)) {
+            Marker placeMarker = api.getCityMarkerSet().findMarker(getCityPlaceMarkerId(city, place));
+            if(placeMarker != null) {
+                placeMarker.deleteMarker();
+            }
         }
     }
 

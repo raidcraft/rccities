@@ -8,7 +8,7 @@ import com.google.common.base.Strings;
 import de.raidcraft.economy.wrapper.Economy;
 import net.silthus.rccities.CityPermissions;
 import net.silthus.rccities.DatabasePlot;
-import net.silthus.rccities.RCCitiesPlugin;
+import net.silthus.rccities.RCCities;
 import net.silthus.rccities.api.city.City;
 import net.silthus.rccities.api.flags.FlagInformation;
 import net.silthus.rccities.api.plot.Plot;
@@ -33,10 +33,10 @@ import java.util.List;
 @CommandAlias("plot")
 public class PlotCommands extends BaseCommand {
 
-    private final RCCitiesPlugin plugin;
+    private final RCCities plugin;
     private static int unclaimTask = 0;
 
-    public PlotCommands(RCCitiesPlugin plugin) {
+    public PlotCommands(RCCities plugin) {
 
         this.plugin = plugin;
     }
@@ -210,7 +210,7 @@ public class PlotCommands extends BaseCommand {
             try {
                 plot.setFlag(MarkPlotBaseFlag.class, true);
             } catch (RaidCraftException e) {
-                RCCitiesPlugin.instance().getLogger().warning(e.getMessage());
+                RCCities.instance().getLogger().warning(e.getMessage());
             }
         }
 
@@ -405,7 +405,7 @@ public class PlotCommands extends BaseCommand {
 
         UnclaimAllTask unclaimAllTask = new UnclaimAllTask(sender, city, restoreSchematics);
         unclaimTask = Bukkit.getScheduler()
-                .runTaskTimer(RCCitiesPlugin.instance(), unclaimAllTask, 0, 2 * 20).getTaskId();
+                .runTaskTimer(RCCities.instance(), unclaimAllTask, 0, 2 * 20).getTaskId();
     }
 
     private class UnclaimAllTask implements Runnable {
@@ -423,7 +423,7 @@ public class PlotCommands extends BaseCommand {
         @Override
         public void run() {
 
-            List<Plot> plots = RCCitiesPlugin.instance().getPlotManager().getPlots(city);
+            List<Plot> plots = RCCities.instance().getPlotManager().getPlots(city);
             if (plots.isEmpty()) {
                 plugin.getLogger().info("[RCCities - Unclaim all] Done: Unclaimed all plots of city + '"
                         + city.getFriendlyName() + "'!");

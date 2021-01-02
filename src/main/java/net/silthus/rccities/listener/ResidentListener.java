@@ -1,6 +1,6 @@
 package net.silthus.rccities.listener;
 
-import net.silthus.rccities.RCCitiesPlugin;
+import net.silthus.rccities.RCCities;
 import net.silthus.rccities.api.resident.Resident;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
@@ -15,9 +15,9 @@ import java.util.List;
 
 public class ResidentListener implements Listener {
 
-    private final RCCitiesPlugin plugin;
+    private final RCCities plugin;
 
-    public ResidentListener(RCCitiesPlugin plugin) {
+    public ResidentListener(RCCities plugin) {
         this.plugin = plugin;
     }
 

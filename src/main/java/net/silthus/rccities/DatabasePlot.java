@@ -26,13 +26,13 @@ public class DatabasePlot extends AbstractPlot {
 
         // create schematic
         try {
-            RCCitiesPlugin.instance().getSchematicManager().createSchematic(this);
+            RCCities.instance().getSchematicManager().createSchematic(this);
         } catch (RaidCraftException e) {
-            RCCitiesPlugin.instance().getLogger().warning(e.getMessage());
+            RCCities.instance().getLogger().warning(e.getMessage());
         }
 
-        RCCitiesPlugin.instance().getDynmapManager().addPlotAreaMarker(this);
-        RCCitiesPlugin.instance().getDynmapManager().addCityMarker(getCity());
+        RCCities.instance().getDynmapManager().addPlotAreaMarker(this);
+        RCCities.instance().getDynmapManager().addCityMarker(getCity());
     }
 
     public DatabasePlot(TPlot tPlot) {
@@ -40,14 +40,14 @@ public class DatabasePlot extends AbstractPlot {
         //XXX setter call order is important!!!
         this.id = tPlot.id();
 
-        City city = RCCitiesPlugin.instance().getCityManager().getCity(tPlot.getCity().getName());
+        City city = RCCities.instance().getCityManager().getCity(tPlot.getCity().getName());
         assert city != null : "City of plot is null!";
         this.city = city;
 
         Location location = new Location(city.getSpawn().getWorld(), tPlot.getX(), 0, tPlot.getZ());
         this.location = location;
 
-        this.region = RCCitiesPlugin.instance().getWorldGuard().getPlatform().getRegionContainer()
+        this.region = RCCities.instance().getWorldGuard().getPlatform().getRegionContainer()
                 .get(BukkitAdapter.adapt(location.getWorld())).getRegion(getRegionName());
         loadAssignments();
     }
@@ -80,19 +80,19 @@ public class DatabasePlot extends AbstractPlot {
     @Override
     public void setFlag(Player player, String flagName, String flagValue) throws RaidCraftException {
 
-        RCCitiesPlugin.instance().getFlagManager().setPlotFlag(this, player, flagName, flagValue);
+        RCCities.instance().getFlagManager().setPlotFlag(this, player, flagName, flagValue);
     }
 
     @Override
     public void removeFlag(String flagName) {
 
-        RCCitiesPlugin.instance().getFlagManager().removePlotFlag(this, flagName);
+        RCCities.instance().getFlagManager().removePlotFlag(this, flagName);
     }
 
     @Override
     public void refreshFlags() {
 
-        RCCitiesPlugin.instance().getFlagManager().refreshPlotFlags(this);
+        RCCities.instance().getFlagManager().refreshPlotFlags(this);
     }
 
     @Override
@@ -137,7 +137,7 @@ public class DatabasePlot extends AbstractPlot {
                 .where().eq("plot_id", getId()).findList();
         for (TAssignment assignment : assignments) {
 
-            Resident resident = RCCitiesPlugin.instance().getResidentManager()
+            Resident resident = RCCities.instance().getResidentManager()
                     .getResident(assignment.getResident().getPlayerId(), getCity());
             if (resident == null) continue;
             assignedResidents.put(resident.getPlayerId(), resident);
@@ -159,7 +159,7 @@ public class DatabasePlot extends AbstractPlot {
     public void delete() {
 
         super.delete();
-        RCCitiesPlugin plugin = RCCitiesPlugin.instance();
+        RCCities plugin = RCCities.instance();
 
         // delete from cache
         plugin.getPlotManager().removeFromCache(this);

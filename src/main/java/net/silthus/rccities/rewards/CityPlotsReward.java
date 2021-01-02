@@ -1,6 +1,6 @@
 package net.silthus.rccities.rewards;
 
-import net.silthus.rccities.RCCitiesPlugin;
+import net.silthus.rccities.RCCities;
 import net.silthus.rccities.api.city.City;
 import net.silthus.rccities.upgrades.api.reward.AbstractReward;
 import net.silthus.rccities.upgrades.api.reward.RewardInformation;
@@ -34,9 +34,9 @@ public class CityPlotsReward extends AbstractReward<City> {
 
         if (broadcast) {
             if (plotAmount > 1) {
-                RCCitiesPlugin.instance().getResidentManager().broadcastCityMessage(city, "Die Stadt hat " + plotAmount + " neue Plots erhalten!");
+                RCCities.instance().getResidentManager().broadcastCityMessage(city, "Die Stadt hat " + plotAmount + " neue Plots erhalten!");
             } else {
-                RCCitiesPlugin.instance().getResidentManager().broadcastCityMessage(city, "Die Stadt hat einen neuen Plot erhalten!");
+                RCCities.instance().getResidentManager().broadcastCityMessage(city, "Die Stadt hat einen neuen Plot erhalten!");
             }
         }
     }

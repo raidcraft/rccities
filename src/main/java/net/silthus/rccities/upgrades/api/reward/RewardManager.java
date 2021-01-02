@@ -1,6 +1,6 @@
 package net.silthus.rccities.upgrades.api.reward;
 
-import net.silthus.rccities.RCCitiesPlugin;
+import net.silthus.rccities.RCCities;
 import net.silthus.rccities.util.CaseInsensitiveMap;
 import net.silthus.rccities.util.StringUtils;
 import org.bukkit.configuration.ConfigurationSection;
@@ -37,8 +37,8 @@ public class RewardManager {
 
             Class<? extends Reward<?>> rClass = rewardClasses.get(rewardType);
             if (rClass == null) {
-                RCCitiesPlugin.instance().getLogger().warning("There are no reward types defined for the type " + rewardType);
-                RCCitiesPlugin.instance().getLogger().warning("Available Reward Types are: " + String.join(", ", new ArrayList<>(rewardClasses.keySet())));
+                RCCities.instance().getLogger().warning("There are no reward types defined for the type " + rewardType);
+                RCCities.instance().getLogger().warning("Available Reward Types are: " + String.join(", ", new ArrayList<>(rewardClasses.keySet())));
                 return rewards;
             }
             try {
@@ -48,7 +48,7 @@ public class RewardManager {
                 }
                 rewards.add(reward);
             } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
-                RCCitiesPlugin.instance().getLogger().warning(e.getMessage());
+                RCCities.instance().getLogger().warning(e.getMessage());
                 e.printStackTrace();
             }
         }
@@ -58,7 +58,7 @@ public class RewardManager {
     public static <T extends Reward<?>> void registerRewardType(Class<T> rClass) {
 
         if (!rClass.isAnnotationPresent(RewardInformation.class)) {
-            RCCitiesPlugin.instance().getLogger().warning("Cannot register " + rClass.getCanonicalName() + " as Reward because it has no Information tag!");
+            RCCities.instance().getLogger().warning("Cannot register " + rClass.getCanonicalName() + " as Reward because it has no Information tag!");
             return;
         }
         for (Constructor<?> constructor : rClass.getDeclaredConstructors()) {

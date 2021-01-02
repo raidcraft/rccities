@@ -5,7 +5,7 @@ import io.ebean.Finder;
 import lombok.Getter;
 import lombok.Setter;
 import net.silthus.ebean.BaseEntity;
-import net.silthus.rccities.RCCitiesPlugin;
+import net.silthus.rccities.RCCities;
 import net.silthus.rccities.api.city.City;
 import net.silthus.rccities.upgrades.api.level.UpgradeLevel;
 import net.silthus.rccities.upgrades.api.upgrade.Upgrade;
@@ -38,7 +38,7 @@ public class TUpgradeRequest extends BaseEntity {
 
     public City getRCCity() {
 
-        return RCCitiesPlugin.instance().getCityManager().getCity(city.getName());
+        return RCCities.instance().getCityManager().getCity(city.getName());
     }
 
     public void setCity(City city) {
