@@ -1,3 +1,10 @@
+## [1.11.5](https://github.com/raidcraft/rccities/compare/v1.11.4...v1.11.5) (2021-01-02)
+
+
+### Bug Fixes
+
+* Track teleport cooldown separate for foreign cities. Fixes [#31](https://github.com/raidcraft/rccities/issues/31) ([4ad7d7c](https://github.com/raidcraft/rccities/commit/4ad7d7cbf6574394bc8f2ec19e5c2e5bee20c3f1))
+
 ## [1.11.4](https://github.com/raidcraft/rccities/compare/v1.11.3...v1.11.4) (2020-12-31)
 
 
