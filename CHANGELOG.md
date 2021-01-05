@@ -1,3 +1,10 @@
+## [1.11.6](https://github.com/raidcraft/rccities/compare/v1.11.5...v1.11.6) (2021-01-05)
+
+
+### Bug Fixes
+
+* Remove unnecessary getChunk() calls which triggers chunk load and produce performance issues when loading all plots of a city. Implement location util instead which calculates chunk coordinates. ([e7c238f](https://github.com/raidcraft/rccities/commit/e7c238ffa5aaaac2cb015adcc31c2f801e18adc6))
+
 ## [1.11.5](https://github.com/raidcraft/rccities/compare/v1.11.4...v1.11.5) (2021-01-02)
 
 
