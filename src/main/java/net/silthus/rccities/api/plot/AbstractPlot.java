@@ -13,6 +13,7 @@ import net.silthus.rccities.RCCitiesPlugin;
 import net.silthus.rccities.api.city.City;
 import net.silthus.rccities.api.resident.Resident;
 import net.silthus.rccities.api.resident.RolePermission;
+import net.silthus.rccities.util.LocationUtil;
 import net.silthus.rccities.util.StringUtils;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
@@ -35,8 +36,8 @@ public abstract class AbstractPlot implements Plot {
 
     protected AbstractPlot(Location location, City city) {
 
-        this.location = new Location(location.getWorld(), location.getChunk().getX() * 16 + 8,
-                0, location.getChunk().getZ() * 16 + 8);
+        this.location = new Location(location.getWorld(), LocationUtil.getChunkX(location) * 16 + 8,
+                0, LocationUtil.getChunkZ(location) * 16 + 8);
         this.city = city;
 
         save();
@@ -46,7 +47,8 @@ public abstract class AbstractPlot implements Plot {
     @Override
     public final String getRegionName() {
 
-        return city.getTechnicalName() + "_" + location.getChunk().getX() + "_" + location.getChunk().getZ();
+        return city.getTechnicalName() + "_" + LocationUtil.getChunkX(location) + "_"
+                + LocationUtil.getChunkZ(location);
     }
 
     @Override
@@ -60,16 +62,15 @@ public abstract class AbstractPlot implements Plot {
                 regionManager.removeRegion(getRegionName());
             }
 
-            Chunk chunk = location.getChunk();
             BlockVector3 vector1 = BlockVector3.at(
-                    chunk.getX() * 16,
+                    LocationUtil.getChunkX(location) * 16,
                     0,
-                    chunk.getZ() * 16
+                    LocationUtil.getChunkZ(location) * 16
             );
             BlockVector3 vector2 = BlockVector3.at(
-                    (chunk.getX() * 16) + 15,
+                    (LocationUtil.getChunkX(location) * 16) + 15,
                     location.getWorld().getMaxHeight(),
-                    (chunk.getZ() * 16) + 15
+                    (LocationUtil.getChunkZ(location) * 16) + 15
             );
 
             ProtectedCuboidRegion protectedCuboidRegion = new ProtectedCuboidRegion(getRegionName(), vector1, vector2);

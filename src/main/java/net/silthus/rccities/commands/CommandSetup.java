@@ -101,7 +101,7 @@ public class CommandSetup {
             // at current location
             //----------------------------------------
             if(city == null) {
-                Plot plot = plugin.getPlotManager().getPlot(c.getPlayer().getLocation().getChunk());
+                Plot plot = plugin.getPlotManager().getPlot(c.getPlayer().getLocation());
                 if(plot != null) {
                     city = plot.getCity();
                 }
@@ -137,7 +137,7 @@ public class CommandSetup {
             // plot at current location
             //---------------------------------
             if(plot == null) {
-                plot = plugin.getPlotManager().getPlot(c.getPlayer().getLocation().getChunk());
+                plot = plugin.getPlotManager().getPlot(c.getPlayer().getLocation());
             }
 
             // Throw exception if no plot was found

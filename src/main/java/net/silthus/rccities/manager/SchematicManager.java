@@ -16,6 +16,7 @@ import com.sk89q.worldedit.session.ClipboardHolder;
 import net.silthus.rccities.RCCitiesPlugin;
 import net.silthus.rccities.api.city.City;
 import net.silthus.rccities.api.plot.Plot;
+import net.silthus.rccities.util.LocationUtil;
 import net.silthus.rccities.util.RaidCraftException;
 import org.bukkit.World;
 import org.bukkit.util.Vector;
@@ -50,9 +51,11 @@ public class SchematicManager {
                 return;
             }
 
-            Vector pos1 = new Vector(plot.getLocation().getChunk().getX() * 16, 0, plot.getLocation().getChunk().getZ() * 16);
-            Vector pos2 = new Vector(plot.getLocation().getChunk().getX() * 16 + 15,
-                    plot.getLocation().getWorld().getMaxHeight(), plot.getLocation().getChunk().getZ() * 16 + 15);
+            Vector pos1 = new Vector(LocationUtil.getChunkX(plot.getLocation()) * 16, 0,
+                    LocationUtil.getChunkZ(plot.getLocation()) * 16);
+            Vector pos2 = new Vector(LocationUtil.getChunkX(plot.getLocation()) * 16 + 15,
+                    plot.getLocation().getWorld().getMaxHeight(),
+                    LocationUtil.getChunkZ(plot.getLocation()) * 16 + 15);
 
             BlockVector3 min = BlockVector3.at(Math.min(pos1.getX(), pos2.getX()),
                     Math.min(pos1.getY(), pos2.getY()),

@@ -16,6 +16,7 @@ import net.silthus.rccities.api.resident.Resident;
 import net.silthus.rccities.api.resident.RolePermission;
 import net.silthus.rccities.flags.plot.MarkPlotBaseFlag;
 import net.silthus.rccities.flags.plot.MarkPlotFlag;
+import net.silthus.rccities.util.LocationUtil;
 import net.silthus.rccities.util.RaidCraftException;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -124,29 +125,36 @@ public class PlotCommands extends BaseCommand {
     public void claim(Player player, @Optional String cityName) {
 
         // Check if there is already an plot
-        if(plugin.getPlotManager().getPlot(player.getLocation().getChunk()) != null) {
+        if(plugin.getPlotManager().getPlot(player.getLocation()) != null) {
             throw new ConditionFailedException("Hier befindet sich bereits eine Stadt Plot!");
         }
 
         // get neighbor plot and city
         Chunk chunk = player.getLocation().getChunk();
         Plot[] neighborPlots = new Plot[8];
-        neighborPlots[0] = plugin.getPlotManager().getPlot(player.getWorld()
-                .getChunkAt(chunk.getX(), chunk.getZ() + 1));
-        neighborPlots[1] = plugin.getPlotManager().getPlot(player.getWorld()
-                .getChunkAt(chunk.getX() - 1, chunk.getZ() + 1));
-        neighborPlots[2] = plugin.getPlotManager().getPlot(player.getWorld()
-                .getChunkAt(chunk.getX() + 1, chunk.getZ() + 1));
-        neighborPlots[3] = plugin.getPlotManager().getPlot(player.getWorld()
-                .getChunkAt(chunk.getX(), chunk.getZ() - 1));
-        neighborPlots[4] = plugin.getPlotManager().getPlot(player.getWorld()
-                .getChunkAt(chunk.getX() - 1, chunk.getZ() - 1));
-        neighborPlots[5] = plugin.getPlotManager().getPlot(player.getWorld()
-                .getChunkAt(chunk.getX() + 1, chunk.getZ() - 1));
-        neighborPlots[6] = plugin.getPlotManager().getPlot(player.getWorld()
-                .getChunkAt(chunk.getX() - 1, chunk.getZ()));
-        neighborPlots[7] = plugin.getPlotManager().getPlot(player.getWorld()
-                .getChunkAt(chunk.getX() + 1, chunk.getZ()));
+        neighborPlots[0] = plugin.getPlotManager().getPlot(
+                player.getLocation().add(0, 0, +LocationUtil.CHUNK_BLOCK_WIDTH));
+
+        neighborPlots[1] = plugin.getPlotManager().getPlot(
+                player.getLocation().add(-LocationUtil.CHUNK_BLOCK_WIDTH, 0, +LocationUtil.CHUNK_BLOCK_WIDTH));
+
+        neighborPlots[2] = plugin.getPlotManager().getPlot(
+                player.getLocation().add(+LocationUtil.CHUNK_BLOCK_WIDTH, 0, +LocationUtil.CHUNK_BLOCK_WIDTH));
+
+        neighborPlots[3] = plugin.getPlotManager().getPlot(
+                player.getLocation().add(0, 0, -LocationUtil.CHUNK_BLOCK_WIDTH));
+
+        neighborPlots[4] = plugin.getPlotManager().getPlot(
+                player.getLocation().add(-LocationUtil.CHUNK_BLOCK_WIDTH, 0, -LocationUtil.CHUNK_BLOCK_WIDTH));
+
+        neighborPlots[5] = plugin.getPlotManager().getPlot(
+                player.getLocation().add(+LocationUtil.CHUNK_BLOCK_WIDTH, 0, -LocationUtil.CHUNK_BLOCK_WIDTH));
+
+        neighborPlots[6] = plugin.getPlotManager().getPlot(
+                player.getLocation().add(-LocationUtil.CHUNK_BLOCK_WIDTH, 0, 0));
+
+        neighborPlots[7] = plugin.getPlotManager().getPlot(
+                player.getLocation().add(+LocationUtil.CHUNK_BLOCK_WIDTH, 0, 0));
 
         City city = null;
         for (Plot plot : neighborPlots) {

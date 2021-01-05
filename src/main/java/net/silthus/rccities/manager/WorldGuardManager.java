@@ -7,6 +7,7 @@ import com.sk89q.worldguard.protection.managers.storage.StorageException;
 import com.sk89q.worldguard.protection.regions.ProtectedCuboidRegion;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import net.silthus.rccities.RCCitiesPlugin;
+import net.silthus.rccities.util.LocationUtil;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
@@ -34,9 +35,8 @@ public class WorldGuardManager implements Listener {
     }
 
     public ApplicableRegionSet getChunkRegions(Location location) {
-        Chunk chunk = location.getChunk();
-        int bx = chunk.getX() << 4;
-        int bz = chunk.getZ() << 4;
+        int bx = LocationUtil.getChunkX(location) << 4;
+        int bz = LocationUtil.getChunkZ(location) << 4;
         BlockVector3 pt1 = BlockVector3.at(bx, 0, bz);
         BlockVector3 pt2 = BlockVector3.at(bx + 15, 256, bz + 15);
         ProtectedCuboidRegion chunkRegion = new ProtectedCuboidRegion("chunkRegion", pt1, pt2);
@@ -149,7 +149,7 @@ public class WorldGuardManager implements Listener {
     public void onPistonExtend(BlockPistonExtendEvent event) {
 
         // Check if here is a city plot
-        if(!plugin.getPlotManager().isInsidePlot(event.getBlock().getChunk())) {
+        if(!plugin.getPlotManager().isInsidePlot(event.getBlock().getLocation())) {
             return;
         }
 
@@ -161,7 +161,7 @@ public class WorldGuardManager implements Listener {
     public void onPistonRetract(BlockPistonRetractEvent event) {
 
         // Check if here is a city plot
-        if(!plugin.getPlotManager().isInsidePlot(event.getBlock().getChunk())) {
+        if(!plugin.getPlotManager().isInsidePlot(event.getBlock().getLocation())) {
             return;
         }
 

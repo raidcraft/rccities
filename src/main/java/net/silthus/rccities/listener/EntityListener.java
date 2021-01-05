@@ -22,7 +22,7 @@ public class EntityListener implements Listener {
         if((event.getEntity() instanceof IronGolem) || (event.getEntity() instanceof Snowman) || (event.getEntity() instanceof Wither)) return;
         // allow CUSTOM spawns, e.g. NPCs
         if (event.getSpawnReason() == CreatureSpawnEvent.SpawnReason.CUSTOM) return;
-        if (plugin.getPlotManager().getPlot(event.getEntity().getLocation().getChunk()) == null) {
+        if (plugin.getPlotManager().getPlot(event.getEntity().getLocation()) == null) {
             return;
         }
 

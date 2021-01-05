@@ -105,7 +105,7 @@ public class TownCommands extends BaseCommand {
     public void create(Player player, String cityName) {
 
         // Check if there is already an plot
-        if(plugin.getPlotManager().getPlot(player.getLocation().getChunk()) != null) {
+        if(plugin.getPlotManager().getPlot(player.getLocation()) != null) {
             throw new ConditionFailedException("Hier befindet sich bereits eine Stadt Plot!");
         }
 
@@ -289,7 +289,7 @@ public class TownCommands extends BaseCommand {
 
         CommandHelper.checkRolePermissions(player, city, RolePermission.SET_SPAWN);
 
-        if(plugin.getPlotManager().getPlot(player.getLocation().getChunk()) == null) {
+        if(plugin.getPlotManager().getPlot(player.getLocation()) == null) {
             throw new ConditionFailedException("Der Spawn muss sich innerhalb der Stadt befinden!");
         }
 

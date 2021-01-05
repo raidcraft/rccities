@@ -8,6 +8,7 @@ import net.silthus.rccities.api.city.City;
 import net.silthus.rccities.api.plot.Plot;
 import net.silthus.rccities.api.resident.Resident;
 import net.silthus.rccities.tables.TPlot;
+import net.silthus.rccities.util.LocationUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
@@ -105,8 +106,8 @@ public class PlotManager {
         }
 
         for (Plot plot : cachedPlots.values()) {
-            if (plot.getLocation().getChunk().getX() == chunkX
-                    && plot.getLocation().getChunk().getZ() == chunkZ) {
+            if (LocationUtil.getChunkX(plot.getLocation()) == chunkX
+                    && LocationUtil.getChunkZ(plot.getLocation()) == chunkZ) {
                 return plot;
             }
         }
@@ -120,10 +121,10 @@ public class PlotManager {
         return null;
     }
 
-    public Plot getPlot(Chunk chunk) {
+    public Plot getPlot(Location location) {
 
-        Location simpleLocation = new Location(chunk.getWorld(), chunk.getX() * 16 + 8, 0,
-                chunk.getZ() * 16 + 8);
+        Location simpleLocation = new Location(location.getWorld(), LocationUtil.getChunkX(location) * 16 + 8, 0,
+                LocationUtil.getChunkZ(location) * 16 + 8);
         Plot plot = cachedPlots.get(simpleLocation);
 
         if (plot == null) {
@@ -137,10 +138,11 @@ public class PlotManager {
         return plot;
     }
 
-    public boolean isInsidePlot(Chunk chunk) {
+    public boolean isInsidePlot(Location location) {
 
-        Location simpleLocation = new Location(chunk.getWorld(), chunk.getX() * 16 + 8, 0,
-                chunk.getZ() * 16 + 8);
+        Location simpleLocation = new Location(location.getWorld(),
+                LocationUtil.getChunkX(location) * 16 + 8, 0,
+                LocationUtil.getChunkZ(location) * 16 + 8);
         return cachedPlots.containsKey(simpleLocation);
     }
 
@@ -169,8 +171,8 @@ public class PlotManager {
             return false;
         }
 
-        plugin.getLogger().info("Ein alter Plot (" + location.getChunk().getX()
-                + "/" + location.getChunk().getZ() + ") von " + city.getFriendlyName() + " wurde migriert!");
+        plugin.getLogger().info("Ein alter Plot (" + LocationUtil.getChunkX(location)
+                + "/" + LocationUtil.getChunkZ(location) + ") von " + city.getFriendlyName() + " wurde migriert!");
 
         // Create new plot
         Plot plot = new DatabasePlot(location, city);
