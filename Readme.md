@@ -112,7 +112,7 @@ Am einfachsten stellt man sich beim Ausführen der Befehle in die betroffene Sta
 ``/plot flag <Flag> <Wert>``
 * Folgende Flags stehen zur Auswahl:
     * ``FARM`` ``ON|OFF`` Erlaubt allen Einwohnern in diesem Plot das Abbauen von Blöcken
-    * ``MOB_SPAWN`` ``ON|OFF`` Erlaubt das Spwanen von jeglichen Mobs in diesem Plot (sowohl friedliche Tiere als auch aggresive Monster)
+    * ``MOB_SPAWNING`` ``ON|OFF`` Erlaubt das Spwanen von jeglichen Mobs in diesem Plot (sowohl friedliche Tiere als auch aggresive Monster)
     * ``PVP`` ``ON|OFF`` Erlaubt das gegenseitige zufügen von Schaden zwischen Spielern
     * ``TNT`` ``ON|OFF`` Erlaubt das plazieren und Zünden von TNT
 #### Einwohner
