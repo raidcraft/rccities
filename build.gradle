@@ -35,6 +35,7 @@ spigot {
     apiVersion = project.property("apiVersion")
     load = STARTUP
     depends = ['WorldGuard', 'WorldEdit', 'ProtocolLib', 'Vault', 'ebean-wrapper', 'dynmap']
+    softDepends = ['art-framework', 'RCEconomy']
 }
 
 archivesBaseName = project.property("pluginName")
