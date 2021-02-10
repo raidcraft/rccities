@@ -1,3 +1,10 @@
+## [1.11.7](https://github.com/raidcraft/rccities/compare/v1.11.6...v1.11.7) (2021-02-10)
+
+
+### Bug Fixes
+
+* add proper dependencies to economy plugin ([f343a77](https://github.com/raidcraft/rccities/commit/f343a77c3b6810408974ce9ae1173aaf6040a333))
+
 ## [1.11.6](https://github.com/raidcraft/rccities/compare/v1.11.5...v1.11.6) (2021-01-05)
 
 
