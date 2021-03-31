@@ -158,6 +158,12 @@ Es gibt zwei Hauptgruppen:
 * ``rccities.user``
 * ``rccities.admin``
 
+##### Plot Anzahl ändern
+Erhöht, verringert oder setzt die Anzahl der Plots einer Stadt.
+* ``/town addplots <City> <Count>``
+* ``/town removeplots <City> <Count>``
+* ``/town setplots <City> <Count>``
+
 Einzelne Befehle lassen sich auch granularer steuern:
 * ``rccities.user.<Typ>.<Befehl>``
 
