@@ -153,16 +153,17 @@ Die Stadt selbst wird folgendermaßen gelöscht.
 * ``-a`` Unclaimed ALLE Plots der Stadt
 ##### Teleport zu Plot
 ``/plot tp <Plotname>``
-## Permissions
-Es gibt zwei Hauptgruppen:  
-* ``rccities.user``
-* ``rccities.admin``
 
 ##### Plot Anzahl ändern
 Erhöht, verringert oder setzt die Anzahl der Plots einer Stadt.
 * ``/town addplots <City> <Count>``
 * ``/town removeplots <City> <Count>``
 * ``/town setplots <City> <Count>``
+
+## Permissions
+Es gibt zwei Hauptgruppen:  
+* ``rccities.user``
+* ``rccities.admin``
 
 Einzelne Befehle lassen sich auch granularer steuern:
 * ``rccities.user.<Typ>.<Befehl>``
