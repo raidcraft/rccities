@@ -601,7 +601,7 @@ public class TownCommands extends BaseCommand {
     @Subcommand("setplots")
     @CommandCompletion("@cities")
     @CommandPermission(CityPermissions.GROUP_ADMIN + ".town.setplots")
-    public void removePlots(Player player, City city, int amount) {
+    public void setPlots(Player player, City city, int amount) {
 
         if(amount < 0) {
             throw new ConditionFailedException("Die Anzahl der Plots muss größer als 0 sein");

@@ -14,8 +14,6 @@ import net.silthus.rccities.api.city.City;
 import net.silthus.rccities.api.resident.Resident;
 import net.silthus.rccities.api.resident.RolePermission;
 import net.silthus.rccities.util.LocationUtil;
-import net.silthus.rccities.util.StringUtils;
-import org.bukkit.Chunk;
 import org.bukkit.Location;
 
 import java.util.UUID;

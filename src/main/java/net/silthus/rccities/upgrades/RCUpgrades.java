@@ -1,11 +1,7 @@
 package net.silthus.rccities.upgrades;
 
-import io.ebean.Database;
 import lombok.Getter;
-import net.silthus.ebean.Config;
-import net.silthus.ebean.EbeanWrapper;
 import net.silthus.rccities.RCCitiesPlugin;
-import net.silthus.rccities.upgrades.tables.*;
 
 /**
  * @author Philip Urban

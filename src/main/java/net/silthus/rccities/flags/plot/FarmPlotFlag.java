@@ -7,7 +7,6 @@ import net.silthus.rccities.api.flags.FlagInformation;
 import net.silthus.rccities.api.flags.FlagType;
 import net.silthus.rccities.api.plot.Plot;
 import net.silthus.rccities.api.resident.Resident;
-import net.silthus.rccities.util.RaidCraftException;
 
 /**
  * @author Philip Urban

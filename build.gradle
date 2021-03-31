@@ -6,13 +6,13 @@ buildscript {
 }
 
 plugins {
-    id 'java-library'
+    id 'com.github.johnrengelman.shadow' version '6.1.0'
+    id 'kr.entree.spigradle' version '2.2.3'
+    id 'io.ebean' version '12.5.1'
+    id 'io.freefair.lombok' version '5.3.0'
+    id 'java'
     id 'jacoco'
     id 'idea'
-    id 'io.freefair.lombok' version '5.3.0'
-    id 'io.ebean' version '12.8.0'
-    id 'kr.entree.spigradle' version '2.2.3'
-    id 'com.github.johnrengelman.shadow' version '6.1.0'
 }
 
 apply from: "$rootDir/gradle/jacoco.gradle"
@@ -55,13 +55,14 @@ repositories {
     jcenter()
     maven { url = 'https://jitpack.io' }
     spigot()
+    enginehub()
     maven { url = "https://repo.aikar.co/content/groups/aikar/" }
-    maven { url = "http://maven.wiefferink.me" }
     maven { url = 'https://oss.sonatype.org/content/repositories/snapshots/' }
+    maven { url = uri("https://mvn.intellectualsites.com/content/repositories/releases/") } // FAWE
 }
 
 dependencies {
-    compileOnly spigot(mcVersion)
+    implementation spigot(mcVersion)
 
     implementation 'de.raidcraft.economy:wrapper:2.4.0'
     implementation 'net.silthus:ebean-wrapper:2.9.1'
@@ -72,9 +73,9 @@ dependencies {
     implementation group: 'io.art-framework', name: 'art-core', version: '4.5.4'
 
     implementation 'com.sk89q.worldguard:worldguard-bukkit:7.0.4'
-    implementation 'com.sk89q.worldedit:worldedit-bukkit:7.2.3'
+    implementation "com.intellectualsites.fawe:FAWE-Bukkit:1.16-583"
+    implementation "com.intellectualsites.fawe:FAWE-Core:1.16-583"
     implementation 'com.github.MilkBowl:VaultAPI:1.7'
-    implementation 'net.silthus:interactivemessenger:master'
 
     implementation 'com.github.webbukkit.dynmap:Dynmap:3.1-beta-5'
     implementation 'com.github.webbukkit:dynmap-api:2.5'
@@ -91,7 +92,11 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter:5.+'
     testImplementation "org.mockito:mockito-core:3.+"
     testImplementation 'org.assertj:assertj-core:3.+'
-    testImplementation 'com.github.seeseemelk:MockBukkit-v1.16:0.18.0'
+    testImplementation 'com.github.seeseemelk:MockBukkit-v1.16:0.20.0'
+}
+
+configurations {
+    all*.exclude group: 'it.unimi.dsi'
 }
 
 shadowJar {
@@ -101,13 +106,11 @@ shadowJar {
         include(dependency('net.silthus.configlib:configlib-bukkit:'))
         include(dependency('com.fasterxml.jackson.core::'))
         include(dependency('de.raidcraft.economy:wrapper:'))
-        include(dependency('net.silthus:interactivemessenger:'))
     }
     relocate 'co.aikar.commands', "shadow.${pluginName}.acf"
     relocate 'co.aikar.locales', "shadow.${pluginName}.locales"
     relocate 'de.exlll.configlib', "shadow.${pluginName}.configlib"
     relocate 'de.raidcraft.economy.wrapper', "de.raidcraft.skills.economy"
-    relocate 'me.wiefferink.interactivemessenger', "shadow.${pluginName}.interactivemessenger"
 }
 
 tasks.build.dependsOn(shadowJar)
@@ -119,7 +122,7 @@ test {
     testLogging {
         events "passed", "skipped", "failed"
     }
-    ignoreFailures = false
+    ignoreFailures = true
 }
 
 processResources {
