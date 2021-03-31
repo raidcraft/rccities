@@ -561,6 +561,59 @@ public class TownCommands extends BaseCommand {
                 + ChatColor.GOLD + " aus der Stadtkasse genommen!");
     }
 
+    @Subcommand("addplots")
+    @CommandCompletion("@cities")
+    @CommandPermission(CityPermissions.GROUP_ADMIN + ".town.addplots")
+    public void addPlots(Player player, City city, int amount) {
+
+        if(amount < 0) {
+            throw new ConditionFailedException("Die Anzahl der Plots muss größer als 0 sein");
+        }
+
+        int plotCredit = city.getPlotCredit() + amount;
+        city.setPlotCredit(plotCredit);
+
+        plugin.getResidentManager().broadcastCityMessage(city, ChatColor.GOLD
+                + player.getName() + " hat der Stadt " + ChatColor.GREEN + amount
+                + ChatColor.GOLD + " Plots hinzugefügt! Die Stadt hat jetzt"
+                + ChatColor.GREEN + plotCredit + " Plots.");
+    }
+
+    @Subcommand("removeplots")
+    @CommandCompletion("@cities")
+    @CommandPermission(CityPermissions.GROUP_ADMIN + ".town.removeplots")
+    public void removePlots(Player player, City city, int amount) {
+
+        if(amount < 0) {
+            throw new ConditionFailedException("Die Anzahl der Plots muss größer als 0 sein");
+        }
+
+        int plotCredit = city.getPlotCredit() - amount;
+        if (plotCredit < 0) plotCredit = 0;
+        city.setPlotCredit(plotCredit);
+
+        plugin.getResidentManager().broadcastCityMessage(city, ChatColor.GOLD
+                + player.getName() + " hat der Stadt " + ChatColor.RED + amount
+                + ChatColor.GOLD + " Plots abgezogen! Die Stadt hat jetzt "
+                + ChatColor.GREEN + plotCredit + " Plots.");
+    }
+
+    @Subcommand("setplots")
+    @CommandCompletion("@cities")
+    @CommandPermission(CityPermissions.GROUP_ADMIN + ".town.setplots")
+    public void removePlots(Player player, City city, int amount) {
+
+        if(amount < 0) {
+            throw new ConditionFailedException("Die Anzahl der Plots muss größer als 0 sein");
+        }
+
+        city.setPlotCredit(amount);
+
+        plugin.getResidentManager().broadcastCityMessage(city, ChatColor.GOLD
+                + player.getName() + " hat die Plots der Stadt auf " + ChatColor.AQUA + amount
+                + ChatColor.GOLD + " Plots gesetzt!");
+    }
+
     /*
      *******************************************************************************************************************
      */
