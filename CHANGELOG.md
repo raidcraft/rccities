@@ -1,3 +1,15 @@
+# [1.12.0](https://github.com/raidcraft/rccities/compare/v1.11.7...v1.12.0) (2021-03-31)
+
+
+### Bug Fixes
+
+* **build:** remove unreachable repo and switch to fawe ([30911c5](https://github.com/raidcraft/rccities/commit/30911c515e4b95c13b88c1cf852398607b7a6bef))
+
+
+### Features
+
+* **cmd:** add admin commands to add,remove and set city plots ([fc36d74](https://github.com/raidcraft/rccities/commit/fc36d749d8db20ac6e7169f68df5d15ab3cc3b23))
+
 ## [1.11.7](https://github.com/raidcraft/rccities/compare/v1.11.6...v1.11.7) (2021-02-10)
 
 
