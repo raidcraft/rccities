@@ -1,3 +1,10 @@
+## [1.13.2](https://github.com/raidcraft/rccities/compare/v1.13.1...v1.13.2) (2021-04-07)
+
+
+### Bug Fixes
+
+* check radius if ignore radius flag does not exist ([c682abc](https://github.com/raidcraft/rccities/commit/c682abc370c35204340f58e60008852a3d7b83cc))
+
 ## [1.13.1](https://github.com/raidcraft/rccities/compare/v1.13.0...v1.13.1) (2021-04-07)
 
 
