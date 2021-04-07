@@ -1,3 +1,10 @@
+## [1.13.1](https://github.com/raidcraft/rccities/compare/v1.13.0...v1.13.1) (2021-04-07)
+
+
+### Bug Fixes
+
+* allow admins to claim plots without plot credit ([8e07645](https://github.com/raidcraft/rccities/commit/8e07645350c5fb0d4600400d1af60bee1f5e4876)), closes [#35](https://github.com/raidcraft/rccities/issues/35)
+
 # [1.13.0](https://github.com/raidcraft/rccities/compare/v1.12.0...v1.13.0) (2021-04-07)
 
 
