@@ -1,3 +1,10 @@
+# [1.13.0](https://github.com/raidcraft/rccities/compare/v1.12.0...v1.13.0) (2021-04-07)
+
+
+### Features
+
+* **flag:** add admin flag to ignore city radius ([866ea81](https://github.com/raidcraft/rccities/commit/866ea810171c9f21394b57f77eab1e6fa473cfdf)), closes [#87](https://github.com/raidcraft/rccities/issues/87)
+
 # [1.12.0](https://github.com/raidcraft/rccities/compare/v1.11.7...v1.12.0) (2021-03-31)
 
 
