@@ -211,7 +211,7 @@ public class PlotCommands extends BaseCommand {
         CommandHelper.checkRolePermissions(player, city, RolePermission.PLOT_CLAIM);
 
         // check plot credit
-        if (city.getPlotCredit() == 0) {
+        if (city.getPlotCredit() == 0 && !player.hasPermission(CityPermissions.GROUP_ADMIN + ".plot.claim.bypass-limit")) {
             throw new ConditionFailedException("Deine Stadt hat keine freien Plots zum claimen!");
         }
 
