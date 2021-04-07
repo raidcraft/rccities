@@ -15,6 +15,7 @@ import net.silthus.rccities.api.plot.Plot;
 import net.silthus.rccities.commands.CommandSetup;
 import net.silthus.rccities.commands.QueuedCommand;
 import net.silthus.rccities.flags.city.*;
+import net.silthus.rccities.flags.city.admin.IgnoreRadiusCityFlag;
 import net.silthus.rccities.flags.city.admin.InviteCityFlag;
 import net.silthus.rccities.flags.plot.*;
 import net.silthus.rccities.listener.EntityListener;
@@ -142,6 +143,7 @@ public class RCCitiesPlugin extends JavaPlugin {
         flagManager.registerCityFlag(JoinCostsCityFlag.class);
         flagManager.registerCityFlag(LeafDecayCityFlag.class);
         flagManager.registerCityFlag(MobSpawnCityFlag.class);
+        flagManager.registerCityFlag(IgnoreRadiusCityFlag.class);
 
         // plot flags
         flagManager.registerPlotFlag(MarkPlotFlag.class);

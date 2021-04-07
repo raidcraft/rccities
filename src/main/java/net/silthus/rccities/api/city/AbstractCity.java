@@ -222,10 +222,8 @@ public abstract class AbstractCity implements City {
         int additionalPlotLengths = RCCitiesPlugin.instance().getPluginConfig().getAdditionalRadiusPlots();
         additionalPlotLengths *= additionalPlotLengths;
 
-        int maxRadius = (int)Math.sqrt(getSize() + getPlotCredit()
+        return (int)Math.sqrt(getSize() + getPlotCredit()
                 + additionalPlotLengths) * 16;
-
-        return maxRadius;
     }
 
     @Override

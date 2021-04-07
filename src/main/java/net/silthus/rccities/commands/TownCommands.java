@@ -20,6 +20,7 @@ import net.silthus.rccities.api.resident.RolePermission;
 import net.silthus.rccities.flags.city.GreetingsCityFlag;
 import net.silthus.rccities.flags.city.JoinCostsCityFlag;
 import net.silthus.rccities.flags.city.PvpCityFlag;
+import net.silthus.rccities.flags.city.admin.IgnoreRadiusCityFlag;
 import net.silthus.rccities.flags.city.admin.InviteCityFlag;
 import net.silthus.rccities.flags.plot.MarkPlotBaseFlag;
 import net.silthus.rccities.manager.FlagManager;
@@ -136,6 +137,7 @@ public class TownCommands extends BaseCommand {
             FlagManager flagManager = plugin.getFlagManager();
             flagManager.setCityFlag(city, player, PvpCityFlag.class, false);
             flagManager.setCityFlag(city, player, InviteCityFlag.class, true);
+            flagManager.setCityFlag(city, player, IgnoreRadiusCityFlag.class, false);
             flagManager.setCityFlag(city, player, GreetingsCityFlag.class, true);
             flagManager.setCityFlag(city, player, JoinCostsCityFlag.class, plugin.getPluginConfig().getJoinCosts());
 

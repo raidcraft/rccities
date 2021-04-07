@@ -78,6 +78,8 @@ Am einfachsten stellt man sich beim Ausführen der Befehle in die betroffene Sta
     * ``MOB_SPAWNING`` ``ON|OFF`` Erlaubt das Spawnen von Mobs
     * ``PVP`` ``ON|OFF`` Erlaubt PVP im Stadtgebiet
     * ``JOIN_COSTS`` ``Geldbetrag`` Legt den nötigen Betrag fest um Einwohner der Stadt werden zu können
+    * ``INVITE`` ``ON|OFF`` **Admin Flag** – *Erlaubt oder Verbietet das Einladen von neuen Spielern zu einer Stadt. Default: **ON**.*
+    * ``IGNORE_RADIUS`` ``ON|OFF`` **Admin Flag** – *Ignoriert den benötigten Stadt Radius. Default: **OFF**.*
 #### Plot
 ##### Info Anzeigen
 ``/plot`` oder ``/plot info <Plotname>``

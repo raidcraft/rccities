@@ -10,10 +10,13 @@ import net.silthus.rccities.CityPermissions;
 import net.silthus.rccities.DatabasePlot;
 import net.silthus.rccities.RCCitiesPlugin;
 import net.silthus.rccities.api.city.City;
+import net.silthus.rccities.api.flags.CityFlag;
 import net.silthus.rccities.api.flags.FlagInformation;
 import net.silthus.rccities.api.plot.Plot;
 import net.silthus.rccities.api.resident.Resident;
 import net.silthus.rccities.api.resident.RolePermission;
+import net.silthus.rccities.flags.city.admin.IgnoreRadiusCityFlag;
+import net.silthus.rccities.flags.city.admin.InviteCityFlag;
 import net.silthus.rccities.flags.plot.MarkPlotBaseFlag;
 import net.silthus.rccities.flags.plot.MarkPlotFlag;
 import net.silthus.rccities.util.LocationUtil;
@@ -126,7 +129,7 @@ public class PlotCommands extends BaseCommand {
 
         // Check if there is already an plot
         if(plugin.getPlotManager().getPlot(player.getLocation()) != null) {
-            throw new ConditionFailedException("Hier befindet sich bereits eine Stadt Plot!");
+            throw new ConditionFailedException("Hier befindet sich bereits ein Stadt Plot!");
         }
 
         // get neighbor plot and city
@@ -185,13 +188,17 @@ public class PlotCommands extends BaseCommand {
             throw new ConditionFailedException("Hier befindet sich bereits eine andere Region!");
         }
 
-        // check max radius
         Location plotCenter = new Location(chunk.getWorld(), chunk.getX() * 16 + 8, 0, chunk.getZ() * 16 + 8);
-        Location fixedSpawn = city.getSpawn().clone();
-        fixedSpawn.setY(0);
-        if (fixedSpawn.distance(plotCenter) > city.getMaxRadius()) {
-            throw new ConditionFailedException("Deine Stadt darf nur im Umkreis von "
-                    + city.getMaxRadius() + " Blöcken um den Stadtmittelpunkt claimen!");
+
+        CityFlag radiusFlag = plugin.getFlagManager().getCityFlag(city, IgnoreRadiusCityFlag.class);
+        if (radiusFlag != null && !radiusFlag.getType().convertToBoolean(radiusFlag.getValue())) {
+            // check max radius
+            Location fixedSpawn = city.getSpawn().clone();
+            fixedSpawn.setY(0);
+            if (fixedSpawn.distance(plotCenter) > city.getMaxRadius()) {
+                throw new ConditionFailedException("Deine Stadt darf nur im Umkreis von "
+                        + city.getMaxRadius() + " Blöcken um den Stadtmittelpunkt claimen!");
+            }
         }
 
         // check if here is an old plot which could be migrated
