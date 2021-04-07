@@ -191,7 +191,7 @@ public class PlotCommands extends BaseCommand {
         Location plotCenter = new Location(chunk.getWorld(), chunk.getX() * 16 + 8, 0, chunk.getZ() * 16 + 8);
 
         CityFlag radiusFlag = plugin.getFlagManager().getCityFlag(city, IgnoreRadiusCityFlag.class);
-        if (radiusFlag != null && !radiusFlag.getType().convertToBoolean(radiusFlag.getValue())) {
+        if (radiusFlag == null || !radiusFlag.getType().convertToBoolean(radiusFlag.getValue())) {
             // check max radius
             Location fixedSpawn = city.getSpawn().clone();
             fixedSpawn.setY(0);
